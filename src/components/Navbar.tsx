@@ -38,14 +38,26 @@ export const Navbar: React.FC = () => {
     setShowServicesDrop(false);
   }, [location]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-card/85 backdrop-blur-md border-b border-border shadow-sm py-4"
-          : "bg-transparent py-6"
-      }`}
-    >
+    <>
+      <header
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-card/85 backdrop-blur-md border-b border-border shadow-sm py-4"
+            : "bg-transparent py-6"
+        }`}
+      >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <span className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-accent-orange flex items-center justify-center text-white font-black text-xl shadow-md shadow-primary/20 transition-transform group-hover:scale-105">
@@ -220,9 +232,14 @@ export const Navbar: React.FC = () => {
           </button>
         </div>
       </div>
+    </header>
 
       {isOpen && (
-        <div className="fixed inset-0 top-[72px] bg-card z-40 border-t border-border overflow-y-auto px-6 py-8 flex flex-col gap-6 lg:hidden">
+        <div
+          className={`fixed inset-0 z-40 bg-card border-t border-border overflow-y-auto px-6 py-8 flex flex-col gap-6 lg:hidden transition-all duration-300 ${
+            isScrolled ? "top-[73px]" : "top-[89px]"
+          }`}
+        >
           <div className="flex flex-col gap-4">
             <NavLink
               to="/"
@@ -327,13 +344,13 @@ export const Navbar: React.FC = () => {
                 className="w-full justify-center"
                 leftIcon={<Calculator className="w-4 h-4" />}
               >
-                Run Cost Calculator
+                Cost Calculator
               </Button>
             </Link>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 };
 export default Navbar;
