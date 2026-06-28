@@ -1,14 +1,42 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { Mail, Phone, MapPin, Send, ShieldCheck, Cpu, Layers, Globe, Building2, Sparkles } from "lucide-react";
 import { Input } from "../components/ui/Input";
 import { Textarea } from "../components/ui/Textarea";
 import { Select } from "../components/ui/Select";
 import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
 
 export const Contact: React.FC = () => {
   const navigate = useNavigate();
+  const shouldReduceMotion = useReducedMotion();
+  const fadeInUp = shouldReduceMotion
+    ? {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 1 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.4 }
+      }
+    : {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.6, ease: "easeOut" as const }
+      };
+
+  const contactWorkflow = [
+    { title: "NDA Guidelines", desc: "Within 4 hours, our advisory partners sign standard NDAs to protect your intellectual ideas.", icon: ShieldCheck },
+    { title: "Diagnostic Analysis", desc: "Our engineering directors review your project requirements and list recommended tech stacks.", icon: Cpu },
+    { title: "Scoping Session", desc: "Schedule a 30-minute scoping call to map deliverables to 2-week milestones.", icon: Sparkles },
+    { title: "Cost Blueprint", desc: "Receive a detailed cost estimation blueprint representing exact sprint costs.", icon: Layers }
+  ];
+
+  const locations = [
+    { city: "Noida, UP", type: "Main Engineering Headquarters", address: "B-64, B Block, Sector 63, Noida, 201301", icon: Building2 },
+    { city: "Bangalore, KA", type: "Technical Operations Hub", address: "Outer Ring Rd, Bellandur, Bangalore, 560103", icon: Globe }
+  ];
 
   const [formData, setFormData] = useState({
     name: "",
@@ -243,6 +271,89 @@ export const Contact: React.FC = () => {
               Send your inquiry
             </Button>
           </form>
+        </div>
+      </section>
+      {/* Post-Inquiry Workflow FAQ */}
+      <section className="py-20 bg-surface border-y border-border">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <motion.div {...fadeInUp}>
+              <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+                THE WORKFLOW
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+                What Happens Next?
+              </h2>
+              <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+                We respect your confidentiality. Here is the step-by-step path from your submit request to blueprint delivery.
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-left">
+            {contactWorkflow.map((step, idx) => {
+              const StepIcon = step.icon;
+              return (
+                <motion.div key={idx} {...fadeInUp}>
+                  <Card hoverEffect="glow" className="flex flex-col gap-4 p-6 bg-card border border-border/80 h-full relative">
+                    <span className="absolute top-4 right-4 text-xs font-black text-primary/20">
+                      0{idx + 1}
+                    </span>
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-2">
+                      <StepIcon className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-extrabold text-sm text-text-primary mt-2">{step.title}</h3>
+                    <p className="text-[11px] text-text-secondary leading-relaxed mt-1">
+                      {step.desc}
+                    </p>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Global Presence & Technical Centers */}
+      <section className="py-20 max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <motion.div {...fadeInUp}>
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+              OUR CENTERS
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              Global Engineering Locations
+            </h2>
+            <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+              Our offshore developers and systems analysts operate from key technical centers.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+          {locations.map((loc, idx) => {
+            const LocIcon = loc.icon;
+            return (
+              <motion.div key={idx} {...fadeInUp}>
+                <Card hoverEffect="shadow" className="flex flex-col gap-4 p-6 sm:p-8 bg-card border border-border/80 h-full justify-between">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 bg-primary/10 rounded-xl text-primary flex items-center justify-center">
+                        <LocIcon className="w-5.5 h-5.5" />
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-lg text-text-primary leading-tight">{loc.city}</h3>
+                        <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider block mt-0.5">{loc.type}</span>
+                      </div>
+                    </div>
+                    <p className="text-xs sm:text-sm text-text-secondary leading-relaxed mt-4 border-t border-border/40 pt-4">
+                      {loc.address}
+                    </p>
+                  </div>
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
     </>

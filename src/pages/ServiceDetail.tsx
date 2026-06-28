@@ -15,9 +15,11 @@ import {
   BrainCircuit,
   Layers
 } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { servicesData } from "../data/servicesData";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import { Accordion } from "../components/ui/Accordion";
 
 const serviceIcons: Record<string, React.ComponentType<any>> = {
   Smartphone,
@@ -33,9 +35,36 @@ const serviceIcons: Record<string, React.ComponentType<any>> = {
   Layers,
   HelpCircle
 };
-
 export const ServiceDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+
+  const shouldReduceMotion = useReducedMotion();
+  const fadeInUp = shouldReduceMotion
+    ? {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 1 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.4 }
+      }
+    : {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.6, ease: "easeOut" as const }
+      };
+
+  const roadmapPhases = [
+    { title: "Sprint 1: Scope & Wireframe", duration: "Weeks 1-2", desc: "We align on database schemas, project backlogs, and draw clickable Figma design layouts." },
+    { title: "Sprint 2: Core Engineering", desc: "Developers set up Docker containers, establish DB query indexes, and configure API endpoints.", duration: "Weeks 3-6" },
+    { title: "Sprint 3: Interface Integration", desc: "Integrate React components, manage dynamic state inputs, and run automated telemetry tests.", duration: "Weeks 7-10" },
+    { title: "Sprint 4: QA & IP Transfer", desc: "Complete security vulnerability scans, transfer owners credentials, and transition to maintenance support.", duration: "Weeks 11-12" }
+  ];
+
+  const serviceFaqs = [
+    { title: "How do you estimate this service's milestones?", content: "We analyze scope requirements, map deliverables to 2-week agile sprints, and outline exact timelines inside our standard SLA contracts." },
+    { title: "Will I have direct communication channels with the engineers?", content: "Yes. We create shared Slack channels, establish bi-weekly staging review calls, and give you access to our active Git repositories." },
+    { title: "What support options are included after release?", content: "Every build comes with 2.5 years of free maintenance. This covers software regressions, server health diagnostics, and compliance path audits." }
+  ];
 
   const service = servicesData.find((s) => s.slug === slug);
 
@@ -164,6 +193,58 @@ export const ServiceDetail: React.FC = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Dynamic Development Roadmap */}
+      <section className="py-20 bg-surface border-y border-border">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <motion.div {...fadeInUp}>
+              <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+                BUILD LIFECYCLE
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+                Development Roadmap & Sprints
+              </h2>
+              <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+                We organize our engineering lifecycle into clear, bi-weekly sprints with bi-weekly demos.
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-left">
+            {roadmapPhases.map((phase, idx) => (
+              <motion.div key={idx} {...fadeInUp}>
+                <Card hoverEffect="glow" className="flex flex-col gap-4 p-6 bg-card border border-border/80 h-full relative">
+                  <span className="text-[10px] font-black text-primary uppercase tracking-wider bg-primary/10 px-2 py-0.5 rounded w-fit">
+                    {phase.duration}
+                  </span>
+                  <h3 className="font-extrabold text-sm text-text-primary mt-2">{phase.title}</h3>
+                  <p className="text-[11px] text-text-secondary leading-relaxed mt-1">
+                    {phase.desc}
+                  </p>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Service-Specific FAQ Accordion */}
+      <section className="py-20 max-w-4xl mx-auto px-6 border-b border-border text-center">
+        <div className="text-center mb-12">
+          <motion.div {...fadeInUp}>
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+              COMMON QUESTIONS
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-text-primary tracking-tight">
+              Service FAQ
+            </h2>
+          </motion.div>
+        </div>
+        <motion.div {...fadeInUp} className="text-left">
+          <Accordion items={serviceFaqs} />
+        </motion.div>
       </section>
 
       <section className="py-20 bg-surface text-text-primary border-t border-border">

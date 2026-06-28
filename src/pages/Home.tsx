@@ -47,6 +47,40 @@ const serviceIcons: Record<string, React.ComponentType<any>> = {
   HelpCircle
 };
 
+const techCategories = ["Frontend", "Backend", "Mobile", "Databases", "Cloud & DevOps"];
+const techData: Record<string, Array<{ name: string; desc: string; highlight: string }>> = {
+  Frontend: [
+    { name: "React", desc: "For dynamic single-page applications and component architectures.", highlight: "Virtual DOM & Hooks" },
+    { name: "Next.js", desc: "Used for server-side rendering, static site generation, and optimized web content.", highlight: "SSR & Edge Routing" },
+    { name: "TypeScript", desc: "Ensures type safety, prevents runtime failures, and keeps codebases clean.", highlight: "Type Safe Compiler" },
+    { name: "Tailwind CSS", desc: "Lightweight styles for responsive layouts and extremely fast page loading.", highlight: "Utility-First Styling" }
+  ],
+  Backend: [
+    { name: "Node.js", desc: "Event-driven asynchronous I/O serving high-concurrency requests.", highlight: "High Throughput API" },
+    { name: "Python", desc: "Powerful platform for batch processing, microservices, and AI algorithms.", highlight: "Fast Prototyping" },
+    { name: "Java Spring", desc: "Robust framework for secure enterprise-grade systems.", highlight: "Multithreaded Scale" },
+    { name: "FastAPI", desc: "High-performance API engine with automatic OpenAPI documentation.", highlight: "Asynchronous ASGI" }
+  ],
+  Mobile: [
+    { name: "React Native", desc: "Cross-platform mobile apps targeting iOS & Android from one codebase.", highlight: "Native Bridge" },
+    { name: "Flutter", desc: "High-performance widgets for fluid, paint-level canvas graphics.", highlight: "Skia Graphics Engine" },
+    { name: "SwiftUI", desc: "Clean native Apple application interfaces utilizing modern state trees.", highlight: "Native iOS Speed" },
+    { name: "Jetpack Compose", desc: "Modern Android UI toolkit for lightweight, robust native mobile apps.", highlight: "Declarative Android UI" }
+  ],
+  Databases: [
+    { name: "PostgreSQL", desc: "ACID-compliant relational database cluster for critical business records.", highlight: "Advanced Indexing" },
+    { name: "MongoDB", desc: "Flexible document-based NoSQL storage for fast-evolving schemas.", highlight: "Horizontal Sharding" },
+    { name: "pgvector", desc: "Vector similarity engine enabling local semantic search indices.", highlight: "RAG Similarity Indexes" },
+    { name: "Redis", desc: "High-speed in-memory data store for caching and pub/sub queues.", highlight: "Sub-millisecond Latency" }
+  ],
+  "Cloud & DevOps": [
+    { name: "AWS", desc: "Comprehensive cloud platform for serverless and managed container clusters.", highlight: "Multi-Region Redundancy" },
+    { name: "Docker", desc: "Standardized containerization guaranteeing consistent build compilation.", highlight: "Isolated Environments" },
+    { name: "Kubernetes", desc: "Orchestration system to manage self-healing container workloads.", highlight: "Automated Scaling & Healing" },
+    { name: "Terraform", desc: "Infrastructure as code to safely repeat server setup setups.", highlight: "Declarative Provisioning" }
+  ]
+};
+
 export const Home: React.FC = () => {
   const renderIcon = (name: string, className: string = "w-6 h-6") => {
     const IconComponent = serviceIcons[name] || HelpCircle;
@@ -54,6 +88,7 @@ export const Home: React.FC = () => {
   };
 
   const [activeTab, setActiveTab] = useState("Fintech");
+  const [selectedTechCategory, setSelectedTechCategory] = useState("Frontend");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -496,6 +531,64 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Tech Stack Explorer Section */}
+      <section className="py-20 max-w-7xl mx-auto px-6">
+        <div className="text-center mb-12">
+          <motion.div {...fadeInUp}>
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+              TECHNICAL DEPTH
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight">
+              Frameworks & Cloud Infrastructures
+            </h2>
+            <p className="text-text-secondary text-sm mt-4 max-w-xl mx-auto">
+              We leverage reliable and scalable technologies to ensure product longevity, low maintenance overhead, and fast execution.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
+          {techCategories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedTechCategory(cat)}
+              className={`px-5 py-2.5 rounded-full text-xs font-bold border transition-all duration-300 ${
+                selectedTechCategory === cat
+                  ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
+                  : "bg-card text-text-secondary border-border hover:bg-surface"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedTechCategory}
+            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left"
+          >
+            {techData[selectedTechCategory].map((tech, idx) => (
+              <Card key={idx} hoverEffect="glow" className="flex flex-col justify-between h-full bg-card p-6 border border-border/80">
+                <div className="flex flex-col gap-3">
+                  <span className="text-[10px] font-black text-primary tracking-wider uppercase bg-primary/10 px-2.5 py-1 rounded-md w-fit">
+                    {tech.highlight}
+                  </span>
+                  <h3 className="font-bold text-lg text-text-primary mt-2">{tech.name}</h3>
+                  <p className="text-xs text-text-secondary leading-relaxed mt-1">
+                    {tech.desc}
+                  </p>
+                </div>
+              </Card>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </section>
+
       {/* Our Process Section */}
       <EngineeringJourney />
 
@@ -683,6 +776,67 @@ export const Home: React.FC = () => {
                     <span className="text-[10px] font-semibold text-text-muted">Product Owner</span>
                   </div>
                 </div>
+              </Card>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Enterprise Security & Compliance Section */}
+      <section className="py-20 bg-surface border-y border-border">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div {...fadeInUp} className="text-center max-w-3xl mx-auto mb-16">
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+              ENTERPRISE SHIELD
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight">
+              Bank-Grade Security & Compliance
+            </h2>
+            <p className="text-text-secondary text-sm sm:text-base mt-4 max-w-xl mx-auto">
+              We design and construct digital assets focusing strictly on threat mitigation, data privacy, and industry regulatory frameworks.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="whileInView"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            <motion.div variants={fadeInUp}>
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80 text-left">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
+                <h3 className="font-extrabold text-lg text-text-primary mb-3">Data Isolation & Encryption</h3>
+                <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
+                  We deploy salted cryptography models, SHA hashes, and AES-256 database storage options. Access credentials are fully segregated to avoid leakage risks.
+                </p>
+              </Card>
+            </motion.div>
+
+            <motion.div variants={fadeInUp}>
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80 text-left">
+                <div className="w-12 h-12 rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-6">
+                  <Cpu className="w-6 h-6" />
+                </div>
+                <h3 className="font-extrabold text-lg text-text-primary mb-3">Compliance Ready Frameworks</h3>
+                <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
+                  All custom builds follow security guidelines compliant with standard regulations like GDPR data consent paths, HIPAA telemetry schemas, and SOC 2 audits.
+                </p>
+              </Card>
+            </motion.div>
+
+            <motion.div variants={fadeInUp}>
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80 text-left">
+                <div className="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 mb-6">
+                  <Code className="w-6 h-6" />
+                </div>
+                <h3 className="font-extrabold text-lg text-text-primary mb-3">Vulnerability Scanning</h3>
+                <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
+                  Our integration lines deploy automatic security scanners (SAST) to inspect packages, prevent SQL injections, and avoid cross-site scripting vulnerabilities.
+                </p>
               </Card>
             </motion.div>
           </motion.div>

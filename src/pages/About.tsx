@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ShieldAlert,
   History,
@@ -9,12 +10,43 @@ import {
   Users2,
   Calendar,
   Layers,
-  ArrowRight
+  ArrowRight,
+  GitBranch,
+  Target,
+  Sparkles,
+  ShieldCheck
 } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 
+const milestones = [
+  { year: "2019", title: "Founding & MVP Focus", desc: "HangingPanda was founded with a mission to deliver clean code architectures for early-stage startups.", icon: GitBranch },
+  { year: "2021", title: "Enterprise Scaling", desc: "Expanded engineering services to scale legacy databases and deploy microservice structures.", icon: Target },
+  { year: "2023", title: "Offshore Dedicated Teams", desc: "Successfully launched our Offshore Development model, providing dedicated tech teams to global clients.", icon: Sparkles },
+  { year: "2026", title: "Next-Gen AI Integration Labs", desc: "Deployed customized AI autonomous agents, vector indexing (pgvector), and predictive model pipelines.", icon: ShieldCheck }
+];
+
+const leadership = [
+  { name: "Vishal Aman", role: "Founding Partner & Technical Director", bio: "Ex-Systems Architect with a focus on high-concurrency databases, server caching pipelines, and React Native builds." },
+  { name: "Devendra Singh", role: "Lead DevOps & Server Infrastructure", bio: "Specialist in AWS clustering, Docker environments, self-healing Kubernetes workloads, and secure network routing." },
+  { name: "Anjali Gupta", role: "Head of Interface & UI/UX Design", bio: "Focuses on scalable Figma tokens, design systems, interactive prototyping, and human-computer design." }
+];
 export const About: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+  const fadeInUp = shouldReduceMotion
+    ? {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 1 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.4 }
+      }
+    : {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.6, ease: "easeOut" as const }
+      };
+
   const stats = [
     { label: "Years Experience", value: "7+", icon: <Calendar className="w-5 h-5" /> },
     { label: "Tech Professionals", value: "55+", icon: <Users2 className="w-5 h-5" /> },
@@ -124,6 +156,58 @@ export const About: React.FC = () => {
         </div>
       </section>
 
+      {/* Growth & Milestones Timeline */}
+      <section className="py-20 max-w-7xl mx-auto px-6 border-b border-border">
+        <div className="text-center mb-16">
+          <motion.div {...fadeInUp}>
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+              OUR PATHWAY
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              Growth & Milestone Roadmap
+            </h2>
+            <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+              A historical overview of HangingPanda's evolution and core technical focus milestones.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="relative max-w-4xl mx-auto pl-8 sm:pl-0">
+          {/* Vertical line helper */}
+          <div className="absolute left-4 sm:left-1/2 top-2 bottom-2 w-0.5 bg-border -translate-x-1/2 hidden sm:block" />
+          <div className="absolute left-4 top-2 bottom-2 w-0.5 bg-border sm:hidden" />
+
+          <div className="flex flex-col gap-12">
+            {milestones.map((milestone, idx) => {
+              const MilestoneIcon = milestone.icon;
+              const isEven = idx % 2 === 0;
+              return (
+                <div key={idx} className={`flex flex-col sm:flex-row items-start sm:items-center relative ${isEven ? "sm:flex-row-reverse" : ""}`}>
+                  {/* Circle marker */}
+                  <div className="absolute left-0 sm:left-1/2 w-8 h-8 rounded-full bg-card border-2 border-primary text-primary flex items-center justify-center -translate-x-1/2 z-10 shadow-sm">
+                    <MilestoneIcon className="w-4 h-4" />
+                  </div>
+
+                  {/* Empty filler for desktop grid spacing */}
+                  <div className="w-full sm:w-1/2 hidden sm:block" />
+
+                  {/* Content card */}
+                  <div className="w-full sm:w-1/2 pl-8 sm:pl-12 sm:pr-12 text-left">
+                    <motion.div {...fadeInUp} className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:border-primary/20 transition-all duration-300">
+                      <span className="text-xs font-extrabold text-primary">{milestone.year}</span>
+                      <h3 className="text-lg font-bold text-text-primary mt-1 mb-2">{milestone.title}</h3>
+                      <p className="text-xs text-text-secondary leading-relaxed">
+                        {milestone.desc}
+                      </p>
+                    </motion.div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <section className="py-20 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div className="lg:col-span-6 flex flex-col items-start text-left gap-4">
           <span className="block text-xs font-black text-primary tracking-widest uppercase">
@@ -159,6 +243,42 @@ export const About: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Leadership & Engineering Advisory Board */}
+      <section className="py-20 max-w-7xl mx-auto px-6 border-t border-border">
+        <div className="text-center mb-16">
+          <motion.div {...fadeInUp}>
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+              THE SQUAD
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              Engineering Leadership
+            </h2>
+            <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+              Our projects are planned, audited, and delivered under direct supervision of senior engineering partners.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {leadership.map((member, idx) => (
+            <motion.div key={idx} {...fadeInUp}>
+              <Card hoverEffect="shadow" className="flex flex-col gap-4 text-left p-6 sm:p-8 bg-card h-full">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-accent-orange text-white flex items-center justify-center font-black text-lg shadow-sm">
+                  {member.name.split(" ").map(n => n[0]).join("")}
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-lg text-text-primary">{member.name}</h3>
+                  <span className="text-xs font-bold text-primary uppercase tracking-wider block mt-1">{member.role}</span>
+                </div>
+                <p className="text-xs text-text-secondary leading-relaxed mt-2 border-t border-border/40 pt-4">
+                  {member.bio}
+                </p>
+              </Card>
+            </motion.div>
+          ))}
         </div>
       </section>
 

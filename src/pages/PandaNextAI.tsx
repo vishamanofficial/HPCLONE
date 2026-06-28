@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   BrainCircuit,
   MessageSquare,
@@ -9,12 +10,45 @@ import {
   Database,
   Terminal,
   Zap,
-  ArrowRight
+  ArrowRight,
+  Search,
+  CheckSquare,
+  Lock,
+  GitCommit
 } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 
 export const PandaNextAI: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+  const fadeInUp = shouldReduceMotion
+    ? {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 1 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.4 }
+      }
+    : {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.6, ease: "easeOut" as const }
+      };
+
+  const securitySteps = [
+    { title: "PII Masking & Redaction", desc: "Regex patterns filter credit credentials, usernames, and secret key indexes before dispatch.", icon: Lock },
+    { title: "Vector DB Context Retrieval", desc: "Similarity index matching (pgvector) ensures localized query context matches without data leakage.", icon: Search },
+    { title: "Isolated LLM Querying", desc: "API calls route through enterprise firewalls directly to secure sandbox clusters.", icon: BrainCircuit },
+    { title: "Parameter Whitelisting", desc: "Output values pass model guardrails validating schema structure compliance.", icon: CheckSquare },
+    { title: "Audited System Commits", desc: "Changes commit to history records with transaction traces before DB writes.", icon: GitCommit }
+  ];
+
+  const agentTemplates = [
+    { title: "Fintech Risk Assessor", desc: "Monitors transaction telemetry, flags balance anomalies, and drafts compliance logs.", tags: ["PostgreSQL", "FastAPI", "OpenAI Sandbox"] },
+    { title: "E-Commerce Support Router", desc: "Analyzes ticket intent, executes refunds via API, and updates shipping databases.", tags: ["Shopify API", "Pinecone DB", "LangChain"] },
+    { title: "Healthcare Data Classifier", desc: "Reads smart sensor logs, removes telemetry noise, and alerts clinical dashboards.", tags: ["MQTT Broker", "PyTorch", "AWS Lambda"] }
+  ];
+
   return (
     <>
       <Helmet>
@@ -98,6 +132,45 @@ export const PandaNextAI: React.FC = () => {
         </div>
       </section>
 
+      {/* AI Agent Security & Guardrails Blueprint */}
+      <section className="py-20 max-w-7xl mx-auto px-6 border-b border-border">
+        <div className="text-center mb-16">
+          <motion.div {...fadeInUp}>
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+              PIPELINE FLOW
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              AI Security & Execution Guardrails
+            </h2>
+            <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+              How we route operational data safely through AI models to prevent leakage and protect intellectual properties.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 text-left">
+          {securitySteps.map((step, idx) => {
+            const StepIcon = step.icon;
+            return (
+              <motion.div key={idx} {...fadeInUp}>
+                <Card hoverEffect="glow" className="flex flex-col gap-4 p-6 bg-card border border-border/80 h-full relative">
+                  <div className="absolute top-4 right-4 text-xs font-black text-primary/20">
+                    0{idx + 1}
+                  </div>
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-2">
+                    <StepIcon className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-extrabold text-sm text-text-primary leading-tight">{step.title}</h3>
+                  <p className="text-[11px] text-text-secondary leading-relaxed mt-1">
+                    {step.desc}
+                  </p>
+                </Card>
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+
       <section className="py-20 bg-surface text-text-primary border-y border-border">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
@@ -138,6 +211,45 @@ export const PandaNextAI: React.FC = () => {
               </p>
             </Card>
           </div>
+        </div>
+      </section>
+
+      {/* AI Use Cases & Action Templates */}
+      <section className="py-20 max-w-7xl mx-auto px-6 border-b border-border">
+        <div className="text-center mb-16">
+          <motion.div {...fadeInUp}>
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+              TEMPLATES
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              Custom AI Agent Blueprints
+            </h2>
+            <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+              Here are three common workflow automation templates we build and embed into legacy client applications.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {agentTemplates.map((template, idx) => (
+            <motion.div key={idx} {...fadeInUp}>
+              <Card hoverEffect="shadow" className="flex flex-col justify-between p-6 sm:p-8 bg-card border border-border/80 h-full text-left">
+                <div className="flex flex-col gap-4">
+                  <h3 className="font-extrabold text-lg text-text-primary">{template.title}</h3>
+                  <p className="text-xs text-text-secondary leading-relaxed">
+                    {template.desc}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1.5 mt-6 border-t border-border/40 pt-4">
+                  {template.tags.map((tag) => (
+                    <span key={tag} className="px-2 py-0.5 bg-surface border border-border text-[9px] font-bold rounded text-text-secondary">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </Card>
+            </motion.div>
+          ))}
         </div>
       </section>
 

@@ -1,10 +1,41 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { motion, useReducedMotion } from "framer-motion";
+import { Zap, GitBranch, Activity, ShieldCheck } from "lucide-react";
 import { portfolioData } from "../data/portfolioData";
 import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
 
 export const CaseStudies: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+  const fadeInUp = shouldReduceMotion
+    ? {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 1 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.4 }
+      }
+    : {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.6, ease: "easeOut" as const }
+      };
+
+  const metrics = [
+    { label: "Query Optimization", value: "+150% speed", icon: Zap },
+    { label: "Bundles Reduced", value: "-45% size", icon: Activity },
+    { label: "Uptime Guaranteed", value: "99.99%", icon: ShieldCheck },
+    { label: "Direct Sprints Logs", value: "Real-time", icon: GitBranch }
+  ];
+
+  const methodologySteps = [
+    { title: "Bi-Weekly Review Demos", desc: "Clients review active software staging links at the close of every 2-week agile sprint lifecycle." },
+    { title: "Direct Engineer Channels", desc: "Skip account managers. Coordinate directly with developers on shared communication channels." },
+    { title: "Automated Diagnostic QA", desc: "Every commit undergoes package inspections, security scans, and unit checks." }
+  ];
+
   return (
     <>
       <Helmet>
@@ -108,6 +139,81 @@ export const CaseStudies: React.FC = () => {
               </div>
             );
           })}
+        </div>
+      </section>
+
+      {/* Technical Efficiency Stat Banners */}
+      <section className="py-20 bg-surface border-y border-border">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <motion.div {...fadeInUp}>
+              <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+                AGGREGATE SUCCESS
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+                Technical Efficiency Metrics
+              </h2>
+              <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+                Average performance enhancements measured across all custom HangingPanda software builds.
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {metrics.map((metric, idx) => {
+              const MetricIcon = metric.icon;
+              return (
+                <motion.div key={idx} {...fadeInUp}>
+                  <div className="bg-card border border-border p-6 rounded-2xl flex flex-col items-center gap-2 h-full justify-center">
+                    <span className="p-2.5 bg-primary/10 rounded-xl text-primary mb-1">
+                      <MetricIcon className="w-5 h-5" />
+                    </span>
+                    <span className="text-2xl sm:text-3xl font-black text-text-primary tracking-tight">
+                      {metric.value}
+                    </span>
+                    <span className="text-[10px] font-bold text-text-secondary uppercase tracking-wider leading-none mt-1">
+                      {metric.label}
+                    </span>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Sprint Execution Methodology */}
+      <section className="py-20 max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <motion.div {...fadeInUp}>
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+              EXECUTION LOGIC
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              Our Development Methodology
+            </h2>
+            <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+              We ensure project alignment by operating with direct communication loops and daily status updates.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+          {methodologySteps.map((step, idx) => (
+            <motion.div key={idx} {...fadeInUp}>
+              <Card hoverEffect="shadow" className="flex flex-col gap-4 p-6 sm:p-8 bg-card h-full justify-between">
+                <div className="flex flex-col gap-3">
+                  <span className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
+                    0{idx + 1}
+                  </span>
+                  <h3 className="font-extrabold text-base text-text-primary mt-2">{step.title}</h3>
+                  <p className="text-xs text-text-secondary leading-relaxed mt-1">
+                    {step.desc}
+                  </p>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
         </div>
       </section>
 

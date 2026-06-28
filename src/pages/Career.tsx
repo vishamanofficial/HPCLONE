@@ -1,10 +1,50 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Users2, Award, Briefcase, Compass, HeartHandshake } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  Users2,
+  Award,
+  Briefcase,
+  Compass,
+  HeartHandshake,
+  Monitor,
+  BookOpen,
+  Heart,
+  Globe
+} from "lucide-react";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 
 export const Career: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+  const fadeInUp = shouldReduceMotion
+    ? {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 1 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.4 }
+      }
+    : {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.6, ease: "easeOut" as const }
+      };
+
+  const recruitmentSteps = [
+    { title: "Resume & Commit Review", desc: "Our tech directors audit your past repository code commits, project complexity, and tech stacks." },
+    { title: "Live Tech Problem Solving", desc: "Solve visual architecture and API scaling problems in real-time with team leaders." },
+    { title: "System Engineering Review", desc: "Detailed discussion about reducing code debt, Postgres indexes, and microservice decoupling rules." },
+    { title: "Onboarding & Alignment", desc: "Understand team timelines, SLA guarantees, and final sprint schedule coordination." }
+  ];
+
+  const teamPerks = [
+    { title: "Remote-First Environment", desc: "Choose to work remote or join our Noida Sector 63 team center.", icon: Globe },
+    { title: "Learning Allowance", desc: "Monthly budget credits for learning LangChain, cloud infrastructure, or advanced dev certifications.", icon: BookOpen },
+    { title: "Hardware Reimbursement", desc: "Receive allowances for modern laptops, smart screens, and home office set-ups.", icon: Monitor },
+    { title: "Health Coverage", desc: "Comprehensive health insurance covering key diagnostic audits and recovery support.", icon: Heart }
+  ];
+
   const jobs = [
     {
       title: "Senior Full-Stack React / Node.js Developer",
@@ -104,6 +144,41 @@ export const Career: React.FC = () => {
         </div>
       </section>
 
+      {/* The 4-Step Hiring Funnel */}
+      <section className="py-20 bg-surface border-t border-border">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <motion.div {...fadeInUp}>
+              <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+                HIRING LOOP
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+                Our Recruitment Process
+              </h2>
+              <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+                We value your time. We aim to complete our full technical review loop within 7 business days.
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-left">
+            {recruitmentSteps.map((step, idx) => (
+              <motion.div key={idx} {...fadeInUp}>
+                <Card hoverEffect="glow" className="flex flex-col gap-4 p-6 bg-card border border-border/80 h-full relative">
+                  <span className="absolute top-4 right-4 text-xs font-black text-primary/20">
+                    0{idx + 1}
+                  </span>
+                  <h3 className="font-extrabold text-sm text-text-primary mt-2">{step.title}</h3>
+                  <p className="text-[11px] text-text-secondary leading-relaxed mt-1">
+                    {step.desc}
+                  </p>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-20 bg-surface border-y border-border">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-12">
@@ -140,6 +215,44 @@ export const Career: React.FC = () => {
                 </a>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Team Perks & Benefits Grid */}
+      <section className="py-20 bg-surface border-b border-border">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <motion.div {...fadeInUp}>
+              <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+                COMPENSATION
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+                Benefits & Workspace Perks
+              </h2>
+              <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
+                We believe in providing the resources you need to focus on engineering high-fidelity software products.
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
+            {teamPerks.map((perk, idx) => {
+              const PerkIcon = perk.icon;
+              return (
+                <motion.div key={idx} {...fadeInUp}>
+                  <Card hoverEffect="shadow" className="flex flex-col gap-4 p-6 bg-card border border-border/80 h-full">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-2">
+                      <PerkIcon className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-extrabold text-sm text-text-primary">{perk.title}</h3>
+                    <p className="text-[11px] text-text-secondary leading-relaxed mt-1">
+                      {perk.desc}
+                    </p>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
