@@ -1,0 +1,63 @@
+@import "tailwindcss";
+@import "./styles/theme.css";
+
+@theme {
+  --color-primary: rgb(var(--hp-color-primary));
+  --color-primary-hover: rgb(var(--hp-color-primary-hover));
+  --color-accent-orange: rgb(var(--hp-color-accent-orange));
+  --color-accent-pink: rgb(var(--hp-color-accent-pink));
+  
+  --color-bg: rgb(var(--hp-color-bg));
+  --color-surface: rgb(var(--hp-color-surface));
+  --color-card: rgb(var(--hp-color-card));
+  --color-border: rgb(var(--hp-color-border));
+  
+  --color-text-primary: rgb(var(--hp-color-text-primary));
+  --color-text-secondary: rgb(var(--hp-color-text-secondary));
+  --color-text-muted: rgb(var(--hp-color-text-muted));
+  
+  --radius-card: var(--radius-card);
+  --radius-button: var(--radius-button);
+  
+  --font-sans: var(--font-sans);
+  
+  --animate-scroll-strip: scroll-strip 30s linear infinite;
+
+  @keyframes scroll-strip {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
+body {
+  background-color: rgb(var(--hp-color-bg));
+  color: rgb(var(--hp-color-text-primary));
+  font-family: var(--font-sans);
+  transition-property: color, background-color, border-color;
+  transition-duration: 200ms;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--hp-color-bg)), 0 0 0 4px rgb(var(--hp-color-primary));
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgb(var(--hp-color-surface));
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--hp-color-text-muted), 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(var(--hp-color-text-muted), 0.5);
+}

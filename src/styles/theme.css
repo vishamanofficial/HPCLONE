@@ -1,0 +1,36 @@
+:root {
+  --hp-color-primary: 239 68 68;
+  --hp-color-primary-hover: 220 38 38;
+  --hp-color-accent-orange: 220 38 38;
+  --hp-color-accent-pink: 239 68 68;
+  
+  --hp-color-bg: 255 255 255;
+  --hp-color-surface: 249 250 251;
+  --hp-color-card: 255 255 255;
+  --hp-color-border: 229 231 235;
+  
+  --hp-color-text-primary: 17 24 39;
+  --hp-color-text-secondary: 75 85 99;
+  --hp-color-text-muted: 107 114 128;
+  
+  --radius-card: 1rem;
+  --radius-button: 9999px;
+  
+  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.dark {
+  --hp-color-primary: 239 68 68;
+  --hp-color-primary-hover: 248 113 113;
+  --hp-color-accent-orange: 248 113 113;
+  --hp-color-accent-pink: 239 68 68;
+  
+  --hp-color-bg: 15 23 42;
+  --hp-color-surface: 30 41 59;
+  --hp-color-card: 30 41 59;
+  --hp-color-border: 51 65 85;
+  
+  --hp-color-text-primary: 249 250 251;
+  --hp-color-text-secondary: 229 231 235;
+  --hp-color-text-muted: 148 163 184;
+}
