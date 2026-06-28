@@ -31,6 +31,7 @@ import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { Accordion } from "../components/ui/Accordion";
 import { EngineeringJourney } from "../components/EngineeringJourney";
+import { PhoneInput } from "../components/ui/PhoneInput";
 
 const serviceIcons: Record<string, React.ComponentType<any>> = {
   Smartphone,
@@ -92,20 +93,84 @@ export const Home: React.FC = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    countryCode: "+91",
+    phone: "",
+    isWhatsApp: true,
     budget: "$5k - $15k",
     message: ""
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const validateForm = (): boolean => {
+    const formErrors: Record<string, string> = {};
+    if (!formData.name.trim()) formErrors.name = "Name is required";
+    if (!formData.email.trim()) {
+      formErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      formErrors.email = "Please enter a valid email address";
+    }
+    const cleanPhone = formData.phone.trim();
+    if (!cleanPhone) {
+      formErrors.phone = "Phone number is required";
+    } else if (!/^\d{6,15}$/.test(cleanPhone.replace(/[\s()-]/g, ""))) {
+      formErrors.phone = "Please enter a valid phone number (6 to 15 digits)";
+    }
+    if (!formData.message.trim()) {
+      formErrors.message = "Concept description is required";
+    } else if (formData.message.trim().length < 10) {
+      formErrors.message = "Concept must be at least 10 characters long";
+    }
+    setErrors(formErrors);
+    return Object.keys(formErrors).length === 0;
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
     setFormLoading(true);
-    setTimeout(() => {
+    setSubmitError("");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+          ...formData,
+          phone: `${formData.countryCode} ${formData.phone}`,
+          "Is WhatsApp Number": formData.isWhatsApp ? "Yes" : "No",
+          from_name: formData.name,
+          subject: `New Bespoke Software Blueprint request: ${formData.budget}`
+        })
+      });
+
+      if (response.ok) {
+        setFormLoading(false);
+        setFormSubmitted(true);
+        setFormData({
+          name: "",
+          email: "",
+          countryCode: "+91",
+          phone: "",
+          isWhatsApp: true,
+          budget: "$5k - $15k",
+          message: ""
+        });
+        setErrors({});
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (error) {
+      console.error(error);
       setFormLoading(false);
-      setFormSubmitted(true);
-      setFormData({ name: "", email: "", budget: "$5k - $15k", message: "" });
-    }, 1200);
+      setSubmitError("There was an error sending your request. Please check your network and try again, or email us directly at vishamanofficial.business@gmail.com.");
+    }
   };
 
   const industries = ["Fintech", "Healthcare", "E-commerce", "Education", "Logistics"];
@@ -934,12 +999,19 @@ export const Home: React.FC = () => {
                     <input 
                       type="text" 
                       id="form-name" 
-                      required
                       placeholder="Jane Doe" 
-                      className="w-full px-4 py-3 text-sm rounded-xl border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
+                        errors.name ? "border-red-500" : "border-border"
+                      }`}
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value });
+                        setErrors({ ...errors, name: "" });
+                      }}
                     />
+                    {errors.name && (
+                      <span className="text-[11px] text-red-500 font-medium mt-1 block">{errors.name}</span>
+                    )}
                   </div>
                   
                   <div>
@@ -947,12 +1019,45 @@ export const Home: React.FC = () => {
                     <input 
                       type="email" 
                       id="form-email" 
-                      required
                       placeholder="jane@company.com" 
-                      className="w-full px-4 py-3 text-sm rounded-xl border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
+                        errors.email ? "border-red-500" : "border-border"
+                      }`}
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        setErrors({ ...errors, email: "" });
+                      }}
                     />
+                    {errors.email && (
+                      <span className="text-[11px] text-red-500 font-medium mt-1 block">{errors.email}</span>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col w-full text-left">
+                    <PhoneInput
+                      label="Phone Number"
+                      countryCode={formData.countryCode}
+                      phone={formData.phone}
+                      onChange={({ countryCode, phone }) => {
+                        setFormData((prev) => ({ ...prev, countryCode, phone }));
+                        setErrors((prev) => ({ ...prev, phone: "" }));
+                      }}
+                      error={errors.phone}
+                    />
+                    <div className="flex items-start gap-2.5 mt-2 w-full text-left">
+                      <input
+                        id="home-whatsapp"
+                        name="isWhatsApp"
+                        type="checkbox"
+                        checked={formData.isWhatsApp}
+                        onChange={(e) => setFormData((prev) => ({ ...prev, isWhatsApp: e.target.checked }))}
+                        className="w-4 h-4 text-primary border-border focus:ring-primary rounded mt-0.5 cursor-pointer"
+                      />
+                      <label htmlFor="home-whatsapp" className="text-xs text-text-secondary leading-snug cursor-pointer select-none">
+                        This is also my WhatsApp number for faster communications.
+                      </label>
+                    </div>
                   </div>
 
                   <div>
@@ -974,14 +1079,27 @@ export const Home: React.FC = () => {
                     <label className="block text-xs font-bold text-text-secondary uppercase mb-1.5" htmlFor="form-message">Brief Project Concept</label>
                     <textarea 
                       id="form-message" 
-                      required
                       rows={3}
                       placeholder="Describe what you want to build (e.g. mobile app, web dashboard, SaaS architecture)..." 
-                      className="w-full px-4 py-3 text-sm rounded-xl border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
+                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none ${
+                        errors.message ? "border-red-500" : "border-border"
+                      }`}
                       value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, message: e.target.value });
+                        setErrors({ ...errors, message: "" });
+                      }}
                     />
+                    {errors.message && (
+                      <span className="text-[11px] text-red-500 font-medium mt-1 block">{errors.message}</span>
+                    )}
                   </div>
+
+                  {submitError && (
+                    <div className="p-3.5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-xs font-semibold leading-relaxed">
+                      {submitError}
+                    </div>
+                  )}
 
                   <Button variant="gradient" size="md" className="w-full mt-2 justify-center" type="submit" isLoading={formLoading} rightIcon={<Send className="w-4 h-4" />}>
                     Get My Free Blueprint

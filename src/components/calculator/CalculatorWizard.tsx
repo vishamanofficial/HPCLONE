@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -37,6 +37,7 @@ import {
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Textarea } from "../ui/Textarea";
+import { PhoneInput } from "../ui/PhoneInput";
 
 const calculatorIcons: Record<string, React.ComponentType<any>> = {
   HelpCircle,
@@ -78,18 +79,25 @@ export const CalculatorWizard: React.FC = () => {
     management: []
   });
 
+
   const [clientInfo, setClientInfo] = useState({
     name: "",
     email: "",
+    countryCode: "+91",
     phone: "",
     query: "",
-    subscribe: false
+    subscribe: false,
+    isWhatsApp: true
   });
-
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);  const [submitError, setSubmitError] = useState("");
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const totalSteps = 5;
+
+  useEffect(() => {
+    setErrors({});
+    setHasSubmitted(false);
+  }, [currentStep]);
 
   const renderIcon = (name: string, className: string = "w-6 h-6") => {
     if (name === "Apple") {
@@ -140,7 +148,13 @@ export const CalculatorWizard: React.FC = () => {
       } else if (!/\S+@\S+\.\S+/.test(clientInfo.email)) {
         stepErrors.email = "Please enter a valid email address.";
       }
-      if (!clientInfo.phone.trim()) stepErrors.phone = "Phone number is required.";
+      
+      const cleanPhone = clientInfo.phone.trim();
+      if (!cleanPhone) {
+        stepErrors.phone = "Phone number is required.";
+      } else if (!/^\d{6,15}$/.test(cleanPhone.replace(/[\s()-]/g, ""))) {
+        stepErrors.phone = "Please enter a valid phone number (6 to 15 digits).";
+      }
     }
 
     setErrors(stepErrors);
@@ -158,7 +172,7 @@ export const CalculatorWizard: React.FC = () => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setClientInfo((prev) => ({ ...prev, [name]: value }));
@@ -169,25 +183,56 @@ export const CalculatorWizard: React.FC = () => {
     const { name, checked } = e.target;
     setClientInfo((prev) => ({ ...prev, [name]: checked }));
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateStep(5)) return;
-
+    setHasSubmitted(true);
+    if (!validateStep(5)) {
+      return;
+    }
     setIsSubmitting(true);
+    setSubmitError("");
+    const results = runCalculation(selections);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      const results = runCalculation(selections);
-      
-      navigate("/thank-you", {
-        state: {
-          clientName: clientInfo.name,
-          results,
-          selections
-        }
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+          from_name: clientInfo.name,
+          subject: `New App Cost Calculation Request from ${clientInfo.name}`,
+          email: clientInfo.email,
+          phone: `${clientInfo.countryCode} ${clientInfo.phone}`,
+          "Is WhatsApp Number": clientInfo.isWhatsApp ? "Yes" : "No",
+          message: clientInfo.query,
+          "Estimated Cost": `$${results.estimatedCost.toLocaleString()}`,
+          "Selected Platform": selections.platform,
+          "Selected Category": selections.category,
+          "Selected Design Theme": selections.design,
+          "Selected Features": Array.isArray(selections.management) ? selections.management.join(", ") : selections.management
+        })
       });
-    }, 1500);
+
+      if (response.ok) {
+        setIsSubmitting(false);
+        navigate("/thank-you", {
+          state: {
+            clientName: clientInfo.name,
+            results,
+            selections
+          }
+        });
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      setIsSubmitting(false);
+      setSubmitError("There was an error submitting your calculation. Please try again or email us directly at vishamanofficial.business@gmail.com.");
+    }
   };
 
   const progressPercentage = (currentStep / totalSteps) * 100;
@@ -315,7 +360,7 @@ export const CalculatorWizard: React.FC = () => {
                       placeholder="e.g. John Doe"
                       value={clientInfo.name}
                       onChange={handleInputChange}
-                      error={errors.name}
+                      error={hasSubmitted ? errors.name : undefined}
                     />
                     <Input
                       label="Email Address"
@@ -324,19 +369,35 @@ export const CalculatorWizard: React.FC = () => {
                       placeholder="e.g. john@company.com"
                       value={clientInfo.email}
                       onChange={handleInputChange}
-                      error={errors.email}
+                      error={hasSubmitted ? errors.email : undefined}
                     />
                   </div>
 
-                  <Input
-                    label="Phone Number"
-                    name="phone"
-                    type="tel"
-                    placeholder="e.g. +91 93117 81537"
-                    value={clientInfo.phone}
-                    onChange={handleInputChange}
-                    error={errors.phone}
-                  />
+                  <div className="flex flex-col w-full">
+                    <PhoneInput
+                      label="Phone Number"
+                      countryCode={clientInfo.countryCode}
+                      phone={clientInfo.phone}
+                      onChange={({ countryCode, phone }) => {
+                        setClientInfo((prev) => ({ ...prev, countryCode, phone }));
+                        setErrors((prev) => ({ ...prev, phone: "" }));
+                      }}
+                      error={hasSubmitted ? errors.phone : undefined}
+                    />
+                    <div className="flex items-start gap-2.5 mt-2.5 w-full text-left">
+                      <input
+                        id="calculator-whatsapp"
+                        name="isWhatsApp"
+                        type="checkbox"
+                        checked={clientInfo.isWhatsApp}
+                        onChange={handleCheckboxChange}
+                        className="w-4 h-4 text-primary border-border focus:ring-primary rounded mt-0.5 cursor-pointer"
+                      />
+                      <label htmlFor="calculator-whatsapp" className="text-xs text-text-secondary leading-snug cursor-pointer select-none">
+                        This is also my WhatsApp number for faster communications.
+                      </label>
+                    </div>
+                  </div>
 
                   <Textarea
                     label="Still have any query? Let us know (Optional)"
@@ -365,8 +426,15 @@ export const CalculatorWizard: React.FC = () => {
             )}
           </AnimatePresence>
 
+          {submitError && (
+            <div className="p-3.5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-xs font-semibold leading-relaxed mb-6">
+              {submitError}
+            </div>
+          )}
+
           <div className="flex items-center justify-between border-t border-border mt-8 pt-6">
             <Button
+              key="prev-btn"
               type="button"
               variant="secondary"
               onClick={handlePrev}
@@ -378,6 +446,7 @@ export const CalculatorWizard: React.FC = () => {
 
             {currentStep < totalSteps ? (
               <Button
+                key="next-btn"
                 type="button"
                 onClick={handleNext}
                 rightIcon={<ArrowRight className="w-4 h-4" />}
@@ -386,6 +455,7 @@ export const CalculatorWizard: React.FC = () => {
               </Button>
             ) : (
               <Button
+                key="submit-btn"
                 type="submit"
                 variant="gradient"
                 isLoading={isSubmitting}

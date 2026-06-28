@@ -230,49 +230,6 @@ export const Blog: React.FC = () => {
           </div>
         )}
       </section>
-      {/* Weekly Developer Digest Section */}
-      <section className="py-20 bg-surface border-t border-border relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(239,68,68,0.06),transparent_40%)] pointer-events-none" />
-        <div className="max-w-4xl mx-auto px-6 relative z-10 text-center flex flex-col items-center gap-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-col items-center gap-6"
-          >
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary uppercase tracking-wider">
-              Weekly Digest
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
-              Get Tech Blueprints in Your Inbox
-            </h2>
-            <p className="text-xs sm:text-sm text-text-secondary max-w-md leading-relaxed">
-              We send out weekly breakdowns of cloud server optimizations, system architecture blueprints, and AI autonomous agent configurations. No fluff.
-            </p>
-            
-            <form 
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Thank you for subscribing to HangingPanda digests!");
-              }} 
-              className="flex flex-col sm:flex-row gap-3 w-full max-w-md mt-4"
-            >
-              <input 
-                type="email" 
-                required
-                placeholder="jane@company.com" 
-                className="w-full px-4 py-3 text-sm rounded-full border border-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-              />
-              <button 
-                type="submit"
-                className="px-6 py-3 bg-gradient-to-r from-primary to-accent-orange text-white text-xs font-bold uppercase tracking-wider rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 whitespace-nowrap cursor-pointer"
-              >
-                Subscribe
-              </button>
-            </form>
-          </motion.div>
-        </div>
-      </section>
     </>
   );
 };

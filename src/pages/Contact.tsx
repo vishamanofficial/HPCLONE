@@ -8,6 +8,7 @@ import { Textarea } from "../components/ui/Textarea";
 import { Select } from "../components/ui/Select";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import { PhoneInput } from "../components/ui/PhoneInput";
 
 export const Contact: React.FC = () => {
   const navigate = useNavigate();
@@ -38,19 +39,21 @@ export const Contact: React.FC = () => {
     { city: "Bangalore, KA", type: "Technical Operations Hub", address: "Outer Ring Rd, Bellandur, Bangalore, 560103", icon: Globe }
   ];
 
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    countryCode: "+91",
     phone: "",
     subject: "",
     service: "",
     message: "",
-    subscribe: false
+    subscribe: false,
+    isWhatsApp: true
   });
-
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [submitError, setSubmitError] = useState("");
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -67,33 +70,74 @@ export const Contact: React.FC = () => {
   const validateForm = (): boolean => {
     const formErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) formErrors.name = "Required";
+    if (!formData.name.trim()) formErrors.name = "Name is required";
     if (!formData.email.trim()) {
-      formErrors.email = "Required";
+      formErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       formErrors.email = "Please enter a valid email address";
     }
-    if (!formData.phone.trim()) formErrors.phone = "Required";
+    
+    const cleanPhone = formData.phone.trim();
+    if (!cleanPhone) {
+      formErrors.phone = "Phone number is required";
+    } else if (!/^\d{6,15}$/.test(cleanPhone.replace(/[\s()-]/g, ""))) {
+      formErrors.phone = "Please enter a valid phone number (6 to 15 digits)";
+    }
+
+    if (!formData.service) {
+      formErrors.service = "Please select a service category";
+    }
+
+    if (!formData.message.trim()) {
+      formErrors.message = "Message is required";
+    } else if (formData.message.trim().length < 10) {
+      formErrors.message = "Message must be at least 10 characters long";
+    }
 
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitError("");
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      navigate("/thank-you", {
-        state: {
-          clientName: formData.name,
-          contactSuccess: true
-        }
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+          ...formData,
+          phone: `${formData.countryCode} ${formData.phone}`,
+          "Is WhatsApp Number": formData.isWhatsApp ? "Yes" : "No",
+          from_name: formData.name,
+          subject: `New inquiry from HangingPanda: ${formData.subject}`
+        })
       });
-    }, 1500);
+
+      if (response.ok) {
+        setIsSubmitting(false);
+        navigate("/thank-you", {
+          state: {
+            clientName: formData.name,
+            contactSuccess: true
+          }
+        });
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      setIsSubmitting(false);
+      setSubmitError("There was an error sending your inquiry. Please try again or email us directly at vishamanofficial.business@gmail.com.");
+    }
   };
 
   return (
@@ -204,15 +248,31 @@ export const Contact: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <Input
-                label="Phone Number"
-                name="phone"
-                type="tel"
-                placeholder="e.g. +91 93116 75528"
-                value={formData.phone}
-                onChange={handleInputChange}
-                error={errors.phone}
-              />
+              <div className="flex flex-col w-full">
+                <PhoneInput
+                  label="Phone Number"
+                  countryCode={formData.countryCode}
+                  phone={formData.phone}
+                  onChange={({ countryCode, phone }) => {
+                    setFormData((prev) => ({ ...prev, countryCode, phone }));
+                    setErrors((prev) => ({ ...prev, phone: "" }));
+                  }}
+                  error={errors.phone}
+                />
+                <div className="flex items-start gap-2.5 mt-2 w-full text-left">
+                  <input
+                    id="contact-whatsapp"
+                    name="isWhatsApp"
+                    type="checkbox"
+                    checked={formData.isWhatsApp}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-primary border-border focus:ring-primary rounded mt-0.5 cursor-pointer"
+                  />
+                  <label htmlFor="contact-whatsapp" className="text-xs text-text-secondary leading-snug cursor-pointer select-none">
+                    This is also my WhatsApp number for faster communications.
+                  </label>
+                </div>
+              </div>
               <Input
                 label="Subject (Optional)"
                 name="subject"
@@ -260,6 +320,12 @@ export const Contact: React.FC = () => {
                 Subscribe to our Newsletter.
               </label>
             </div>
+
+            {submitError && (
+              <div className="p-3.5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-xs font-semibold leading-relaxed mt-2">
+                {submitError}
+              </div>
+            )}
 
             <Button
               type="submit"
