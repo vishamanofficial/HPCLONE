@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -93,10 +93,17 @@ export const CalculatorWizard: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);  const [submitError, setSubmitError] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const totalSteps = 5;
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setErrors({});
     setHasSubmitted(false);
+    if (containerRef.current) {
+      const offsetTop = containerRef.current.getBoundingClientRect().top + window.pageYOffset - 90;
+      window.scrollTo({ top: Math.max(0, offsetTop), behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }, [currentStep]);
 
   const renderIcon = (name: string, className: string = "w-6 h-6") => {
@@ -238,7 +245,7 @@ export const CalculatorWizard: React.FC = () => {
   const progressPercentage = (currentStep / totalSteps) * 100;
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8">
+    <div ref={containerRef} className="w-full max-w-4xl mx-auto px-4 py-8">
       <div className="mb-10">
         <div className="flex items-center justify-between text-xs font-bold uppercase text-text-secondary tracking-wider mb-3">
           <span>App Cost Calculator</span>
