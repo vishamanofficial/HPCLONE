@@ -133,7 +133,7 @@ export const Career: React.FC = () => {
                     {job.description}
                   </p>
                 </div>
-                <a href="mailto:connect@hangingpanda.com?subject=Job Application" className="w-full sm:w-auto">
+                <a href="mailto:vishamanofficial.business@gmail.com?subject=Job Application" className="w-full sm:w-auto">
                   <Button variant="outline" className="w-full justify-center">
                     Apply Now &rarr;
                   </Button>
@@ -151,7 +151,7 @@ export const Career: React.FC = () => {
         <p className="text-xs sm:text-sm text-text-secondary leading-relaxed max-w-md mx-auto mb-6">
           Submit your CV anyway. We regularly review speculative engineering profiles for future contract sprints.
         </p>
-        <a href="mailto:connect@hangingpanda.com?subject=Speculative Technical CV Application">
+        <a href="mailto:vishamanofficial.business@gmail.com?subject=Speculative Technical CV Application">
           <Button variant="gradient">
             Email Your Resume
           </Button>

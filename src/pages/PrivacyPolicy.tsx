@@ -40,8 +40,8 @@ export const PrivacyPolicy: React.FC = () => {
           </p>
           <p>
             If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at{" "}
-            <a href="mailto:connect@hangingpanda.com" className="text-primary hover:underline">
-              connect@hangingpanda.com
+            <a href="mailto:vishamanofficial.business@gmail.com" className="text-primary hover:underline">
+              vishamanofficial.business@gmail.com
             </a>.
           </p>
 

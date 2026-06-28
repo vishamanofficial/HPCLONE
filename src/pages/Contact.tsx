@@ -133,8 +133,8 @@ export const Contact: React.FC = () => {
               </span>
               <div className="flex flex-col gap-1">
                 <span className="text-xs font-bold text-text-secondary uppercase tracking-wider">Email Coordinates</span>
-                <a href="mailto:connect@hangingpanda.com" className="text-sm font-semibold text-text-primary hover:text-primary transition-colors">
-                  connect@hangingpanda.com
+                <a href="mailto:vishamanofficial.business@gmail.com" className="text-sm font-semibold text-text-primary hover:text-primary transition-colors">
+                  vishamanofficial.business@gmail.com
                 </a>
               </div>
             </div>
@@ -145,8 +145,8 @@ export const Contact: React.FC = () => {
               </span>
               <div className="flex flex-col gap-1">
                 <span className="text-xs font-bold text-text-secondary uppercase tracking-wider">Call Coordinates</span>
-                <a href="tel:+919311781537" className="text-sm font-semibold text-text-primary hover:text-primary transition-colors">
-                  +91-9311781537
+                <a href="tel:+918887024887" className="text-sm font-semibold text-text-primary hover:text-primary transition-colors">
+                  +91-8887024887
                 </a>
               </div>
             </div>

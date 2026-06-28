@@ -30,14 +30,14 @@ export const Footer: React.FC = () => {
             </div>
             <div className="flex items-center gap-3 text-sm">
               <Mail className="w-5 h-5 text-primary flex-shrink-0" />
-              <a href="mailto:connect@hangingpanda.com" className="hover:text-primary transition-colors">
-                connect@hangingpanda.com
+              <a href="mailto:vishamanofficial.business@gmail.com" className="hover:text-primary transition-colors">
+                vishamanofficial.business@gmail.com
               </a>
             </div>
             <div className="flex items-center gap-3 text-sm">
               <Smartphone className="w-5 h-5 text-primary flex-shrink-0" />
-              <a href="tel:+919311781537" className="hover:text-primary transition-colors">
-                +91-9311781537
+              <a href="tel:+918887024887" className="hover:text-primary transition-colors">
+                +91-8887024887
               </a>
             </div>
           </div>
