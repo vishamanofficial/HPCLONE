@@ -96,7 +96,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             placeholder={placeholder}
             value={phone}
             onChange={handlePhoneChange}
-            className={`w-full px-4 py-3 bg-surface border rounded-lg text-sm text-text-primary transition-all duration-300 placeholder:text-text-muted/60 focus:bg-card focus:border-primary focus:ring-1 focus:ring-primary h-[46px] ${
+            className={`w-full px-4 py-3 bg-surface border rounded-lg text-base md:text-sm text-text-primary transition-all duration-300 placeholder:text-text-muted/60 focus:bg-card focus:border-primary focus:ring-1 focus:ring-primary h-[46px] ${
               error ? "border-red-500 ring-1 ring-red-500 focus:border-red-500 focus:ring-red-500" : "border-border"
             }`}
           />
@@ -114,7 +114,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                 placeholder="Search country or code..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs text-text-primary border-none outline-none focus:outline-none focus:ring-0 focus:border-transparent focus-visible:outline-none focus-visible:ring-0 focus-visible:border-transparent [box-shadow:none] focus-visible:[box-shadow:none] placeholder:text-text-muted/50 py-1"
+                className="w-full bg-transparent text-base md:text-xs text-text-primary border-none outline-none focus:outline-none focus:ring-0 focus:border-transparent focus-visible:outline-none focus-visible:ring-0 focus-visible:border-transparent [box-shadow:none] focus-visible:[box-shadow:none] placeholder:text-text-muted/50 py-1"
               />
             </div>
 

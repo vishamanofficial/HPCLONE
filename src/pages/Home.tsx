@@ -1000,7 +1000,7 @@ export const Home: React.FC = () => {
                       type="text" 
                       id="form-name" 
                       placeholder="Jane Doe" 
-                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
+                      className={`w-full px-4 py-3 text-base md:text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
                         errors.name ? "border-red-500" : "border-border"
                       }`}
                       value={formData.name}
@@ -1020,7 +1020,7 @@ export const Home: React.FC = () => {
                       type="email" 
                       id="form-email" 
                       placeholder="jane@company.com" 
-                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
+                      className={`w-full px-4 py-3 text-base md:text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
                         errors.email ? "border-red-500" : "border-border"
                       }`}
                       value={formData.email}
@@ -1060,11 +1060,11 @@ export const Home: React.FC = () => {
                     </div>
                   </div>
 
-                  <div>
+                   <div>
                     <label className="block text-xs font-bold text-text-secondary uppercase mb-1.5" htmlFor="form-budget">Est. Project Budget</label>
                     <select 
                       id="form-budget"
-                      className="w-full px-4 py-3 text-sm rounded-xl border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                      className="w-full px-4 py-3 text-base md:text-sm rounded-xl border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                       value={formData.budget}
                       onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                     >
@@ -1081,7 +1081,7 @@ export const Home: React.FC = () => {
                       id="form-message" 
                       rows={3}
                       placeholder="Describe what you want to build (e.g. mobile app, web dashboard, SaaS architecture)..." 
-                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none ${
+                      className={`w-full px-4 py-3 text-base md:text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none ${
                         errors.message ? "border-red-500" : "border-border"
                       }`}
                       value={formData.message}

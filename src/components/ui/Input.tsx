@@ -32,7 +32,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             type={type}
             aria-invalid={error ? "true" : "false"}
             aria-describedby={error ? `${inputId}-error` : undefined}
-            className={`w-full px-4 py-3 bg-surface border rounded-lg text-sm text-text-primary transition-all duration-300 placeholder:text-text-muted/60 focus:bg-card focus:border-primary focus:ring-1 focus:ring-primary ${
+            className={`w-full px-4 py-3 bg-surface border rounded-lg text-base md:text-sm text-text-primary transition-all duration-300 placeholder:text-text-muted/60 focus:bg-card focus:border-primary focus:ring-1 focus:ring-primary ${
               leftIcon ? "pl-11" : ""
             } ${
               error
