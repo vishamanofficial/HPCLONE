@@ -20,12 +20,12 @@ export const MainLayout: React.FC = () => {
 
       <Footer />
 
-      {/* Floating Theme-aligned WhatsApp Button */}
+      {/* Floating Theme-aligned WhatsApp Action Button */}
       <a
         href="https://wa.me/918887024887"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 w-11 h-11 md:w-14 md:h-14 rounded-full flex items-center justify-center bg-gradient-to-tr from-primary to-accent-orange text-white shadow-lg shadow-primary/20 hover:shadow-primary/35 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+        className="fixed bottom-5 right-5 md:bottom-7 md:right-7 z-50 w-12 h-12 md:w-14 md:h-14 min-w-[48px] min-h-[48px] rounded-full flex items-center justify-center bg-gradient-to-tr from-primary to-accent-orange text-white shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 active:scale-95 transition-all duration-200 cursor-pointer"
         aria-label="Chat on WhatsApp"
       >
         <svg viewBox="0 0 24 24" className="w-5.5 h-5.5 md:w-7 md:h-7 fill-current">

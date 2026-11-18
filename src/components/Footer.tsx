@@ -100,20 +100,20 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <h4 className="text-sm font-bold uppercase tracking-wider text-text-primary border-l-2 border-primary pl-3">
+        <div className="flex flex-col gap-5">
+          <h4 className="text-xs font-semibold uppercase tracking-caption text-text-muted">
             Our Company
           </h4>
-          <ul className="flex flex-col gap-3 text-sm">
+          <ul className="flex flex-col gap-2.5 text-sm">
             <li>
               <Link to="/about" className="hover:text-primary transition-colors">
                 About Us
               </Link>
             </li>
             <li>
-              <Link to="/career" className="hover:text-primary transition-colors flex items-center gap-2">
+              <Link to="/career" className="hover:text-primary transition-colors inline-flex items-center gap-2">
                 Careers
-                <span className="px-2 py-0.5 bg-primary/20 text-primary text-[10px] rounded-full font-bold">
+                <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] rounded-full font-bold">
                   Hiring
                 </span>
               </Link>
@@ -136,11 +136,11 @@ export const Footer: React.FC = () => {
           </ul>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <h4 className="text-sm font-bold uppercase tracking-wider text-text-primary border-l-2 border-primary pl-3">
+        <div className="flex flex-col gap-5">
+          <h4 className="text-xs font-semibold uppercase tracking-caption text-text-muted">
             Recent Work
           </h4>
-          <ul className="flex flex-col gap-3 text-sm">
+          <ul className="flex flex-col gap-2.5 text-sm">
             <li>
               <Link to="/case-studies" className="hover:text-primary transition-colors">
                 Marhba Banking App
@@ -169,11 +169,11 @@ export const Footer: React.FC = () => {
           </ul>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <h4 className="text-sm font-bold uppercase tracking-wider text-text-primary border-l-2 border-primary pl-3">
+        <div className="flex flex-col gap-5">
+          <h4 className="text-xs font-semibold uppercase tracking-caption text-text-muted">
             Key Offerings
           </h4>
-          <ul className="flex flex-col gap-3 text-sm">
+          <ul className="flex flex-col gap-2.5 text-sm">
             {quickServices.map((service) => (
               <li key={service.slug}>
                 <Link to={`/services/${service.slug}`} className="hover:text-primary transition-colors">
@@ -190,16 +190,16 @@ export const Footer: React.FC = () => {
           <span>{settings.copyrightText}</span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {settings.socialLinks.facebook && (
             <a
               href={settings.socialLinks.facebook}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit our Facebook profile"
-              className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
+              className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-full bg-card border border-border hover:bg-primary hover:text-white transition-all flex items-center justify-center text-text-secondary cursor-pointer"
             >
-              <Facebook className="w-4.5 h-4.5" />
+              <Facebook className="w-4 h-4" />
             </a>
           )}
           {settings.socialLinks.twitter && (
@@ -208,9 +208,9 @@ export const Footer: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit our Twitter profile"
-              className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
+              className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-full bg-card border border-border hover:bg-primary hover:text-white transition-all flex items-center justify-center text-text-secondary cursor-pointer"
             >
-              <Twitter className="w-4.5 h-4.5" />
+              <Twitter className="w-4 h-4" />
             </a>
           )}
           {settings.socialLinks.linkedin && (
@@ -219,9 +219,9 @@ export const Footer: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit our LinkedIn profile"
-              className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
+              className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-full bg-card border border-border hover:bg-primary hover:text-white transition-all flex items-center justify-center text-text-secondary cursor-pointer"
             >
-              <Linkedin className="w-4.5 h-4.5" />
+              <Linkedin className="w-4 h-4" />
             </a>
           )}
           {settings.socialLinks.instagram && (
@@ -230,9 +230,9 @@ export const Footer: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit our Instagram profile"
-              className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
+              className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-full bg-card border border-border hover:bg-primary hover:text-white transition-all flex items-center justify-center text-text-secondary cursor-pointer"
             >
-              <Instagram className="w-4.5 h-4.5" />
+              <Instagram className="w-4 h-4" />
             </a>
           )}
         </div>

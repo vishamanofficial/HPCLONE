@@ -11,6 +11,7 @@
   --color-surface: rgb(var(--hp-color-surface));
   --color-card: rgb(var(--hp-color-card));
   --color-border: rgb(var(--hp-color-border));
+  --color-border-subtle: rgb(var(--hp-color-border-subtle));
   
   --color-text-primary: rgb(var(--hp-color-text-primary));
   --color-text-secondary: rgb(var(--hp-color-text-secondary));
@@ -18,10 +19,11 @@
   
   --radius-card: var(--radius-card);
   --radius-button: var(--radius-button);
+  --radius-control: var(--radius-control);
   
   --font-sans: var(--font-sans);
   
-  --animate-scroll-strip: scroll-strip 30s linear infinite;
+  --animate-scroll-strip: scroll-strip 35s linear infinite;
 
   @keyframes scroll-strip {
     0% { transform: translateX(0); }
@@ -36,28 +38,99 @@ body {
   transition-property: color, background-color, border-color;
   transition-duration: 200ms;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 
+/* Apple Liquid Glass Material Specification */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+}
+
+.dark .apple-glass {
+  background: rgba(22, 23, 26, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Apple Clear Liquid Glass for Floating Controls */
+.apple-glass-clear {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.dark .apple-glass-clear {
+  background: rgba(30, 30, 34, 0.5);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Apple Optical Tracking Scale (typography.md) */
+.tracking-display {
+  letter-spacing: -0.03em;
+}
+
+.tracking-headline {
+  letter-spacing: -0.02em;
+}
+
+.tracking-body {
+  letter-spacing: -0.01em;
+}
+
+.tracking-caption {
+  letter-spacing: +0.05em;
+}
+
+/* Visible Keyboard Focus Ring (accessibility.md) */
 :focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px rgb(var(--hp-color-bg)), 0 0 0 4px rgb(var(--hp-color-primary));
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .apple-glass, .apple-glass-clear {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgb(var(--hp-color-surface)) !important;
+  }
+}
+
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: rgb(var(--hp-color-surface));
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(var(--hp-color-text-muted), 0.3);
+  background-color: rgba(var(--hp-color-text-muted), 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(var(--hp-color-text-muted), 0.5);
+  background-color: rgba(var(--hp-color-text-muted), 0.45);
 }

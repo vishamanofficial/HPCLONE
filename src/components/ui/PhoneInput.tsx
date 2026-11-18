@@ -80,7 +80,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-between gap-1 px-3 py-3 bg-surface border border-border rounded-lg text-sm text-text-primary hover:bg-card focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all duration-300 h-[46px] min-w-[95px] cursor-pointer"
+          className="flex items-center justify-between gap-1 px-3 py-2 bg-surface border border-border rounded-xl text-sm text-text-primary hover:bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-150 min-h-[44px] min-w-[95px] cursor-pointer"
         >
           <span className="flex items-center gap-1.5">
             <span className="text-base select-none">{selectedCountry.flag}</span>
@@ -96,15 +96,15 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             placeholder={placeholder}
             value={phone}
             onChange={handlePhoneChange}
-            className={`w-full px-4 py-3 bg-surface border rounded-lg text-base md:text-sm text-text-primary transition-all duration-300 placeholder:text-text-muted/60 focus:bg-card focus:border-primary focus:ring-1 focus:ring-primary h-[46px] ${
-              error ? "border-red-500 ring-1 ring-red-500 focus:border-red-500 focus:ring-red-500" : "border-border"
+            className={`w-full min-h-[44px] px-3.5 py-2.5 bg-surface border rounded-xl text-base md:text-sm text-text-primary transition-all duration-150 ease-out placeholder:text-text-muted/60 focus:bg-card focus:border-primary focus:ring-2 focus:ring-primary/20 ${
+              error ? "border-red-500 ring-1 ring-red-500 focus:border-red-500" : "border-border hover:border-text-muted/40"
             }`}
           />
         </div>
 
-        {/* Custom Dropdown Panel */}
+        {/* Custom Dropdown Panel - Apple Glass */}
         {isOpen && (
-          <div className="absolute top-[52px] left-0 z-50 w-72 max-h-64 overflow-hidden bg-card border border-border rounded-xl shadow-2xl flex flex-col">
+          <div className="absolute top-[50px] left-0 z-50 w-72 max-h-64 overflow-hidden apple-glass rounded-2xl shadow-xl flex flex-col">
             {/* Search Box */}
             <div className="p-2 border-b border-border flex items-center gap-3.5 bg-surface">
               <Search className="w-3.5 h-3.5 text-text-muted" />

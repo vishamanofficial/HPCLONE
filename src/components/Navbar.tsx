@@ -72,33 +72,35 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-out ${
           isScrolled
-            ? "bg-card/85 backdrop-blur-md border-b border-border shadow-sm py-4"
-            : "bg-transparent py-6"
+            ? "apple-glass py-3 border-b border-border/50 shadow-sm"
+            : "bg-transparent py-5"
         }`}
       >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-accent-orange flex items-center justify-center text-white font-black text-xl shadow-md shadow-primary/20 transition-transform group-hover:scale-105">
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <span className="w-10 h-10 rounded-[12px] bg-gradient-to-tr from-primary to-accent-orange flex items-center justify-center text-white font-black text-lg shadow-sm shadow-primary/20 transition-transform duration-200 group-hover:scale-[1.03]">
             HP
           </span>
           <div className="flex flex-col">
-            <span className="text-lg font-black tracking-tight text-text-primary group-hover:text-primary transition-colors leading-none">
+            <span className="text-[17px] font-bold tracking-headline text-text-primary group-hover:text-primary transition-colors leading-tight">
               HangingPanda
             </span>
-            <span className="text-[10px] tracking-wider uppercase font-semibold text-text-muted">
+            <span className="text-[10px] tracking-caption uppercase font-semibold text-text-muted">
               Software Labs
             </span>
           </div>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-1.5 p-1 rounded-full apple-glass-clear">
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `text-sm font-semibold transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-text-secondary"
+              `min-h-[38px] px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-150 inline-flex items-center ${
+                isActive
+                  ? "bg-card text-primary shadow-xs font-semibold"
+                  : "text-text-secondary hover:text-text-primary hover:bg-surface/60"
               }`
             }
           >
@@ -108,20 +110,24 @@ export const Navbar: React.FC = () => {
           <NavLink
             to="/pandanextai"
             className={({ isActive }) =>
-              `text-sm font-semibold flex items-center gap-1.5 transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-text-secondary"
+              `min-h-[38px] px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-150 inline-flex items-center gap-1.5 ${
+                isActive
+                  ? "bg-card text-primary shadow-xs font-semibold"
+                  : "text-text-secondary hover:text-text-primary hover:bg-surface/60"
               }`
             }
           >
-            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
             PandaNext AI
           </NavLink>
 
           <NavLink
             to="/about"
             className={({ isActive }) =>
-              `text-sm font-semibold transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-text-secondary"
+              `min-h-[38px] px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-150 inline-flex items-center ${
+                isActive
+                  ? "bg-card text-primary shadow-xs font-semibold"
+                  : "text-text-secondary hover:text-text-primary hover:bg-surface/60"
               }`
             }
           >
@@ -136,31 +142,31 @@ export const Navbar: React.FC = () => {
             <button
               aria-haspopup="true"
               aria-expanded={showServicesDrop}
-              className={`text-sm font-semibold flex items-center gap-1 transition-colors hover:text-primary ${
+              className={`min-h-[38px] px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium inline-flex items-center gap-1 transition-all duration-150 cursor-pointer ${
                 showServicesDrop || location.pathname.includes("/services/")
-                  ? "text-primary"
-                  : "text-text-secondary"
+                  ? "bg-card text-primary shadow-xs font-semibold"
+                  : "text-text-secondary hover:text-text-primary hover:bg-surface/60"
               }`}
             >
               Services
               <ChevronDown
-                className={`w-4 h-4 transition-transform duration-300 ${
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
                   showServicesDrop ? "rotate-180" : ""
                 }`}
               />
             </button>
 
             {showServicesDrop && (
-              <div className="absolute top-full -left-48 w-[640px] pt-4 z-50">
-                <div role="menu" className="bg-card border border-border shadow-2xl rounded-2xl p-6 grid grid-cols-2 gap-4">
+              <div className="absolute top-full -left-40 w-[600px] pt-3 z-50">
+                <div role="menu" className="apple-glass rounded-2xl p-5 grid grid-cols-2 gap-3 shadow-2xl">
                   {servicesList.map((service) => (
                     <Link
                       key={service.slug}
                       to={`/services/${service.slug}`}
                       role="menuitem"
-                      className="p-3 rounded-xl hover:bg-surface border border-transparent hover:border-border transition-all flex flex-col gap-1 group"
+                      className="p-3 rounded-xl hover:bg-surface/80 border border-transparent hover:border-border/60 transition-all duration-150 flex flex-col gap-1 group"
                     >
-                      <span className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors flex items-center gap-2">
+                      <span className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors flex items-center gap-2">
                         {service.title}
                       </span>
                       <span className="text-xs text-text-secondary line-clamp-1">
@@ -169,13 +175,13 @@ export const Navbar: React.FC = () => {
                     </Link>
                   ))}
                   <div className="col-span-2 mt-2 pt-3 border-t border-border flex items-center justify-between text-xs text-text-muted">
-                    <span>Need a custom software consultation?</span>
+                    <span>Need an enterprise architecture review?</span>
                     <Link
                       to="/contact"
                       role="menuitem"
-                      className="text-primary font-bold hover:underline inline-flex items-center gap-1"
+                      className="text-primary font-semibold hover:underline inline-flex items-center gap-1"
                     >
-                      Write to our Experts &rarr;
+                      Consult an Engineer &rarr;
                     </Link>
                   </div>
                 </div>
@@ -186,8 +192,10 @@ export const Navbar: React.FC = () => {
           <NavLink
             to="/case-studies"
             className={({ isActive }) =>
-              `text-sm font-semibold transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-text-secondary"
+              `min-h-[38px] px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-150 inline-flex items-center ${
+                isActive
+                  ? "bg-card text-primary shadow-xs font-semibold"
+                  : "text-text-secondary hover:text-text-primary hover:bg-surface/60"
               }`
             }
           >
@@ -197,8 +205,10 @@ export const Navbar: React.FC = () => {
           <NavLink
             to="/blog"
             className={({ isActive }) =>
-              `text-sm font-semibold transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-text-secondary"
+              `min-h-[38px] px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-150 inline-flex items-center ${
+                isActive
+                  ? "bg-card text-primary shadow-xs font-semibold"
+                  : "text-text-secondary hover:text-text-primary hover:bg-surface/60"
               }`
             }
           >
@@ -208,8 +218,10 @@ export const Navbar: React.FC = () => {
           <NavLink
             to="/contact"
             className={({ isActive }) =>
-              `text-sm font-semibold transition-colors hover:text-primary ${
-                isActive ? "text-primary" : "text-text-secondary"
+              `min-h-[38px] px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-150 inline-flex items-center ${
+                isActive
+                  ? "bg-card text-primary shadow-xs font-semibold"
+                  : "text-text-secondary hover:text-text-primary hover:bg-surface/60"
               }`
             }
           >
@@ -217,27 +229,27 @@ export const Navbar: React.FC = () => {
           </NavLink>
         </nav>
 
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3">
           <button
             onClick={toggleTheme}
-            className="p-2.5 rounded-full hover:bg-surface border border-border text-text-secondary hover:text-primary transition-colors"
+            className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-full hover:bg-surface border border-border text-text-secondary hover:text-text-primary transition-all duration-150 flex items-center justify-center cursor-pointer"
             title="Toggle Light/Dark Theme"
             aria-label="Toggle light and dark theme"
           >
-            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {theme === "dark" ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
           </button>
 
           <Link to="/app-cost-calculator">
-            <Button variant="gradient" size="md" leftIcon={<Calculator className="w-4 h-4" />}>
+            <Button variant="primary" size="md" leftIcon={<Calculator className="w-4 h-4" />}>
               Cost Calculator
             </Button>
           </Link>
         </div>
 
-        <div className="flex lg:hidden items-center gap-3">
+        <div className="flex lg:hidden items-center gap-2">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-surface text-text-secondary transition-colors"
+            className="w-10 h-10 rounded-full hover:bg-surface text-text-secondary transition-colors flex items-center justify-center cursor-pointer"
             aria-label="Toggle light and dark theme"
           >
             {theme === "dark" ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
@@ -245,10 +257,10 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-full hover:bg-surface text-text-secondary transition-colors"
+            className="w-10 h-10 rounded-full hover:bg-surface text-text-secondary transition-colors flex items-center justify-center cursor-pointer"
             aria-label={isOpen ? "Close main navigation menu" : "Open main navigation menu"}
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
@@ -256,16 +268,16 @@ export const Navbar: React.FC = () => {
 
       {isOpen && (
         <div
-          className={`fixed inset-0 z-40 bg-card border-t border-border overflow-y-auto px-6 py-8 flex flex-col gap-6 lg:hidden transition-all duration-300 ${
-            isScrolled ? "top-[73px]" : "top-[89px]"
+          className={`fixed inset-0 z-40 apple-glass border-t border-border overflow-y-auto px-6 py-8 flex flex-col gap-6 lg:hidden transition-all duration-300 ${
+            isScrolled ? "top-[64px]" : "top-[76px]"
           }`}
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `text-lg font-bold p-2 rounded-xl ${
-                  isActive ? "bg-primary/10 text-primary" : "text-text-primary"
+                `min-h-[44px] text-base font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 flex items-center ${
+                  isActive ? "bg-primary/10 text-primary font-bold" : "text-text-primary hover:bg-surface/60"
                 }`
               }
             >
@@ -275,20 +287,20 @@ export const Navbar: React.FC = () => {
             <NavLink
               to="/pandanextai"
               className={({ isActive }) =>
-                `text-lg font-bold p-2 rounded-xl flex items-center gap-2 ${
-                  isActive ? "bg-primary/10 text-primary" : "text-text-primary"
+                `min-h-[44px] text-base font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 flex items-center gap-2.5 ${
+                  isActive ? "bg-primary/10 text-primary font-bold" : "text-text-primary hover:bg-surface/60"
                 }`
               }
             >
-              <Sparkles className="w-5 h-5 text-primary" />
+              <Sparkles className="w-4.5 h-4.5 text-primary" />
               PandaNext AI
             </NavLink>
 
             <NavLink
               to="/about"
               className={({ isActive }) =>
-                `text-lg font-bold p-2 rounded-xl ${
-                  isActive ? "bg-primary/10 text-primary" : "text-text-primary"
+                `min-h-[44px] text-base font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 flex items-center ${
+                  isActive ? "bg-primary/10 text-primary font-bold" : "text-text-primary hover:bg-surface/60"
                 }`
               }
             >
@@ -298,23 +310,23 @@ export const Navbar: React.FC = () => {
             <div className="flex flex-col">
               <button
                 onClick={() => setShowServicesDrop(!showServicesDrop)}
-                className="text-lg font-bold p-2 rounded-xl flex items-center justify-between text-text-primary"
+                className="min-h-[44px] text-base font-semibold px-4 py-2.5 rounded-xl flex items-center justify-between text-text-primary hover:bg-surface/60 transition-all duration-150 cursor-pointer"
               >
                 Services
                 <ChevronDown
-                  className={`w-5 h-5 transition-transform duration-300 ${
+                  className={`w-4 h-4 transition-transform duration-200 ${
                     showServicesDrop ? "rotate-180" : ""
                   }`}
                 />
               </button>
 
               {showServicesDrop && (
-                <div className="pl-4 flex flex-col gap-2 mt-2 border-l border-border/80 ml-4">
+                <div className="pl-4 flex flex-col gap-1 mt-1 border-l-2 border-primary/20 ml-5">
                   {servicesList.map((service) => (
                     <Link
                       key={service.slug}
                       to={`/services/${service.slug}`}
-                      className="text-sm font-semibold py-1.5 text-text-secondary hover:text-primary transition-colors"
+                      className="min-h-[40px] text-sm font-medium px-3 py-2 text-text-secondary hover:text-primary transition-colors flex items-center"
                     >
                       {service.title}
                     </Link>
@@ -326,8 +338,8 @@ export const Navbar: React.FC = () => {
             <NavLink
               to="/case-studies"
               className={({ isActive }) =>
-                `text-lg font-bold p-2 rounded-xl ${
-                  isActive ? "bg-primary/10 text-primary" : "text-text-primary"
+                `min-h-[44px] text-base font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 flex items-center ${
+                  isActive ? "bg-primary/10 text-primary font-bold" : "text-text-primary hover:bg-surface/60"
                 }`
               }
             >
@@ -337,8 +349,8 @@ export const Navbar: React.FC = () => {
             <NavLink
               to="/blog"
               className={({ isActive }) =>
-                `text-lg font-bold p-2 rounded-xl ${
-                  isActive ? "bg-primary/10 text-primary" : "text-text-primary"
+                `min-h-[44px] text-base font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 flex items-center ${
+                  isActive ? "bg-primary/10 text-primary font-bold" : "text-text-primary hover:bg-surface/60"
                 }`
               }
             >
@@ -348,8 +360,8 @@ export const Navbar: React.FC = () => {
             <NavLink
               to="/contact"
               className={({ isActive }) =>
-                `text-lg font-bold p-2 rounded-xl ${
-                  isActive ? "bg-primary/10 text-primary" : "text-text-primary"
+                `min-h-[44px] text-base font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 flex items-center ${
+                  isActive ? "bg-primary/10 text-primary font-bold" : "text-text-primary hover:bg-surface/60"
                 }`
               }
             >
@@ -360,8 +372,8 @@ export const Navbar: React.FC = () => {
           <div className="mt-auto border-t border-border pt-6">
             <Link to="/app-cost-calculator">
               <Button
-                variant="gradient"
-                className="w-full justify-center"
+                variant="primary"
+                className="w-full justify-center min-h-[48px]"
                 leftIcon={<Calculator className="w-4 h-4" />}
               >
                 Cost Calculator

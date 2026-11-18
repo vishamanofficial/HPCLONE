@@ -33,6 +33,9 @@ import { Card } from "../components/ui/Card";
 import { Accordion } from "../components/ui/Accordion";
 import { EngineeringJourney } from "../components/EngineeringJourney";
 import { PhoneInput } from "../components/ui/PhoneInput";
+import { Input } from "../components/ui/Input";
+import { Select } from "../components/ui/Select";
+import { Textarea } from "../components/ui/Textarea";
 
 const serviceIcons: Record<string, React.ComponentType<any>> = {
   Smartphone,
@@ -266,8 +269,8 @@ export const Home: React.FC = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-12 md:py-24 bg-gradient-to-b from-surface to-bg">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.06),transparent_45%)] pointer-events-none" />
+      <section className="relative overflow-hidden py-14 md:py-28 bg-gradient-to-b from-surface to-bg">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(220,38,38,0.05),transparent_50%)] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           <div className="lg:col-span-7 flex flex-col items-start text-left">
@@ -275,9 +278,9 @@ export const Home: React.FC = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary uppercase tracking-wider mb-6"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full apple-glass-clear border border-primary/20 text-xs font-semibold text-primary tracking-caption uppercase mb-6"
             >
-              <span className="w-2 h-2 rounded-full bg-primary animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               Next-Gen Software Engineering
             </motion.div>
 
@@ -285,7 +288,7 @@ export const Home: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-6xl font-black text-text-primary tracking-tight leading-tight"
+              className="text-4xl sm:text-6xl font-extrabold text-text-primary tracking-display leading-[1.08]"
             >
               AI-Powered <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-orange">Software Development</span> for Leaders.
             </motion.h1>
@@ -294,7 +297,7 @@ export const Home: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg text-text-secondary mt-6 max-w-2xl leading-relaxed"
+              className="text-base sm:text-lg text-text-secondary mt-6 max-w-2xl leading-relaxed tracking-body"
             >
               Recreating digital landscapes with secure native mobile apps, web design tokens, and modular enterprise algorithms. Backed by 2.5 years of free maintenance.
             </motion.p>
@@ -303,10 +306,10 @@ export const Home: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center gap-4 mt-10 w-full sm:w-auto"
+              className="flex flex-col sm:flex-row items-center gap-3.5 mt-9 w-full sm:w-auto"
             >
               <Link to="/app-cost-calculator" className="w-full sm:w-auto">
-                <Button variant="gradient" size="lg" className="w-full justify-center">
+                <Button variant="primary" size="lg" className="w-full justify-center shadow-sm">
                   Consult Our Experts
                 </Button>
               </Link>
@@ -319,64 +322,66 @@ export const Home: React.FC = () => {
           </div>
 
           <div className="lg:col-span-5 relative hidden lg:block">
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-accent-orange/10 rounded-3xl rotate-3 scale-105 filter blur-xl" />
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7 }}
-              className="relative bg-card border border-border shadow-2xl rounded-3xl p-8 flex flex-col gap-6"
+              className="relative apple-glass rounded-3xl p-7 flex flex-col gap-5 shadow-2xl"
             >
               <div className="flex items-center justify-between border-b border-border/80 pb-4">
-                <span className="text-xs font-bold text-text-muted uppercase tracking-wider">
+                <span className="text-xs font-semibold text-text-muted uppercase tracking-caption">
                   Live Project Metrics
                 </span>
-                <span className="px-2 py-0.5 bg-green-500/10 text-green-500 rounded-full font-bold text-[10px] animate-pulse">
-                  Connected
+                <span className="px-2.5 py-0.5 bg-green-500/10 text-green-600 dark:text-green-400 rounded-full font-semibold text-[11px] inline-flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                  Active Telemetry
                 </span>
               </div>
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-text-secondary">App Speed Index</span>
-                  <span className="text-sm font-bold text-primary">98/100</span>
+                  <span className="text-sm font-medium text-text-secondary">App Speed Index</span>
+                  <span className="text-sm font-bold text-text-primary">98/100</span>
                 </div>
-                <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: "98%" }}
                     transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-                    className="h-full bg-primary"
+                    className="h-full bg-primary rounded-full"
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-text-secondary">API Latency Target</span>
-                  <span className="text-sm font-bold text-accent-orange">&lt;180ms</span>
+                  <span className="text-sm font-medium text-text-secondary">API Latency Target</span>
+                  <span className="text-sm font-bold text-text-primary">&lt;180ms</span>
                 </div>
-                <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: "88%" }}
                     transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
-                    className="h-full bg-accent-orange"
+                    className="h-full bg-accent-orange rounded-full"
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-text-secondary">SLA Compliance Guarantee</span>
-                  <span className="text-sm font-bold text-green-500">100%</span>
+                  <span className="text-sm font-medium text-text-secondary">SLA Compliance Guarantee</span>
+                  <span className="text-sm font-bold text-green-600 dark:text-green-400">100%</span>
                 </div>
-                <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: "100%" }}
                     transition={{ duration: 1.2, delay: 0.7, ease: "easeOut" }}
-                    className="h-full bg-green-500"
+                    className="h-full bg-green-500 rounded-full"
                   />
                 </div>
               </div>
-              <div className="bg-surface/50 border border-border/60 rounded-2xl p-4 flex items-center gap-3">
-                <Code className="w-8 h-8 text-primary animate-pulse" />
+              <div className="bg-surface/70 border border-border/60 rounded-2xl p-4 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                  <Code className="w-5 h-5" />
+                </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-bold text-text-primary">Free Maintenance</span>
-                  <span className="text-[10px] text-text-secondary">2.5 Years post release support</span>
+                  <span className="text-[11px] text-text-muted">2.5 Years post-release security support</span>
                 </div>
               </div>
             </motion.div>
@@ -624,20 +629,23 @@ export const Home: React.FC = () => {
           </motion.div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-          {techCategories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedTechCategory(cat)}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold border transition-all duration-300 ${
-                selectedTechCategory === cat
-                  ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
-                  : "bg-card text-text-secondary border-border hover:bg-surface"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Apple Segmented Control for Tech Categories */}
+        <div className="flex justify-center mb-10">
+          <div className="p-1 rounded-full bg-surface border border-border inline-flex flex-wrap gap-1 shadow-xs max-w-full justify-center">
+            {techCategories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedTechCategory(cat)}
+                className={`min-h-[40px] px-4 sm:px-5 py-2 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                  selectedTechCategory === cat
+                    ? "bg-card text-text-primary shadow-xs font-bold"
+                    : "text-text-secondary hover:text-text-primary hover:bg-card/50"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
         <AnimatePresence mode="wait">
@@ -682,24 +690,27 @@ export const Home: React.FC = () => {
           </motion.div>
         </div>
 
-        <div role="tablist" className="flex flex-wrap items-center justify-center gap-2 mb-10">
-          {industries.map((ind) => (
-            <button
-              key={ind}
-              id={`industry-tab-${ind}`}
-              role="tab"
-              aria-selected={activeTab === ind}
-              aria-controls={`industry-panel-${ind}`}
-              onClick={() => setActiveTab(ind)}
-              className={`px-6 py-2.5 rounded-full text-xs font-bold border transition-all duration-300 ${
-                activeTab === ind
-                  ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
-                  : "bg-card text-text-secondary border-border hover:bg-surface"
-              }`}
-            >
-              {ind}
-            </button>
-          ))}
+        {/* Apple Segmented Control for Industries */}
+        <div className="flex justify-center mb-10">
+          <div role="tablist" className="p-1 rounded-full bg-surface border border-border inline-flex flex-wrap gap-1 shadow-xs max-w-full justify-center">
+            {industries.map((ind) => (
+              <button
+                key={ind}
+                id={`industry-tab-${ind}`}
+                role="tab"
+                aria-selected={activeTab === ind}
+                aria-controls={`industry-panel-${ind}`}
+                onClick={() => setActiveTab(ind)}
+                className={`min-h-[40px] px-5 sm:px-6 py-2 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                  activeTab === ind
+                    ? "bg-card text-text-primary shadow-xs font-bold"
+                    : "text-text-secondary hover:text-text-primary hover:bg-card/50"
+                }`}
+              >
+                {ind}
+              </button>
+            ))}
+          </div>
         </div>
 
         <AnimatePresence mode="wait">
@@ -983,9 +994,9 @@ export const Home: React.FC = () => {
             {...fadeInUp}
             className="lg:col-span-6 w-full"
           >
-            <Card hoverEffect="none" className="bg-card border border-border p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden">
-              <h3 className="text-xl sm:text-2xl font-black text-text-primary tracking-tight mb-2">Book a Scoping Session</h3>
-              <p className="text-xs text-text-secondary mb-6">Let us analyze your app requirements and supply draft wireframe logic.</p>
+            <Card hoverEffect="none" className="bg-card border border-border/80 p-6 sm:p-9 rounded-3xl shadow-xl relative overflow-hidden">
+              <h3 className="text-xl sm:text-2xl font-extrabold text-text-primary tracking-headline mb-2">Book a Scoping Session</h3>
+              <p className="text-xs text-text-secondary mb-6 tracking-body">Let our senior software architects analyze your app requirements and supply draft system diagrams.</p>
               
               {formSubmitted ? (
                 <motion.div 
@@ -996,7 +1007,7 @@ export const Home: React.FC = () => {
                   <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center text-green-500">
                     <CheckCircle className="w-8 h-8 animate-bounce" />
                   </div>
-                  <h4 className="text-lg font-bold text-text-primary">Blueprint Scheduled!</h4>
+                  <h4 className="text-lg font-bold text-text-primary tracking-headline">Blueprint Scheduled!</h4>
                   <p className="text-xs text-text-secondary max-w-xs leading-relaxed">
                     Thank you! Our engineering team has received your application. We will reach out to you within 24 hours at your email.
                   </p>
@@ -1005,46 +1016,31 @@ export const Home: React.FC = () => {
                   </Button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-text-secondary uppercase mb-1.5" htmlFor="form-name">Your Name</label>
-                    <input 
-                      type="text" 
-                      id="form-name" 
-                      placeholder="Jane Doe" 
-                      className={`w-full px-4 py-3 text-base md:text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
-                        errors.name ? "border-red-500" : "border-border"
-                      }`}
-                      value={formData.name}
-                      onChange={(e) => {
-                        setFormData({ ...formData, name: e.target.value });
-                        setErrors({ ...errors, name: "" });
-                      }}
-                    />
-                    {errors.name && (
-                      <span className="text-[11px] text-red-500 font-medium mt-1 block">{errors.name}</span>
-                    )}
-                  </div>
+                <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 text-left">
+                  <Input
+                    label="Your Name"
+                    id="form-name"
+                    placeholder="Jane Doe"
+                    value={formData.name}
+                    onChange={(e) => {
+                      setFormData({ ...formData, name: e.target.value });
+                      setErrors({ ...errors, name: "" });
+                    }}
+                    error={errors.name}
+                  />
                   
-                  <div>
-                    <label className="block text-xs font-bold text-text-secondary uppercase mb-1.5" htmlFor="form-email">Work Email</label>
-                    <input 
-                      type="email" 
-                      id="form-email" 
-                      placeholder="jane@company.com" 
-                      className={`w-full px-4 py-3 text-base md:text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all ${
-                        errors.email ? "border-red-500" : "border-border"
-                      }`}
-                      value={formData.email}
-                      onChange={(e) => {
-                        setFormData({ ...formData, email: e.target.value });
-                        setErrors({ ...errors, email: "" });
-                      }}
-                    />
-                    {errors.email && (
-                      <span className="text-[11px] text-red-500 font-medium mt-1 block">{errors.email}</span>
-                    )}
-                  </div>
+                  <Input
+                    label="Work Email"
+                    id="form-email"
+                    type="email"
+                    placeholder="jane@company.com"
+                    value={formData.email}
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                      setErrors({ ...errors, email: "" });
+                    }}
+                    error={errors.email}
+                  />
 
                   <div className="flex flex-col w-full text-left">
                     <PhoneInput
@@ -1072,40 +1068,31 @@ export const Home: React.FC = () => {
                     </div>
                   </div>
 
-                   <div>
-                    <label className="block text-xs font-bold text-text-secondary uppercase mb-1.5" htmlFor="form-budget">Est. Project Budget</label>
-                    <select 
-                      id="form-budget"
-                      className="w-full px-4 py-3 text-base md:text-sm rounded-xl border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                      value={formData.budget}
-                      onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    >
-                      <option>Under $5k</option>
-                      <option>$5k - $15k</option>
-                      <option>$15k - $50k</option>
-                      <option>$50k+</option>
-                    </select>
-                  </div>
+                  <Select
+                    label="Est. Project Budget"
+                    id="form-budget"
+                    value={formData.budget}
+                    onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                    options={[
+                      { value: "Under $5k", label: "Under $5k" },
+                      { value: "$5k - $15k", label: "$5k - $15k" },
+                      { value: "$15k - $50k", label: "$15k - $50k" },
+                      { value: "$50k+", label: "$50k+" },
+                    ]}
+                  />
 
-                  <div>
-                    <label className="block text-xs font-bold text-text-secondary uppercase mb-1.5" htmlFor="form-message">Brief Project Concept</label>
-                    <textarea 
-                      id="form-message" 
-                      rows={3}
-                      placeholder="Describe what you want to build (e.g. mobile app, web dashboard, SaaS architecture)..." 
-                      className={`w-full px-4 py-3 text-base md:text-sm rounded-xl border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none ${
-                        errors.message ? "border-red-500" : "border-border"
-                      }`}
-                      value={formData.message}
-                      onChange={(e) => {
-                        setFormData({ ...formData, message: e.target.value });
-                        setErrors({ ...errors, message: "" });
-                      }}
-                    />
-                    {errors.message && (
-                      <span className="text-[11px] text-red-500 font-medium mt-1 block">{errors.message}</span>
-                    )}
-                  </div>
+                  <Textarea
+                    label="Brief Project Concept"
+                    id="form-message"
+                    rows={3}
+                    placeholder="Describe what you want to build (e.g. mobile app, web dashboard, SaaS architecture)..."
+                    value={formData.message}
+                    onChange={(e) => {
+                      setFormData({ ...formData, message: e.target.value });
+                      setErrors({ ...errors, message: "" });
+                    }}
+                    error={errors.message}
+                  />
 
                   {submitError && (
                     <div className="p-3.5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-xs font-semibold leading-relaxed">
@@ -1113,7 +1100,7 @@ export const Home: React.FC = () => {
                     </div>
                   )}
 
-                  <Button variant="gradient" size="md" className="w-full mt-2 justify-center" type="submit" isLoading={formLoading} rightIcon={<Send className="w-4 h-4" />}>
+                  <Button variant="primary" size="md" className="w-full mt-2 justify-center shadow-sm" type="submit" isLoading={formLoading} rightIcon={<Send className="w-4 h-4" />}>
                     Get My Free Blueprint
                   </Button>
                 </form>
@@ -1137,14 +1124,14 @@ export const Home: React.FC = () => {
             <p className="text-sm sm:text-base text-text-secondary max-w-xl">
               Get an instant cost assessment or contact our engineering team to draft custom software blueprints.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-4">
+            <div className="flex flex-col sm:flex-row gap-3.5 w-full sm:w-auto mt-4">
               <Link to="/app-cost-calculator" className="w-full sm:w-auto">
-                <Button variant="gradient" size="lg" className="w-full justify-center">
+                <Button variant="primary" size="lg" className="w-full justify-center shadow-sm">
                   Calculate App Cost
                 </Button>
               </Link>
               <Link to="/contact" className="w-full sm:w-auto">
-                <Button variant="outline" size="lg" className="w-full justify-center">
+                <Button variant="secondary" size="lg" className="w-full justify-center">
                   Contact Experts
                 </Button>
               </Link>
