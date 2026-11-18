@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import api from "../services/api";
 import {
   HelpCircle,
   Smartphone,
@@ -66,10 +67,44 @@ export const ServiceDetail: React.FC = () => {
     { title: "What support options are included after release?", content: "Every build comes with 2.5 years of free maintenance. This covers software regressions, server health diagnostics, and compliance path audits." }
   ];
 
-  const service = servicesData.find((s) => s.slug === slug);
+  const fallbackService = servicesData.find((s) => s.slug === slug);
+  const [service, setService] = useState<any>(fallbackService);
+  const [isLoading, setIsLoading] = useState<boolean>(!fallbackService);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchService = async () => {
+      if (!slug) return;
+      try {
+        const res = await api.getPublicServiceBySlug(slug);
+        if (isMounted && res.success && res.service) {
+          setService(res.service);
+        }
+      } catch (err) {
+        if (isMounted && fallbackService) {
+          setService(fallbackService);
+        }
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+    fetchService();
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  if (!isLoading && !service) {
+    return <Navigate to="/404" replace />;
+  }
 
   if (!service) {
-    return <Navigate to="/404" replace />;
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-24 text-center">
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-sm text-text-secondary">Loading service...</p>
+      </div>
+    );
   }
 
   const renderIcon = (name: string, className: string = "w-8 h-8") => {
@@ -80,8 +115,8 @@ export const ServiceDetail: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{`${service.title} Services | HangingPanda`}</title>
-        <meta name="description" content={service.shortDesc} />
+        <title>{service.seoTitle || `${service.title} Services | HangingPanda`}</title>
+        <meta name="description" content={service.metaDescription || service.shortDesc} />
         <link rel="canonical" href={`https://hangingpanda.com/services/${service.slug}`} />
         <meta property="og:title" content={`${service.title} Services | HangingPanda`} />
         <meta property="og:description" content={service.shortDesc} />
@@ -137,7 +172,7 @@ export const ServiceDetail: React.FC = () => {
               Core Technologies
             </span>
             <div className="flex flex-wrap gap-2">
-              {service.techStack.map((tech) => (
+              {service.techStack.map((tech: string) => (
                 <span
                   key={tech}
                   className="px-3.5 py-1.5 bg-surface border border-border rounded-lg text-xs font-bold text-text-primary"
@@ -159,7 +194,7 @@ export const ServiceDetail: React.FC = () => {
             How We Add Immediate Value
           </h2>
           <div className="flex flex-col gap-4 mt-6 w-full">
-            {service.benefits.map((benefit, idx) => (
+            {service.benefits.map((benefit: string, idx: number) => (
               <div key={idx} className="flex items-start gap-3 bg-surface p-4 rounded-xl border border-border/50">
                 <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">
                   ✓
@@ -180,7 +215,7 @@ export const ServiceDetail: React.FC = () => {
             Built-in Architecture Deliverables
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 w-full">
-            {service.features.map((feat, idx) => (
+            {service.features.map((feat: string, idx: number) => (
               <Card key={idx} hoverEffect="shadow" className="flex flex-col gap-2.5 bg-card">
                 <span className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
                   0{idx + 1}

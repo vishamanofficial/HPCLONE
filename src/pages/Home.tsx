@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import api from "../services/api";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -134,38 +135,49 @@ export const Home: React.FC = () => {
     setSubmitError("");
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
-          ...formData,
-          phone: `${formData.countryCode} ${formData.phone}`,
-          "Is WhatsApp Number": formData.isWhatsApp ? "Yes" : "No",
-          from_name: formData.name,
-          subject: `New Bespoke Software Blueprint request: ${formData.budget}`
-        })
-      });
+      // 1. Submit lead to database CRM
+      await api.submitInquiry({
+        fullName: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        countryCode: formData.countryCode,
+        isWhatsApp: formData.isWhatsApp,
+        budget: formData.budget,
+        message: formData.message,
+        source: 'homepage_blueprint'
+      }).catch(err => console.warn('CRM sync notice:', err));
 
-      if (response.ok) {
-        setFormLoading(false);
-        setFormSubmitted(true);
-        setFormData({
-          name: "",
-          email: "",
-          countryCode: "+91",
-          phone: "",
-          isWhatsApp: true,
-          budget: "$5k - $15k",
-          message: ""
-        });
-        setErrors({});
-      } else {
-        throw new Error("Form submission failed");
+      // 2. Dispatch Web3Forms email if key is available
+      if (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY) {
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+            ...formData,
+            phone: `${formData.countryCode} ${formData.phone}`,
+            "Is WhatsApp Number": formData.isWhatsApp ? "Yes" : "No",
+            from_name: formData.name,
+            subject: `New Bespoke Software Blueprint request: ${formData.budget}`
+          })
+        }).catch(err => console.warn('Email notice:', err));
       }
+
+      setFormLoading(false);
+      setFormSubmitted(true);
+      setFormData({
+        name: "",
+        email: "",
+        countryCode: "+91",
+        phone: "",
+        isWhatsApp: true,
+        budget: "$5k - $15k",
+        message: ""
+      });
+      setErrors({});
     } catch (error) {
       console.error(error);
       setFormLoading(false);

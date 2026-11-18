@@ -1,12 +1,69 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Smartphone, Mail, MapPin } from "lucide-react";
 import { Facebook, Twitter, Linkedin, Instagram } from "./ui/BrandIcons";
 import { servicesData } from "../data/servicesData";
+import api from "../services/api";
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  const quickServices = servicesData.slice(0, 5);
+  const [quickServices, setQuickServices] = useState<any[]>(servicesData.slice(0, 5));
+  const [settings, setSettings] = useState<{
+    officeAddress: string;
+    contactEmail: string;
+    contactPhone: string;
+    copyrightText: string;
+    socialLinks: { facebook?: string; twitter?: string; linkedin?: string; instagram?: string };
+  }>({
+    officeAddress: "B-64, B Block, Sector 63, Noida, Uttar Pradesh, India, 201301",
+    contactEmail: "vishamanofficial.business@gmail.com",
+    contactPhone: "+91-8887024887",
+    copyrightText: `© ${currentYear} HangingPanda Pvt Ltd. All rights reserved.`,
+    socialLinks: {
+      facebook: "https://facebook.com",
+      twitter: "https://twitter.com",
+      linkedin: "https://linkedin.com",
+      instagram: "https://instagram.com"
+    }
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchFooterData = async () => {
+      try {
+        const [settingsRes, servicesRes] = await Promise.all([
+          api.getPublicSettings().catch(() => null),
+          api.getPublicServices().catch(() => null)
+        ]);
+
+        if (isMounted && settingsRes && settingsRes.success && settingsRes.settings) {
+          const s = settingsRes.settings;
+          setSettings({
+            officeAddress: s.officeAddress || "B-64, B Block, Sector 63, Noida, Uttar Pradesh, India, 201301",
+            contactEmail: s.contactEmail || "vishamanofficial.business@gmail.com",
+            contactPhone: s.contactPhone || "+91-8887024887",
+            copyrightText: s.copyrightText || `© ${currentYear} HangingPanda Pvt Ltd. All rights reserved.`,
+            socialLinks: {
+              facebook: s.socialLinks?.facebook || "https://facebook.com",
+              twitter: s.socialLinks?.twitter || "https://twitter.com",
+              linkedin: s.socialLinks?.linkedin || "https://linkedin.com",
+              instagram: s.socialLinks?.instagram || "https://instagram.com"
+            }
+          });
+        }
+
+        if (isMounted && servicesRes && servicesRes.success && servicesRes.services?.length) {
+          setQuickServices(servicesRes.services.slice(0, 5));
+        }
+      } catch (err) {
+        // Fallback intact
+      }
+    };
+    fetchFooterData();
+    return () => {
+      isMounted = false;
+    };
+  }, [currentYear]);
 
   return (
     <footer className="bg-surface text-text-secondary border-t border-border pt-20 pb-8 transition-colors duration-300">
@@ -26,18 +83,18 @@ export const Footer: React.FC = () => {
           <div className="flex flex-col gap-3.5 mt-2">
             <div className="flex items-start gap-3 text-sm">
               <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-              <span>B-64, B Block, Sector 63, Noida, Uttar Pradesh, India, 201301</span>
+              <span>{settings.officeAddress}</span>
             </div>
             <div className="flex items-center gap-3 text-sm">
               <Mail className="w-5 h-5 text-primary flex-shrink-0" />
-              <a href="mailto:vishamanofficial.business@gmail.com" className="hover:text-primary transition-colors">
-                vishamanofficial.business@gmail.com
+              <a href={`mailto:${settings.contactEmail}`} className="hover:text-primary transition-colors">
+                {settings.contactEmail}
               </a>
             </div>
             <div className="flex items-center gap-3 text-sm">
               <Smartphone className="w-5 h-5 text-primary flex-shrink-0" />
-              <a href="tel:+918887024887" className="hover:text-primary transition-colors">
-                +91-8887024887
+              <a href={`tel:${settings.contactPhone}`} className="hover:text-primary transition-colors">
+                {settings.contactPhone}
               </a>
             </div>
           </div>
@@ -130,46 +187,54 @@ export const Footer: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-6 text-sm text-text-muted">
         <div className="flex items-center gap-1.5">
-          <span>&copy; {currentYear} HangingPanda Pvt Ltd. All rights reserved.</span>
+          <span>{settings.copyrightText}</span>
         </div>
 
         <div className="flex items-center gap-4">
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit our Facebook profile"
-            className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
-          >
-            <Facebook className="w-4.5 h-4.5" />
-          </a>
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit our Twitter profile"
-            className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
-          >
-            <Twitter className="w-4.5 h-4.5" />
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit our LinkedIn profile"
-            className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
-          >
-            <Linkedin className="w-4.5 h-4.5" />
-          </a>
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit our Instagram profile"
-            className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
-          >
-            <Instagram className="w-4.5 h-4.5" />
-          </a>
+          {settings.socialLinks.facebook && (
+            <a
+              href={settings.socialLinks.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit our Facebook profile"
+              className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
+            >
+              <Facebook className="w-4.5 h-4.5" />
+            </a>
+          )}
+          {settings.socialLinks.twitter && (
+            <a
+              href={settings.socialLinks.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit our Twitter profile"
+              className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
+            >
+              <Twitter className="w-4.5 h-4.5" />
+            </a>
+          )}
+          {settings.socialLinks.linkedin && (
+            <a
+              href={settings.socialLinks.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit our LinkedIn profile"
+              className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
+            >
+              <Linkedin className="w-4.5 h-4.5" />
+            </a>
+          )}
+          {settings.socialLinks.instagram && (
+            <a
+              href={settings.socialLinks.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit our Instagram profile"
+              className="p-2 bg-card border border-border hover:bg-primary hover:text-white rounded-full transition-all text-text-secondary"
+            >
+              <Instagram className="w-4.5 h-4.5" />
+            </a>
+          )}
         </div>
       </div>
     </footer>

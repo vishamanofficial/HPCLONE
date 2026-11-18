@@ -9,6 +9,7 @@ import { Select } from "../components/ui/Select";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { PhoneInput } from "../components/ui/PhoneInput";
+import api from "../services/api";
 
 export const Contact: React.FC = () => {
   const navigate = useNavigate();
@@ -106,33 +107,47 @@ export const Contact: React.FC = () => {
     setSubmitError("");
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
-          ...formData,
+      // 1. Submit lead to internal MongoDB CRM pipeline
+      try {
+        await api.submitInquiry({
+          name: formData.name,
+          email: formData.email,
           phone: `${formData.countryCode} ${formData.phone}`,
-          "Is WhatsApp Number": formData.isWhatsApp ? "Yes" : "No",
-          from_name: formData.name,
-          subject: `New inquiry from HangingPanda: ${formData.subject}`
-        })
-      });
-
-      if (response.ok) {
-        setIsSubmitting(false);
-        navigate("/thank-you", {
-          state: {
-            clientName: formData.name,
-            contactSuccess: true
-          }
+          serviceInterested: formData.service,
+          message: formData.message,
+          source: 'contact_page',
+          status: 'new'
         });
-      } else {
-        throw new Error("Form submission failed");
+      } catch (crmErr) {
+        console.warn("Backend CRM sync fallback:", crmErr);
       }
+
+      // 2. Submit to Web3Forms if access key is available
+      if (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY) {
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+            ...formData,
+            phone: `${formData.countryCode} ${formData.phone}`,
+            "Is WhatsApp Number": formData.isWhatsApp ? "Yes" : "No",
+            from_name: formData.name,
+            subject: `New inquiry from HangingPanda: ${formData.subject || formData.service}`
+          })
+        });
+      }
+
+      setIsSubmitting(false);
+      navigate("/thank-you", {
+        state: {
+          clientName: formData.name,
+          contactSuccess: true
+        }
+      });
     } catch (error) {
       console.error("Submission error:", error);
       setIsSubmitting(false);

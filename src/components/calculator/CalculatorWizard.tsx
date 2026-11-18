@@ -38,6 +38,7 @@ import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Textarea } from "../ui/Textarea";
 import { PhoneInput } from "../ui/PhoneInput";
+import api from "../../services/api";
 
 const calculatorIcons: Record<string, React.ComponentType<any>> = {
   HelpCircle,
@@ -201,40 +202,62 @@ export const CalculatorWizard: React.FC = () => {
     const results = runCalculation(selections);
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
-          from_name: clientInfo.name,
-          subject: `New App Cost Calculation Request from ${clientInfo.name}`,
+      // 1. Submit lead to internal MongoDB CRM pipeline
+      try {
+        await api.submitInquiry({
+          name: clientInfo.name,
           email: clientInfo.email,
           phone: `${clientInfo.countryCode} ${clientInfo.phone}`,
-          "Is WhatsApp Number": clientInfo.isWhatsApp ? "Yes" : "No",
-          message: clientInfo.query,
-          "Estimated Cost": `$${results.estimatedCost.toLocaleString()}`,
-          "Selected Platform": selections.platform,
-          "Selected Category": selections.category,
-          "Selected Design Theme": selections.design,
-          "Selected Features": Array.isArray(selections.management) ? selections.management.join(", ") : selections.management
-        })
-      });
-
-      if (response.ok) {
-        setIsSubmitting(false);
-        navigate("/thank-you", {
-          state: {
-            clientName: clientInfo.name,
-            results,
-            selections
-          }
+          serviceInterested: `App Cost Calculator: ${selections.category || selections.platform}`,
+          message: clientInfo.query || `Estimated budget: $${results.estimatedCost.toLocaleString()} (${results.timelineWeeks.min}-${results.timelineWeeks.max} weeks)`,
+          source: 'cost_calculator',
+          calculatorDetails: {
+            platform: selections.platform,
+            category: selections.category,
+            design: selections.design,
+            features: Array.isArray(selections.management) ? selections.management : [selections.management],
+            estimatedCost: results.estimatedCost,
+            estimatedTimelineWeeks: `${results.timelineWeeks.min}-${results.timelineWeeks.max} weeks`
+          },
+          status: 'new'
         });
-      } else {
-        throw new Error("Form submission failed");
+      } catch (crmErr) {
+        console.warn("Backend CRM sync fallback:", crmErr);
       }
+
+      // 2. Submit to Web3Forms if access key is available
+      if (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY) {
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+            from_name: clientInfo.name,
+            subject: `New App Cost Calculation Request from ${clientInfo.name}`,
+            email: clientInfo.email,
+            phone: `${clientInfo.countryCode} ${clientInfo.phone}`,
+            "Is WhatsApp Number": clientInfo.isWhatsApp ? "Yes" : "No",
+            message: clientInfo.query,
+            "Estimated Cost": `$${results.estimatedCost.toLocaleString()}`,
+            "Selected Platform": selections.platform,
+            "Selected Category": selections.category,
+            "Selected Design Theme": selections.design,
+            "Selected Features": Array.isArray(selections.management) ? selections.management.join(", ") : selections.management
+          })
+        });
+      }
+
+      setIsSubmitting(false);
+      navigate("/thank-you", {
+        state: {
+          clientName: clientInfo.name,
+          results,
+          selections
+        }
+      });
     } catch (error) {
       console.error("Submission error:", error);
       setIsSubmitting(false);

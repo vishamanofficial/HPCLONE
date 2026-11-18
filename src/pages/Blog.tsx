@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
-import { Search, Calendar, Clock } from "lucide-react";
+import { Search, Calendar, Clock, ArrowRight } from "lucide-react";
+import api from "../services/api";
 import { blogsData } from "../data/blogsData";
 import { Card } from "../components/ui/Card";
 import { Input } from "../components/ui/Input";
@@ -11,20 +13,37 @@ type CategoryFilter = "All" | "AI & ML" | "Web Development" | "Mobile Apps" | "T
 export const Blog: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("All");
+  const [articles, setArticles] = useState<any[]>(blogsData);
 
   const categories: CategoryFilter[] = ["All", "AI & ML", "Web Development", "Mobile Apps", "Tech Strategy"];
 
-  const filteredArticles = blogsData.filter((article) => {
+  useEffect(() => {
+    const fetchLiveBlogs = async () => {
+      try {
+        const res = await api.getPublicBlogs();
+        if (res.success && res.blogs && res.blogs.length > 0) {
+          setArticles(res.blogs);
+        }
+      } catch (err) {
+        // Fallback to static seed
+      }
+    };
+    fetchLiveBlogs();
+  }, []);
+
+  const filteredArticles = articles.filter((article) => {
     const matchesSearch =
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.tags.some((t) => t.toLowerCase().includes(searchTerm.toLowerCase()));
+      (article.tags && article.tags.some((t: string) => t.toLowerCase().includes(searchTerm.toLowerCase())));
 
     const matchesCategory =
       selectedCategory === "All" || article.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
+
+  const featured = articles[0] || blogsData[0];
 
   return (
     <>
@@ -62,70 +81,76 @@ export const Blog: React.FC = () => {
       </section>
 
       {/* Spotlight Featured Article */}
-      <section className="pt-8 pb-16 max-w-7xl mx-auto px-6">
-        <span className="block text-xs font-black text-primary uppercase tracking-widest mb-6 text-center lg:text-left">
-          Featured Article
-        </span>
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8 border border-border bg-card p-6 sm:p-10 rounded-3xl shadow-xl items-center text-left"
-        >
-          <div className="lg:col-span-7 flex flex-col items-start gap-4">
-            <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary/10 px-3.5 py-1.5 rounded-full">
-              {blogsData[0].category}
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-text-primary tracking-tight leading-tight hover:text-primary transition-colors cursor-pointer">
-              {blogsData[0].title}
-            </h2>
-            <p className="text-sm sm:text-base text-text-secondary leading-relaxed mt-2">
-              {blogsData[0].excerpt}
-            </p>
-            <div className="flex flex-wrap gap-1.5 mt-2">
-              {blogsData[0].tags.map((tag) => (
-                <span key={tag} className="text-[10px] font-bold text-text-secondary bg-surface px-2.5 py-1 rounded-md border border-border/40">
-                  #{tag}
-                </span>
-              ))}
-            </div>
-            
-            <div className="flex items-center gap-3 mt-6 border-t border-border/40 pt-4 w-full">
-              <img
-                src={blogsData[0].author.avatarUrl}
-                alt={blogsData[0].author.name}
-                className="w-10 h-10 rounded-full object-cover border border-border"
-              />
-              <div className="flex flex-col">
-                <span className="text-sm font-bold text-text-primary leading-tight">
-                  {blogsData[0].author.name}
-                </span>
-                <span className="text-[10px] text-text-muted">
-                  {blogsData[0].author.role}
-                </span>
+      {featured && (
+        <section className="pt-8 pb-16 max-w-7xl mx-auto px-6">
+          <span className="block text-xs font-black text-primary uppercase tracking-widest mb-6 text-center lg:text-left">
+            Featured Article
+          </span>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 border border-border bg-card p-6 sm:p-10 rounded-3xl shadow-xl items-center text-left"
+          >
+            <div className="lg:col-span-7 flex flex-col items-start gap-4">
+              <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary/10 px-3.5 py-1.5 rounded-full">
+                {featured.category}
+              </span>
+              <Link to={`/blog/${featured.slug || featured.id}`}>
+                <h2 className="text-2xl sm:text-4xl font-black text-text-primary tracking-tight leading-tight hover:text-primary transition-colors cursor-pointer">
+                  {featured.title}
+                </h2>
+              </Link>
+              <p className="text-sm sm:text-base text-text-secondary leading-relaxed mt-2">
+                {featured.excerpt}
+              </p>
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {featured.tags && featured.tags.map((tag: string) => (
+                  <span key={tag} className="text-[10px] font-bold text-text-secondary bg-surface px-2.5 py-1 rounded-md border border-border/40">
+                    #{tag}
+                  </span>
+                ))}
               </div>
-              <span className="text-[10px] font-bold text-text-muted ml-auto flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5" />
-                {blogsData[0].publishedAt}
-              </span>
-            </div>
-          </div>
-          <div className="lg:col-span-5 w-full">
-            <div className="aspect-video w-full rounded-2xl bg-gradient-to-tr from-primary/20 to-accent-orange/20 border border-white/10 p-8 flex flex-col justify-between shadow-lg">
-              <span className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold">
-                HP
-              </span>
-              <div>
-                <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Estimated Read Time</span>
-                <div className="flex items-center gap-1.5 text-text-primary font-black mt-1">
-                  <Clock className="w-4 h-4 text-primary" />
-                  {blogsData[0].readTime}
+              
+              <div className="flex items-center gap-3 mt-6 border-t border-border/40 pt-4 w-full">
+                <img
+                  src={featured.author?.avatarUrl}
+                  alt={featured.author?.name}
+                  className="w-10 h-10 rounded-full object-cover border border-border"
+                />
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-text-primary leading-tight">
+                    {featured.author?.name}
+                  </span>
+                  <span className="text-[10px] text-text-muted">
+                    {featured.author?.role}
+                  </span>
                 </div>
+                <span className="text-[10px] font-bold text-text-muted ml-auto flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {featured.publishedAt ? new Date(featured.publishedAt).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) : 'June 15, 2026'}
+                </span>
               </div>
             </div>
-          </div>
-        </motion.div>
-      </section>
+            <div className="lg:col-span-5 w-full">
+              <Link to={`/blog/${featured.slug || featured.id}`}>
+                <div className="aspect-video w-full rounded-2xl bg-gradient-to-tr from-primary/20 to-accent-orange/20 border border-white/10 p-8 flex flex-col justify-between shadow-lg group hover:scale-[1.02] transition-transform">
+                  <span className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold">
+                    HP
+                  </span>
+                  <div>
+                    <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Estimated Read Time</span>
+                    <div className="flex items-center gap-1.5 text-text-primary font-black mt-1">
+                      <Clock className="w-4 h-4 text-primary" />
+                      {featured.readTime || '6 min read'}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </motion.div>
+        </section>
+      )}
 
       <section className="py-12 max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex flex-wrap gap-2 items-center justify-start w-full md:w-auto">
@@ -159,65 +184,66 @@ export const Blog: React.FC = () => {
         {filteredArticles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {filteredArticles.map((article) => (
-              <Card
-                key={article.id}
-                hoverEffect="scale"
-                className="flex flex-col justify-between h-full p-6 sm:p-8 bg-card"
-              >
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary/10 px-3 py-1 rounded-full">
-                      {article.category}
-                    </span>
-                    <span className="text-xs text-text-secondary flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5" />
-                      {article.readTime}
-                    </span>
-                  </div>
-
-                  <h2 className="text-lg sm:text-xl font-bold text-text-primary tracking-tight mt-2 hover:text-primary transition-colors cursor-pointer">
-                    {article.title}
-                  </h2>
-                  <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
-                    {article.excerpt}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5 mt-2">
-                    {article.tags.map((t) => (
-                      <span key={t} className="text-[10px] font-bold text-text-secondary bg-surface px-2 py-0.5 rounded-md border border-border/40">
-                        #{t}
+              <Link key={article.slug || article.id} to={`/blog/${article.slug || article.id}`} className="group">
+                <Card
+                  hoverEffect="scale"
+                  className="flex flex-col justify-between h-full p-6 sm:p-8 bg-card text-left"
+                >
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary/10 px-3 py-1 rounded-full">
+                        {article.category}
                       </span>
-                    ))}
-                  </div>
-                </div>
+                      <span className="text-xs text-text-secondary flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5" />
+                        {article.readTime}
+                      </span>
+                    </div>
 
-                <div className="flex items-center justify-between border-t border-border/40 mt-8 pt-4">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={article.author.avatarUrl}
-                      alt={article.author.name}
-                      width={36}
-                      height={36}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-9 h-9 rounded-full object-cover border border-border"
-                    />
-                    <div className="flex flex-col text-left">
-                      <span className="text-xs font-bold text-text-primary leading-tight">
-                        {article.author.name}
-                      </span>
-                      <span className="text-[9px] text-text-muted">
-                        {article.author.role}
-                      </span>
+                    <h2 className="text-lg sm:text-xl font-bold text-text-primary tracking-tight mt-2 group-hover:text-primary transition-colors">
+                      {article.title}
+                    </h2>
+                    <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
+                      {article.excerpt}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {article.tags && article.tags.map((t: string) => (
+                        <span key={t} className="text-[10px] font-bold text-text-secondary bg-surface px-2 py-0.5 rounded-md border border-border/40">
+                          #{t}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
-                  <span className="text-[10px] font-bold text-text-muted flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5" />
-                    {article.publishedAt}
-                  </span>
-                </div>
-              </Card>
+                  <div className="flex items-center justify-between border-t border-border/40 mt-8 pt-4">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={article.author?.avatarUrl}
+                        alt={article.author?.name}
+                        width={36}
+                        height={36}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-9 h-9 rounded-full object-cover border border-border"
+                      />
+                      <div className="flex flex-col text-left">
+                        <span className="text-xs font-bold text-text-primary leading-tight">
+                          {article.author?.name}
+                        </span>
+                        <span className="text-[9px] text-text-muted">
+                          {article.author?.role}
+                        </span>
+                      </div>
+                    </div>
+
+                    <span className="text-[10px] font-bold text-text-muted flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {article.publishedAt ? new Date(article.publishedAt).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) : 'June 15, 2026'}
+                    </span>
+                  </div>
+                </Card>
+              </Link>
             ))}
           </div>
         ) : (

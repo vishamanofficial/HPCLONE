@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { servicesData } from "../data/servicesData";
 import { Button } from "./ui/Button";
+import api from "../services/api";
 
 export const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -20,6 +21,25 @@ export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showServicesDrop, setShowServicesDrop] = useState(false);
+  const [servicesList, setServicesList] = useState<any[]>(servicesData);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchServices = async () => {
+      try {
+        const res = await api.getPublicServices();
+        if (isMounted && res.success && res.services && res.services.length > 0) {
+          setServicesList(res.services);
+        }
+      } catch (err) {
+        // Fallback to static servicesData
+      }
+    };
+    fetchServices();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -133,7 +153,7 @@ export const Navbar: React.FC = () => {
             {showServicesDrop && (
               <div className="absolute top-full -left-48 w-[640px] pt-4 z-50">
                 <div role="menu" className="bg-card border border-border shadow-2xl rounded-2xl p-6 grid grid-cols-2 gap-4">
-                  {servicesData.map((service) => (
+                  {servicesList.map((service) => (
                     <Link
                       key={service.slug}
                       to={`/services/${service.slug}`}
@@ -290,7 +310,7 @@ export const Navbar: React.FC = () => {
 
               {showServicesDrop && (
                 <div className="pl-4 flex flex-col gap-2 mt-2 border-l border-border/80 ml-4">
-                  {servicesData.map((service) => (
+                  {servicesList.map((service) => (
                     <Link
                       key={service.slug}
                       to={`/services/${service.slug}`}
