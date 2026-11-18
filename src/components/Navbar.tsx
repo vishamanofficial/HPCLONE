@@ -249,18 +249,18 @@ export const Navbar: React.FC = () => {
         <div className="flex lg:hidden items-center gap-2">
           <button
             onClick={toggleTheme}
-            className="w-10 h-10 rounded-full hover:bg-surface text-text-secondary transition-colors flex items-center justify-center cursor-pointer"
+            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-surface/80 border border-border/60 text-text-secondary transition-colors flex items-center justify-center cursor-pointer active:scale-95"
             aria-label="Toggle light and dark theme"
           >
-            {theme === "dark" ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
+            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="w-10 h-10 rounded-full hover:bg-surface text-text-secondary transition-colors flex items-center justify-center cursor-pointer"
+            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-surface/80 border border-border/60 text-text-secondary transition-colors flex items-center justify-center cursor-pointer active:scale-95"
             aria-label={isOpen ? "Close main navigation menu" : "Open main navigation menu"}
           >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isOpen ? <X className="w-5.5 h-5.5" /> : <Menu className="w-5.5 h-5.5" />}
           </button>
         </div>
       </div>

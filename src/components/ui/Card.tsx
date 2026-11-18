@@ -14,7 +14,7 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   // Apple HIG: Standard materials for content layer with smooth continuous radii & subtle specular edges
   const baseClasses =
-    "p-6 sm:p-7 rounded-2xl transition-all duration-200 ease-out relative overflow-hidden";
+    "p-4 sm:p-6 md:p-7 rounded-xl sm:rounded-2xl transition-all duration-200 ease-out relative overflow-hidden";
 
   const variantClasses = {
     default: "bg-card border border-border shadow-[0_1px_3px_rgba(0,0,0,0.04),0_6px_16px_rgba(0,0,0,0.02)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.3)]",

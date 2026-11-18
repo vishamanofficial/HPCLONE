@@ -24,7 +24,8 @@ import {
   Zap,
   Award,
   Clock,
-  ThumbsUp
+  ThumbsUp,
+  Sparkles
 } from "lucide-react";
 import { servicesData } from "../data/servicesData";
 import { portfolioData } from "../data/portfolioData";
@@ -36,6 +37,7 @@ import { PhoneInput } from "../components/ui/PhoneInput";
 import { Input } from "../components/ui/Input";
 import { Select } from "../components/ui/Select";
 import { Textarea } from "../components/ui/Textarea";
+import { TechBackground } from "../components/TechBackground";
 
 const serviceIcons: Record<string, React.ComponentType<any>> = {
   Smartphone,
@@ -268,124 +270,141 @@ export const Home: React.FC = () => {
         <meta name="robots" content="index, follow" />
       </Helmet>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-14 md:py-28 bg-gradient-to-b from-surface to-bg">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(220,38,38,0.05),transparent_50%)] pointer-events-none" />
+      {/* Redesigned Cinematic Tech Hero Section - Mobile First */}
+      <section className="relative overflow-hidden pt-6 pb-16 sm:pt-12 sm:pb-24 md:pt-16 md:pb-32 min-h-[80vh] flex items-center justify-center bg-bg">
+        {/* Crazy Live Tech Interactive Canvas Background */}
+        <TechBackground />
 
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full apple-glass-clear border border-primary/20 text-xs font-semibold text-primary tracking-caption uppercase mb-6"
-            >
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              Next-Gen Software Engineering
-            </motion.div>
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center">
+          {/* Monumental Display Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-3xl sm:text-5xl lg:text-7xl font-extrabold text-text-primary tracking-display leading-[1.08] sm:leading-[1.04] max-w-5xl"
+          >
+            Engineering Intelligent Software At{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent-orange to-accent-pink drop-shadow-sm">
+              Uncompromising Scale.
+            </span>
+          </motion.h1>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-6xl font-extrabold text-text-primary tracking-display leading-[1.08]"
-            >
-              AI-Powered <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-orange">Software Development</span> for Leaders.
-            </motion.h1>
+          {/* High-Precision Subheading */}
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-sm sm:text-lg md:text-xl text-text-secondary mt-4 sm:mt-6 max-w-3xl leading-relaxed tracking-body font-normal"
+          >
+            We build custom web platforms, mobile applications, and smart AI automation tools tailored to your business goals. Backed by 2.5 years of free maintenance.
+          </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-base sm:text-lg text-text-secondary mt-6 max-w-2xl leading-relaxed tracking-body"
-            >
-              Recreating digital landscapes with secure native mobile apps, web design tokens, and modular enterprise algorithms. Backed by 2.5 years of free maintenance.
-            </motion.p>
+          {/* Easy to Understand Value Chips */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mt-5 sm:mt-8 max-w-3xl"
+          >
+            {[
+              { label: "Lightning-Fast Performance", icon: Zap },
+              { label: "Smart AI Solutions", icon: BrainCircuit },
+              { label: "100% Private & Secure", icon: ShieldCheck },
+              { label: "iOS & Android Apps", icon: Smartphone },
+              { label: "2.5 Years Free Maintenance", icon: Award }
+            ].map((chip, idx) => {
+              const Icon = chip.icon;
+              return (
+                <div
+                  key={idx}
+                  className="apple-glass-clear px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-text-primary border border-border/80 flex items-center gap-1.5 transition-all duration-200 hover:border-primary/40 hover:scale-[1.02] cursor-default"
+                >
+                  <Icon className="w-3.5 h-3.5 text-primary shrink-0" />
+                  <span>{chip.label}</span>
+                </div>
+              );
+            })}
+          </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center gap-3.5 mt-9 w-full sm:w-auto"
-            >
-              <Link to="/app-cost-calculator" className="w-full sm:w-auto">
-                <Button variant="primary" size="lg" className="w-full justify-center shadow-sm">
-                  Consult Our Experts
-                </Button>
-              </Link>
-              <Link to="/case-studies" className="w-full sm:w-auto">
-                <Button variant="secondary" size="lg" className="w-full justify-center" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                  View Portfolio
-                </Button>
-              </Link>
-            </motion.div>
-          </div>
+          {/* Primary & Secondary Action Group - Full Width on Mobile, Horizontal on Desktop */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mt-7 sm:mt-10 w-full sm:w-auto max-w-xs sm:max-w-none"
+          >
+            <Link to="/app-cost-calculator" className="w-full sm:w-auto">
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-full justify-center shadow-md shadow-primary/20 min-h-[48px]"
+                rightIcon={<ArrowRight className="w-4 h-4" />}
+              >
+                Consult Our Experts
+              </Button>
+            </Link>
+            <Link to="/case-studies" className="w-full sm:w-auto">
+              <Button
+                variant="glass"
+                size="lg"
+                className="w-full justify-center min-h-[48px]"
+                leftIcon={<Sparkles className="w-4 h-4 text-accent-orange" />}
+              >
+                View Our Portfolio
+              </Button>
+            </Link>
+          </motion.div>
 
-          <div className="lg:col-span-5 relative hidden lg:block">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7 }}
-              className="relative apple-glass rounded-3xl p-7 flex flex-col gap-5 shadow-2xl"
-            >
-              <div className="flex items-center justify-between border-b border-border/80 pb-4">
-                <span className="text-xs font-semibold text-text-muted uppercase tracking-caption">
-                  Live Project Metrics
+          {/* User-Friendly Guarantees & Trust Panel (Mobile First 2x2 Grid, Desktop 4 Cols) */}
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="w-full max-w-4xl mt-10 sm:mt-14 apple-glass rounded-2xl p-4 sm:p-5 border border-border/80 shadow-xl relative overflow-hidden text-left"
+          >
+            {/* Header Bar */}
+            <div className="flex items-center justify-between border-b border-border/60 pb-3 mb-3.5 sm:mb-4 gap-2">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-xs sm:text-sm font-bold text-text-primary tracking-tight">
+                  HangingPanda Service Commitments
                 </span>
-                <span className="px-2.5 py-0.5 bg-green-500/10 text-green-600 dark:text-green-400 rounded-full font-semibold text-[11px] inline-flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  Active Telemetry
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[11px] sm:text-xs font-semibold text-green-500">
+                  Guaranteed Standards
                 </span>
               </div>
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-text-secondary">App Speed Index</span>
-                  <span className="text-sm font-bold text-text-primary">98/100</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: "98%" }}
-                    transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-                    className="h-full bg-primary rounded-full"
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-text-secondary">API Latency Target</span>
-                  <span className="text-sm font-bold text-text-primary">&lt;180ms</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: "88%" }}
-                    transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
-                    className="h-full bg-accent-orange rounded-full"
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-text-secondary">SLA Compliance Guarantee</span>
-                  <span className="text-sm font-bold text-green-600 dark:text-green-400">100%</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: 1.2, delay: 0.7, ease: "easeOut" }}
-                    className="h-full bg-green-500 rounded-full"
-                  />
-                </div>
+            </div>
+
+            {/* Easy-to-Understand Metrics Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 text-left">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-surface/70 border border-border/60 flex flex-col gap-0.5">
+                <span className="text-[10px] sm:text-xs text-text-muted uppercase font-bold tracking-wider">Delivery</span>
+                <span className="text-sm sm:text-base font-extrabold text-primary">On-Time Milestones</span>
+                <span className="text-[10px] sm:text-xs text-text-secondary leading-tight mt-0.5">Strict weekly SLA schedule</span>
               </div>
-              <div className="bg-surface/70 border border-border/60 rounded-2xl p-4 flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
-                  <Code className="w-5 h-5" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold text-text-primary">Free Maintenance</span>
-                  <span className="text-[11px] text-text-muted">2.5 Years post-release security support</span>
-                </div>
+
+              <div className="p-3 sm:p-3.5 rounded-xl bg-surface/70 border border-border/60 flex flex-col gap-0.5">
+                <span className="text-[10px] sm:text-xs text-text-muted uppercase font-bold tracking-wider">Reliability</span>
+                <span className="text-sm sm:text-base font-extrabold text-green-500">99.9% Uptime</span>
+                <span className="text-[10px] sm:text-xs text-text-secondary leading-tight mt-0.5">Zero downtime architecture</span>
               </div>
-            </motion.div>
-          </div>
+
+              <div className="p-3 sm:p-3.5 rounded-xl bg-surface/70 border border-border/60 flex flex-col gap-0.5">
+                <span className="text-[10px] sm:text-xs text-text-muted uppercase font-bold tracking-wider">Support</span>
+                <span className="text-sm sm:text-base font-extrabold text-accent-orange">2.5 Years Free</span>
+                <span className="text-[10px] sm:text-xs text-text-secondary leading-tight mt-0.5">Comprehensive bug fixes included</span>
+              </div>
+
+              <div className="p-3 sm:p-3.5 rounded-xl bg-surface/70 border border-border/60 flex flex-col gap-0.5">
+                <span className="text-[10px] sm:text-xs text-text-muted uppercase font-bold tracking-wider">Ownership</span>
+                <span className="text-sm sm:text-base font-extrabold text-text-primary">100% Code IP</span>
+                <span className="text-[10px] sm:text-xs text-text-secondary leading-tight mt-0.5">You own all source code</span>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -408,20 +427,20 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Stats & Trust Section */}
-      <section className="py-20 bg-surface border-b border-border">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* Stats & Trust Section - Mobile First */}
+      <section className="py-10 sm:py-20 bg-surface border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.div 
             {...fadeInUp}
-            className="text-center max-w-3xl mx-auto mb-16"
+            className="text-center max-w-3xl mx-auto mb-8 sm:mb-16"
           >
-            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
               Our Track Record
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight">
               Engineered to Deliver Real Impact
             </h2>
-            <p className="text-text-secondary text-sm sm:text-base mt-4 max-w-xl mx-auto">
+            <p className="text-text-secondary text-xs sm:text-base mt-2 sm:mt-4 max-w-xl mx-auto">
               We stand by our metrics. Our engagement terms include concrete performance standards and delivery milestones.
             </p>
           </motion.div>
@@ -431,56 +450,56 @@ export const Home: React.FC = () => {
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true, margin: "-80px" }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6"
           >
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6">
-                  <Zap className="w-6 h-6" />
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-3.5 sm:p-7 border border-border/80 rounded-xl sm:rounded-2xl">
+                <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-3 sm:mb-6">
+                  <Zap className="w-4 h-4 sm:w-6 sm:h-6" />
                 </div>
-                <span className="text-4xl font-black text-text-primary tracking-tight mb-2">180ms</span>
-                <h3 className="font-bold text-sm text-text-primary mb-2">Avg API Latency Target</h3>
-                <p className="text-xs text-text-secondary leading-relaxed">
-                  Highly optimized databases and edge-CDN infrastructure ensuring real-time response speeds.
+                <span className="text-xl sm:text-4xl font-black text-text-primary tracking-tight mb-1 sm:mb-2">180ms</span>
+                <h3 className="font-bold text-xs sm:text-sm text-text-primary mb-1 sm:mb-2 leading-tight">Avg API Latency</h3>
+                <p className="text-[10px] sm:text-xs text-text-secondary leading-snug sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
+                  Optimized databases and edge-CDN infrastructure ensuring real-time response speeds.
                 </p>
               </Card>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80">
-                <div className="w-12 h-12 rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-6">
-                  <ShieldCheck className="w-6 h-6" />
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-3.5 sm:p-7 border border-border/80 rounded-xl sm:rounded-2xl">
+                <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-3 sm:mb-6">
+                  <ShieldCheck className="w-4 h-4 sm:w-6 sm:h-6" />
                 </div>
-                <span className="text-4xl font-black text-text-primary tracking-tight mb-2">99.9%</span>
-                <h3 className="font-bold text-sm text-text-primary mb-2">Core Service Uptime</h3>
-                <p className="text-xs text-text-secondary leading-relaxed">
-                  Decoupled serverless API microservices providing continuous operations under load.
+                <span className="text-xl sm:text-4xl font-black text-text-primary tracking-tight mb-1 sm:mb-2">99.9%</span>
+                <h3 className="font-bold text-xs sm:text-sm text-text-primary mb-1 sm:mb-2 leading-tight">Service Uptime</h3>
+                <p className="text-[10px] sm:text-xs text-text-secondary leading-snug sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
+                  Decoupled serverless microservices providing continuous operations under load.
                 </p>
               </Card>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80">
-                <div className="w-12 h-12 rounded-2xl bg-accent-pink/10 flex items-center justify-center text-accent-pink mb-6">
-                  <Award className="w-6 h-6" />
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-3.5 sm:p-7 border border-border/80 rounded-xl sm:rounded-2xl">
+                <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-accent-pink/10 flex items-center justify-center text-accent-pink mb-3 sm:mb-6">
+                  <Award className="w-4 h-4 sm:w-6 sm:h-6" />
                 </div>
-                <span className="text-4xl font-black text-text-primary tracking-tight mb-2">2.5 Yrs</span>
-                <h3 className="font-bold text-sm text-text-primary mb-2">Free Maintenance Warranty</h3>
-                <p className="text-xs text-text-secondary leading-relaxed">
-                  Comprehensive security patches, bug fixes, and system health checks at zero extra cost.
+                <span className="text-xl sm:text-4xl font-black text-text-primary tracking-tight mb-1 sm:mb-2">2.5 Yrs</span>
+                <h3 className="font-bold text-xs sm:text-sm text-text-primary mb-1 sm:mb-2 leading-tight">Free Warranty</h3>
+                <p className="text-[10px] sm:text-xs text-text-secondary leading-snug sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
+                  Comprehensive security patches, bug fixes, and health checks at zero extra cost.
                 </p>
               </Card>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80">
-                <div className="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 mb-6">
-                  <Users className="w-6 h-6" />
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-3.5 sm:p-7 border border-border/80 rounded-xl sm:rounded-2xl">
+                <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 mb-3 sm:mb-6">
+                  <Users className="w-4 h-4 sm:w-6 sm:h-6" />
                 </div>
-                <span className="text-4xl font-black text-text-primary tracking-tight mb-2">7+ Yrs</span>
-                <h3 className="font-bold text-sm text-text-primary mb-2">Average Engineer Track Record</h3>
-                <p className="text-xs text-text-secondary leading-relaxed">
-                  Staffed solely by senior engineering professionals. No interns, no cut corners, no placeholders.
+                <span className="text-xl sm:text-4xl font-black text-text-primary tracking-tight mb-1 sm:mb-2">7+ Yrs</span>
+                <h3 className="font-bold text-xs sm:text-sm text-text-primary mb-1 sm:mb-2 leading-tight">Engineer Track Record</h3>
+                <p className="text-[10px] sm:text-xs text-text-secondary leading-snug sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
+                  Staffed solely by senior engineering professionals. No interns or placeholders.
                 </p>
               </Card>
             </motion.div>
@@ -488,31 +507,31 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Who We Are */}
-      <section className="py-20 max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      {/* Who We Are - Mobile First */}
+      <section className="py-10 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center">
           <motion.div 
             {...fadeInUp}
             className="lg:col-span-5 flex flex-col items-start text-left"
           >
-            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
               Who We Are
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-4xl font-black text-text-primary tracking-tight leading-tight">
               Your Specialized Digital Innovation Partner
             </h2>
-            <p className="text-text-secondary mt-6 text-sm sm:text-base leading-relaxed">
+            <p className="text-text-secondary mt-3 sm:mt-6 text-xs sm:text-base leading-relaxed">
               At HangingPanda, we reject generic one-size-fits-all coding templates. We audit your workflows and formulate exact web, mobile, and automation tools that scale operations.
             </p>
-            <div className="flex flex-col gap-4 mt-8 w-full">
+            <div className="flex flex-col gap-2.5 sm:gap-4 mt-5 sm:mt-8 w-full">
               {[
                 "Custom built architectures, zero code templates",
                 "Senior developer staff with over 7+ years track records",
                 "Robust SLA contracts with clear timelines"
               ].map((val, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="text-sm font-semibold text-text-primary">{val}</span>
+                <div key={idx} className="flex items-center gap-2.5 sm:gap-3">
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary flex-shrink-0" />
+                  <span className="text-xs sm:text-sm font-semibold text-text-primary">{val}</span>
                 </div>
               ))}
             </div>
@@ -523,40 +542,40 @@ export const Home: React.FC = () => {
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true, margin: "-80px" }}
-            className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6"
+            className="lg:col-span-7 grid grid-cols-2 gap-2.5 sm:gap-6 mt-4 sm:mt-0"
           >
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="scale" className="flex flex-col gap-4">
-                <TrendingUp className="w-10 h-10 text-primary" />
-                <h3 className="font-bold text-lg text-text-primary">Performance Driven</h3>
-                <p className="text-xs text-text-secondary leading-relaxed">
+              <Card hoverEffect="scale" className="flex flex-col gap-2 sm:gap-4 p-3.5 sm:p-6 rounded-xl sm:rounded-2xl h-full">
+                <TrendingUp className="w-6 h-6 sm:w-10 sm:h-10 text-primary" />
+                <h3 className="font-bold text-xs sm:text-lg text-text-primary leading-tight">Performance Driven</h3>
+                <p className="text-[10px] sm:text-xs text-text-secondary leading-snug sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
                   Our frontends score &gt;95 on lighthouse speed tests to ensure customer conversion.
                 </p>
               </Card>
             </motion.div>
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="scale" className="flex flex-col gap-4">
-                <Cpu className="w-10 h-10 text-accent-orange" />
-                <h3 className="font-bold text-lg text-text-primary">Scalable Backends</h3>
-                <p className="text-xs text-text-secondary leading-relaxed">
+              <Card hoverEffect="scale" className="flex flex-col gap-2 sm:gap-4 p-3.5 sm:p-6 rounded-xl sm:rounded-2xl h-full">
+                <Cpu className="w-6 h-6 sm:w-10 sm:h-10 text-accent-orange" />
+                <h3 className="font-bold text-xs sm:text-lg text-text-primary leading-tight">Scalable Backends</h3>
+                <p className="text-[10px] sm:text-xs text-text-secondary leading-snug sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
                   Microservice APIs decoupled to support horizontal scaling on server loads.
                 </p>
               </Card>
             </motion.div>
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="scale" className="flex flex-col gap-4">
-                <ShieldCheck className="w-10 h-10 text-green-500" />
-                <h3 className="font-bold text-lg text-text-primary">Secured Infrastructure</h3>
-                <p className="text-xs text-text-secondary leading-relaxed">
+              <Card hoverEffect="scale" className="flex flex-col gap-2 sm:gap-4 p-3.5 sm:p-6 rounded-xl sm:rounded-2xl h-full">
+                <ShieldCheck className="w-6 h-6 sm:w-10 sm:h-10 text-green-500" />
+                <h3 className="font-bold text-xs sm:text-lg text-text-primary leading-tight">Secured Builds</h3>
+                <p className="text-[10px] sm:text-xs text-text-secondary leading-snug sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
                   Security-first builds incorporating GDPR compliance, SSL, and data hashes.
                 </p>
               </Card>
             </motion.div>
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="scale" className="flex flex-col gap-4">
-                <Users className="w-10 h-10 text-accent-pink" />
-                <h3 className="font-bold text-lg text-text-primary">Transparent Sprints</h3>
-                <p className="text-xs text-text-secondary leading-relaxed">
+              <Card hoverEffect="scale" className="flex flex-col gap-2 sm:gap-4 p-3.5 sm:p-6 rounded-xl sm:rounded-2xl h-full">
+                <Users className="w-6 h-6 sm:w-10 sm:h-10 text-accent-pink" />
+                <h3 className="font-bold text-xs sm:text-lg text-text-primary leading-tight">Transparent Sprints</h3>
+                <p className="text-[10px] sm:text-xs text-text-secondary leading-snug sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
                   Direct access to developers with live Git commits and daily status logs.
                 </p>
               </Card>
@@ -564,18 +583,17 @@ export const Home: React.FC = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Core Service Offerings */}
-      <section className="py-20 bg-surface border-y border-border">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+      {/* Core Service Offerings - Mobile First */}
+      <section className="py-10 sm:py-20 bg-surface border-y border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <motion.div {...fadeInUp}>
-            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
               Core Service Offerings
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight max-w-3xl mx-auto">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight max-w-3xl mx-auto">
               Dynamic Solutions Engineered for Scale
             </h2>
-            <p className="text-text-secondary text-sm sm:text-base mt-4 max-w-xl mx-auto">
+            <p className="text-text-secondary text-xs sm:text-base mt-2 sm:mt-4 max-w-xl mx-auto">
               Discover how HangingPanda develops, secures, and markets customized software frameworks.
             </p>
           </motion.div>
@@ -585,23 +603,23 @@ export const Home: React.FC = () => {
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true, margin: "-80px" }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 text-left"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 mt-8 sm:mt-12 text-left"
           >
             {servicesData.slice(0, 6).map((service) => (
               <motion.div key={service.slug} variants={fadeInUp}>
-                <Card hoverEffect="glow" className="flex flex-col justify-between h-full group">
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center gap-3">
-                      <span className="p-3 bg-primary/10 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                        {renderIcon(service.iconName, "w-6 h-6")}
+                <Card hoverEffect="glow" className="flex flex-col justify-between h-full group p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+                  <div className="flex flex-col gap-3 sm:gap-4">
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      <span className="p-2 sm:p-2.5 bg-primary/10 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                        {renderIcon(service.iconName, "w-5 h-5 sm:w-6 sm:h-6")}
                       </span>
-                      <h3 className="font-bold text-lg text-text-primary">{service.title}</h3>
+                      <h3 className="font-bold text-sm sm:text-lg text-text-primary leading-tight">{service.title}</h3>
                     </div>
-                    <p className="text-xs text-text-secondary leading-relaxed mt-2">
+                    <p className="text-xs text-text-secondary leading-snug sm:leading-relaxed">
                       {service.shortDesc}
                     </p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-xs font-bold">
+                  <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-border/40 flex items-center justify-between text-xs font-bold">
                     <Link to={`/services/${service.slug}`} className="text-primary hover:underline flex items-center gap-1">
                       Explore Service &rarr;
                     </Link>
@@ -613,30 +631,30 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Tech Stack Explorer Section */}
-      <section className="py-20 max-w-7xl mx-auto px-6">
-        <div className="text-center mb-12">
+      {/* Tech Stack Explorer Section - Mobile First */}
+      <section className="py-10 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-8 sm:mb-12">
           <motion.div {...fadeInUp}>
-            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
               TECHNICAL DEPTH
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight">
               Frameworks & Cloud Infrastructures
             </h2>
-            <p className="text-text-secondary text-sm mt-4 max-w-xl mx-auto">
+            <p className="text-text-secondary text-xs sm:text-sm mt-2 sm:mt-4 max-w-xl mx-auto">
               We leverage reliable and scalable technologies to ensure product longevity, low maintenance overhead, and fast execution.
             </p>
           </motion.div>
         </div>
 
-        {/* Apple Segmented Control for Tech Categories */}
-        <div className="flex justify-center mb-10">
-          <div className="p-1 rounded-full bg-surface border border-border inline-flex flex-wrap gap-1 shadow-xs max-w-full justify-center">
+        {/* Apple Segmented Control for Tech Categories - Mobile First */}
+        <div className="flex justify-center mb-6 sm:mb-10 px-2">
+          <div className="p-1 rounded-2xl sm:rounded-full bg-surface border border-border inline-flex flex-wrap gap-1 shadow-xs max-w-full justify-center">
             {techCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedTechCategory(cat)}
-                className={`min-h-[40px] px-4 sm:px-5 py-2 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                className={`min-h-[38px] px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl sm:rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer ${
                   selectedTechCategory === cat
                     ? "bg-card text-text-primary shadow-xs font-bold"
                     : "text-text-secondary hover:text-text-primary hover:bg-card/50"
@@ -655,16 +673,16 @@ export const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -15 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 text-left"
           >
             {techData[selectedTechCategory].map((tech, idx) => (
-              <Card key={idx} hoverEffect="glow" className="flex flex-col justify-between h-full bg-card p-6 border border-border/80">
-                <div className="flex flex-col gap-3">
-                  <span className="text-[10px] font-black text-primary tracking-wider uppercase bg-primary/10 px-2.5 py-1 rounded-md w-fit">
+              <Card key={idx} hoverEffect="glow" className="flex flex-col justify-between h-full bg-card p-3 sm:p-6 border border-border/80 rounded-xl sm:rounded-2xl">
+                <div className="flex flex-col gap-1.5 sm:gap-3">
+                  <span className="text-[9px] sm:text-[10px] font-black text-primary tracking-wider uppercase bg-primary/10 px-2 py-0.5 rounded-md w-fit">
                     {tech.highlight}
                   </span>
-                  <h3 className="font-bold text-lg text-text-primary mt-2">{tech.name}</h3>
-                  <p className="text-xs text-text-secondary leading-relaxed mt-1">
+                  <h3 className="font-bold text-xs sm:text-lg text-text-primary mt-1 sm:mt-2 leading-tight">{tech.name}</h3>
+                  <p className="text-[10px] sm:text-xs text-text-secondary leading-snug sm:leading-relaxed mt-0.5 line-clamp-3 sm:line-clamp-none">
                     {tech.desc}
                   </p>
                 </div>
@@ -690,9 +708,9 @@ export const Home: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Apple Segmented Control for Industries */}
-        <div className="flex justify-center mb-10">
-          <div role="tablist" className="p-1 rounded-full bg-surface border border-border inline-flex flex-wrap gap-1 shadow-xs max-w-full justify-center">
+        {/* Apple Segmented Control for Industries - Mobile First */}
+        <div className="flex justify-center mb-10 px-2">
+          <div role="tablist" className="p-1 rounded-2xl sm:rounded-full bg-surface border border-border inline-flex flex-wrap gap-1 shadow-xs max-w-full justify-center">
             {industries.map((ind) => (
               <button
                 key={ind}
@@ -701,7 +719,7 @@ export const Home: React.FC = () => {
                 aria-selected={activeTab === ind}
                 aria-controls={`industry-panel-${ind}`}
                 onClick={() => setActiveTab(ind)}
-                className={`min-h-[40px] px-5 sm:px-6 py-2 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                className={`min-h-[40px] px-4 sm:px-6 py-2 rounded-xl sm:rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer ${
                   activeTab === ind
                     ? "bg-card text-text-primary shadow-xs font-bold"
                     : "text-text-secondary hover:text-text-primary hover:bg-card/50"
@@ -723,32 +741,32 @@ export const Home: React.FC = () => {
             id={`industry-panel-${activeTab}`}
             role="tabpanel"
             aria-labelledby={`industry-tab-${activeTab}`}
-            className="bg-card border border-border rounded-3xl p-6 sm:p-10 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+            className="bg-card border border-border rounded-2xl sm:rounded-3xl p-4 sm:p-10 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center"
           >
-            <div className="lg:col-span-7 flex flex-col items-start text-left gap-4">
-              <span className="text-xs font-bold text-primary uppercase tracking-widest">
+            <div className="lg:col-span-7 flex flex-col items-start text-left gap-2.5 sm:gap-4">
+              <span className="text-[11px] sm:text-xs font-bold text-primary uppercase tracking-widest">
                 Success Highlight ({activePortfolio.category})
               </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-text-primary tracking-tight">
+              <h3 className="text-xl sm:text-3xl font-black text-text-primary tracking-tight">
                 {activePortfolio.title}
               </h3>
-              <p className="text-sm text-text-secondary leading-relaxed">
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
                 {activePortfolio.description}
               </p>
-              <div className="flex gap-4 flex-wrap mt-2">
+              <div className="flex gap-2 sm:gap-3 flex-wrap mt-1 sm:mt-2">
                 {activePortfolio.tags.map((t) => (
-                  <span key={t} className="px-3 py-1 bg-surface border border-border text-xs font-semibold rounded-lg text-text-secondary">
+                  <span key={t} className="px-2.5 py-0.5 sm:px-3 sm:py-1 bg-surface border border-border text-[11px] sm:text-xs font-semibold rounded-lg text-text-secondary">
                     {t}
                   </span>
                 ))}
               </div>
-              <div className="grid grid-cols-3 gap-6 mt-6 w-full pt-6 border-t border-border">
+              <div className="grid grid-cols-3 gap-2 sm:gap-6 mt-4 sm:mt-6 w-full pt-4 sm:pt-6 border-t border-border">
                 {activePortfolio.metrics.map((m, idx) => (
                   <div key={idx} className="flex flex-col">
-                    <span className="text-xl sm:text-2xl font-black text-text-primary">
+                    <span className="text-base sm:text-2xl font-black text-text-primary">
                       {m.value}
                     </span>
-                    <span className="text-[10px] uppercase font-bold text-text-muted mt-1 leading-none">
+                    <span className="text-[9px] sm:text-[10px] uppercase font-bold text-text-muted mt-0.5 sm:mt-1 leading-tight">
                       {m.label}
                     </span>
                   </div>
@@ -756,15 +774,15 @@ export const Home: React.FC = () => {
               </div>
             </div>
             <div className="lg:col-span-5">
-              <div className="aspect-video w-full rounded-2xl bg-gradient-to-tr from-primary/10 to-accent-orange/10 border border-border p-6 flex flex-col justify-between">
-                <span className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold">
+              <div className="aspect-video w-full rounded-xl sm:rounded-2xl bg-gradient-to-tr from-primary/10 to-accent-orange/10 border border-border p-4 sm:p-6 flex flex-col justify-between">
+                <span className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs sm:text-sm">
                   HP
                 </span>
                 <div>
-                  <span className="text-xs font-bold text-text-muted uppercase">Engineered Stack</span>
-                  <div className="flex flex-wrap gap-1.5 mt-2">
+                  <span className="text-[11px] sm:text-xs font-bold text-text-muted uppercase">Engineered Stack</span>
+                  <div className="flex flex-wrap gap-1.5 mt-1.5 sm:mt-2">
                     {activePortfolio.techStack.map((tech) => (
-                      <span key={tech} className="px-2.5 py-1 bg-card border border-border text-[10px] font-bold rounded-md text-text-primary">
+                      <span key={tech} className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-card border border-border text-[9px] sm:text-[10px] font-bold rounded-md text-text-primary">
                         {tech}
                       </span>
                     ))}
@@ -776,14 +794,14 @@ export const Home: React.FC = () => {
         </AnimatePresence>
       </section>
 
-      {/* Client Testimonials */}
-      <section className="py-20 bg-surface border-y border-border">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+      {/* Client Testimonials - Mobile First */}
+      <section className="py-10 sm:py-20 bg-surface border-y border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <motion.div {...fadeInUp}>
-            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
               Client Testimonials
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight mb-12">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight mb-8 sm:mb-12">
               Trusted by Modern Startups
             </h2>
           </motion.div>
@@ -793,26 +811,26 @@ export const Home: React.FC = () => {
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true, margin: "-80px" }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 text-left"
           >
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="shadow" className="flex flex-col justify-between p-6 h-full">
-                <div className="flex flex-col gap-4">
+              <Card hoverEffect="shadow" className="flex flex-col justify-between p-4 sm:p-6 rounded-xl sm:rounded-2xl h-full">
+                <div className="flex flex-col gap-2.5 sm:gap-4">
                   <div className="flex text-primary gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
+                      <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                     ))}
                   </div>
-                  <p className="text-sm text-text-secondary italic leading-relaxed">
+                  <p className="text-xs sm:text-sm text-text-secondary italic leading-relaxed">
                     "HangingPanda helped rebuild our legacy inventory dashboard. Code execution rates jumped, latency dropped, and their developers handled our MQTT telemetry with ease."
                   </p>
                 </div>
-                <div className="flex items-center gap-3.5 mt-6 border-t border-border/40 pt-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">
+                <div className="flex items-center gap-2.5 sm:gap-3.5 mt-4 sm:mt-6 border-t border-border/40 pt-3 sm:pt-4">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-xs sm:text-sm text-primary shrink-0">
                     WS
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold text-text-primary">Waves Services</span>
+                    <span className="text-xs sm:text-sm font-bold text-text-primary">Waves Services</span>
                     <span className="text-[10px] font-semibold text-text-muted">Operations Director</span>
                   </div>
                 </div>
@@ -820,23 +838,23 @@ export const Home: React.FC = () => {
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="shadow" className="flex flex-col justify-between p-6 h-full">
-                <div className="flex flex-col gap-4">
+              <Card hoverEffect="shadow" className="flex flex-col justify-between p-4 sm:p-6 rounded-xl sm:rounded-2xl h-full">
+                <div className="flex flex-col gap-2.5 sm:gap-4">
                   <div className="flex text-primary gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
+                      <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                     ))}
                   </div>
-                  <p className="text-sm text-text-secondary italic leading-relaxed">
+                  <p className="text-xs sm:text-sm text-text-secondary italic leading-relaxed">
                     "The App Cost Calculator gave us an exact ballpark in minutes. Their cross-platform Swift and Kotlin delivery was on time, saving us 30% compared to local design shops."
                   </p>
                 </div>
-                <div className="flex items-center gap-3.5 mt-6 border-t border-border/40 pt-4">
-                  <div className="w-10 h-10 rounded-full bg-accent-orange/20 flex items-center justify-center font-bold text-accent-orange">
+                <div className="flex items-center gap-2.5 sm:gap-3.5 mt-4 sm:mt-6 border-t border-border/40 pt-3 sm:pt-4">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-accent-orange/20 flex items-center justify-center font-bold text-xs sm:text-sm text-accent-orange shrink-0">
                     QE
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold text-text-primary">Quantum Edge</span>
+                    <span className="text-xs sm:text-sm font-bold text-text-primary">Quantum Edge</span>
                     <span className="text-[10px] font-semibold text-text-muted">Technical Lead</span>
                   </div>
                 </div>
@@ -844,23 +862,23 @@ export const Home: React.FC = () => {
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="shadow" className="flex flex-col justify-between p-6 h-full">
-                <div className="flex flex-col gap-4">
+              <Card hoverEffect="shadow" className="flex flex-col justify-between p-4 sm:p-6 rounded-xl sm:rounded-2xl h-full">
+                <div className="flex flex-col gap-2.5 sm:gap-4">
                   <div className="flex text-primary gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
+                      <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                     ))}
                   </div>
-                  <p className="text-sm text-text-secondary italic leading-relaxed">
+                  <p className="text-xs sm:text-sm text-text-secondary italic leading-relaxed">
                     "Their post-release maintenance of 2.5 years has kept our database clusters secure. They function as a true engineering partner, not just a service provider."
                   </p>
                 </div>
-                <div className="flex items-center gap-3.5 mt-6 border-t border-border/40 pt-4">
-                  <div className="w-10 h-10 rounded-full bg-accent-pink/20 flex items-center justify-center font-bold text-accent-pink">
+                <div className="flex items-center gap-2.5 sm:gap-3.5 mt-4 sm:mt-6 border-t border-border/40 pt-3 sm:pt-4">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-accent-pink/20 flex items-center justify-center font-bold text-xs sm:text-sm text-accent-pink shrink-0">
                     HM
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold text-text-primary">Horizon Marketing</span>
+                    <span className="text-xs sm:text-sm font-bold text-text-primary">Horizon Marketing</span>
                     <span className="text-[10px] font-semibold text-text-muted">Product Owner</span>
                   </div>
                 </div>
@@ -870,17 +888,17 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Enterprise Security & Compliance Section */}
-      <section className="py-20 bg-surface border-y border-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div {...fadeInUp} className="text-center max-w-3xl mx-auto mb-16">
-            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+      {/* Enterprise Security & Compliance Section - Mobile First */}
+      <section className="py-10 sm:py-20 bg-surface border-y border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <motion.div {...fadeInUp} className="text-center max-w-3xl mx-auto mb-8 sm:mb-16">
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
               ENTERPRISE SHIELD
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight">
               Bank-Grade Security & Compliance
             </h2>
-            <p className="text-text-secondary text-sm sm:text-base mt-4 max-w-xl mx-auto">
+            <p className="text-text-secondary text-xs sm:text-base mt-2 sm:mt-4 max-w-xl mx-auto">
               We design and construct digital assets focusing strictly on threat mitigation, data privacy, and industry regulatory frameworks.
             </p>
           </motion.div>
@@ -890,40 +908,40 @@ export const Home: React.FC = () => {
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true, margin: "-80px" }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-8"
           >
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80 text-left">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6">
-                  <ShieldCheck className="w-6 h-6" />
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-4 sm:p-8 border border-border/80 text-left rounded-xl sm:rounded-2xl">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-3 sm:mb-6">
+                  <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h3 className="font-extrabold text-lg text-text-primary mb-3">Data Isolation & Encryption</h3>
+                <h3 className="font-extrabold text-sm sm:text-lg text-text-primary mb-1.5 sm:mb-3">Data Isolation & Encryption</h3>
                 <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
-                  We deploy salted cryptography models, SHA hashes, and AES-256 database storage options. Access credentials are fully segregated to avoid leakage risks.
+                  We deploy salted cryptography models, SHA hashes, and AES-256 database storage options. Access credentials are fully segregated.
                 </p>
               </Card>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80 text-left">
-                <div className="w-12 h-12 rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-6">
-                  <Cpu className="w-6 h-6" />
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-4 sm:p-8 border border-border/80 text-left rounded-xl sm:rounded-2xl">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-3 sm:mb-6">
+                  <Cpu className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h3 className="font-extrabold text-lg text-text-primary mb-3">Compliance Ready Frameworks</h3>
+                <h3 className="font-extrabold text-sm sm:text-lg text-text-primary mb-1.5 sm:mb-3">Compliance Ready</h3>
                 <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
-                  All custom builds follow security guidelines compliant with standard regulations like GDPR data consent paths, HIPAA telemetry schemas, and SOC 2 audits.
+                  All custom builds follow security guidelines compliant with standard regulations like GDPR data consent paths, HIPAA schemas, and SOC 2 audits.
                 </p>
               </Card>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-8 border border-border/80 text-left">
-                <div className="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 mb-6">
-                  <Code className="w-6 h-6" />
+              <Card hoverEffect="glow" className="flex flex-col h-full bg-card p-4 sm:p-8 border border-border/80 text-left rounded-xl sm:rounded-2xl">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500 mb-3 sm:mb-6">
+                  <Code className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h3 className="font-extrabold text-lg text-text-primary mb-3">Vulnerability Scanning</h3>
+                <h3 className="font-extrabold text-sm sm:text-lg text-text-primary mb-1.5 sm:mb-3">Vulnerability Scanning</h3>
                 <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
-                  Our integration lines deploy automatic security scanners (SAST) to inspect packages, prevent SQL injections, and avoid cross-site scripting vulnerabilities.
+                  Our integration lines deploy automatic security scanners (SAST) to inspect packages, prevent SQL injections, and avoid XSS vulnerabilities.
                 </p>
               </Card>
             </motion.div>
@@ -931,14 +949,14 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Common Questions */}
-      <section className="py-20 max-w-4xl mx-auto px-6 border-b border-border">
-        <div className="text-center mb-12">
+      {/* Common Questions - Mobile First */}
+      <section className="py-10 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 border-b border-border">
+        <div className="text-center mb-8 sm:mb-12">
           <motion.div {...fadeInUp}>
-            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
+            <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
               Common Questions
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-black text-text-primary tracking-tight">
               Frequently Asked Queries
             </h2>
           </motion.div>
@@ -948,29 +966,29 @@ export const Home: React.FC = () => {
         </motion.div>
       </section>
 
-      {/* Direct Consultation / Lead Capture Section */}
-      <section className="py-20 bg-gradient-to-b from-bg to-surface relative overflow-hidden">
+      {/* Direct Consultation / Lead Capture Section - Mobile First */}
+      <section className="py-12 sm:py-20 bg-gradient-to-b from-bg to-surface relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(239,68,68,0.04),transparent_40%)] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center relative z-10">
           <motion.div 
             {...fadeInUp}
-            className="lg:col-span-6 flex flex-col items-start text-left gap-6"
+            className="lg:col-span-6 flex flex-col items-start text-left gap-4 sm:gap-6"
           >
             <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary uppercase tracking-wider">
               Consultation blueprint
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight leading-tight">
               Get Your Bespoke Software Blueprint in 24 Hours
             </h2>
-            <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
+            <p className="text-xs sm:text-base text-text-secondary leading-relaxed">
               Skip standard sales fluff. Share your concept, choose a budget range, and our senior engineers will formulate exact structural design blueprints, recommended tech stacks, and a breakdown of milestones.
             </p>
 
-            <div className="flex flex-col gap-4 w-full mt-4">
+            <div className="flex flex-col gap-3 sm:gap-4 w-full mt-2 sm:mt-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-card border border-border flex items-center justify-center text-primary flex-shrink-0">
-                  <Clock className="w-5 h-5" />
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-card border border-border flex items-center justify-center text-primary flex-shrink-0">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-bold text-text-primary">Fast Turnaround</span>
@@ -979,8 +997,8 @@ export const Home: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-card border border-border flex items-center justify-center text-accent-orange flex-shrink-0">
-                  <ThumbsUp className="w-5 h-5" />
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-card border border-border flex items-center justify-center text-accent-orange flex-shrink-0">
+                  <ThumbsUp className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-bold text-text-primary">Zero Obligation Blueprint</span>
@@ -994,9 +1012,9 @@ export const Home: React.FC = () => {
             {...fadeInUp}
             className="lg:col-span-6 w-full"
           >
-            <Card hoverEffect="none" className="bg-card border border-border/80 p-6 sm:p-9 rounded-3xl shadow-xl relative overflow-hidden">
-              <h3 className="text-xl sm:text-2xl font-extrabold text-text-primary tracking-headline mb-2">Book a Scoping Session</h3>
-              <p className="text-xs text-text-secondary mb-6 tracking-body">Let our senior software architects analyze your app requirements and supply draft system diagrams.</p>
+            <Card hoverEffect="none" className="bg-card border border-border/80 p-4 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl relative overflow-hidden">
+              <h3 className="text-lg sm:text-2xl font-extrabold text-text-primary tracking-headline mb-1.5 sm:mb-2">Book a Scoping Session</h3>
+              <p className="text-xs text-text-secondary mb-4 sm:mb-6 tracking-body">Let our senior software architects analyze your app requirements and supply draft system diagrams.</p>
               
               {formSubmitted ? (
                 <motion.div 
