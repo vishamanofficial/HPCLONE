@@ -1,6 +1,9 @@
 // HangingPanda API Client Service
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
 
+// Client-side In-Memory Cache (Instant SWR navigation, zero cost)
+const clientCache = new Map<string, { data: any; expiry: number }>();
+
 class ApiService {
   private getAuthHeaders(): HeadersInit {
     const token = localStorage.getItem('hp_admin_token');
@@ -12,6 +15,17 @@ class ApiService {
 
   // Generic Request Helper
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+    const isGet = !options.method || options.method.toUpperCase() === 'GET';
+    const isPublic = endpoint.startsWith('/public');
+
+    // Return cached response instantly if available and fresh (< 45s)
+    if (isGet && isPublic) {
+      const cached = clientCache.get(endpoint);
+      if (cached && Date.now() < cached.expiry) {
+        return cached.data as T;
+      }
+    }
+
     const url = `${API_BASE_URL}${endpoint}`;
     const headers = {
       ...this.getAuthHeaders(),
@@ -24,6 +38,13 @@ class ApiService {
 
       if (!response.ok) {
         throw new Error(data.message || `Request failed with status ${response.status}`);
+      }
+
+      // Store in client memory cache
+      if (isGet && isPublic) {
+        clientCache.set(endpoint, { data, expiry: Date.now() + 45 * 1000 });
+      } else if (!isGet) {
+        clientCache.clear();
       }
 
       return data as T;

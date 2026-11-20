@@ -101,9 +101,9 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex flex-col gap-5">
-          <h4 className="text-xs font-semibold uppercase tracking-caption text-text-muted">
+          <p className="text-xs font-semibold uppercase tracking-caption text-text-muted">
             Our Company
-          </h4>
+          </p>
           <ul className="flex flex-col gap-2.5 text-sm">
             <li>
               <Link to="/about" className="hover:text-primary transition-colors">
@@ -137,9 +137,9 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex flex-col gap-5">
-          <h4 className="text-xs font-semibold uppercase tracking-caption text-text-muted">
+          <p className="text-xs font-semibold uppercase tracking-caption text-text-muted">
             Recent Work
-          </h4>
+          </p>
           <ul className="flex flex-col gap-2.5 text-sm">
             <li>
               <Link to="/case-studies" className="hover:text-primary transition-colors">
@@ -170,9 +170,9 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex flex-col gap-5">
-          <h4 className="text-xs font-semibold uppercase tracking-caption text-text-muted">
+          <p className="text-xs font-semibold uppercase tracking-caption text-text-muted">
             Key Offerings
-          </h4>
+          </p>
           <ul className="flex flex-col gap-2.5 text-sm">
             {quickServices.map((service) => (
               <li key={service.slug}>

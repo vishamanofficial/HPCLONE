@@ -86,6 +86,7 @@ export const TechBackground: React.FC = () => {
       ref={containerRef}
       aria-hidden="true"
       style={{
+        contain: "paint layout",
         // Default cursor flare position
         ["--mouse-x" as any]: "-1000px",
         ["--mouse-y" as any]: "-1000px",

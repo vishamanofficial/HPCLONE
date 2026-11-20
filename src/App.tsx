@@ -20,6 +20,7 @@ const CookiesPolicy = React.lazy(() => import("./pages/CookiesPolicy"));
 const Calculator = React.lazy(() => import("./pages/Calculator"));
 const ThankYou = React.lazy(() => import("./pages/ThankYou"));
 const LivePreview = React.lazy(() => import("./pages/LivePreview"));
+const DynamicPage = React.lazy(() => import("./pages/DynamicPage"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 
 // Admin CMS Pages
@@ -103,6 +104,7 @@ function App() {
                 <Route path="cookies-policy" element={<CookiesPolicy />} />
                 <Route path="app-cost-calculator" element={<Calculator />} />
                 <Route path="thank-you" element={<ThankYou />} />
+                <Route path=":slug" element={<DynamicPage />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

@@ -20,6 +20,7 @@ import { Media } from '../models/Media.js';
 import { User } from '../models/User.js';
 import { Role } from '../models/Role.js';
 import { AuditLog } from '../models/AuditLog.js';
+import { publicCache } from '../utils/cache.js';
 
 // ==========================================
 // 1. DASHBOARD OVERVIEW & STATS
@@ -222,6 +223,7 @@ export const updatePage = async (req: AuthRequest, res: Response): Promise<void>
     });
 
     await logActivity(req, 'UPDATE_PAGE', 'page', String(page._id), `Updated page ${page.title} (rev ${page.currentRevision})`);
+    publicCache.invalidate();
     res.json({ success: true, page, message: 'Page updated successfully' });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
@@ -264,6 +266,7 @@ export const publishPage = async (req: AuthRequest, res: Response): Promise<void
     await page.save();
 
     await logActivity(req, 'PUBLISH_PAGE', 'page', String(page._id), `Published page ${page.title}`);
+    publicCache.invalidate();
     res.json({ success: true, page, message: 'Page published successfully' });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
@@ -282,6 +285,7 @@ export const unpublishPage = async (req: AuthRequest, res: Response): Promise<vo
     await page.save();
 
     await logActivity(req, 'UNPUBLISH_PAGE', 'page', String(page._id), `Unpublished page ${page.title}`);
+    publicCache.invalidate();
     res.json({ success: true, page, message: 'Page moved to draft' });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });

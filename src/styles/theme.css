@@ -26,11 +26,11 @@
 }
 
 .dark {
-  /* Apple HIG SystemRed Dark Mode (6.2:1 contrast on dark surface) */
-  --hp-color-primary: 255 69 58;
-  --hp-color-primary-hover: 255 105 97;
-  --hp-color-accent-orange: 255 159 10;
-  --hp-color-accent-pink: 255 55 95;
+  /* Apple HIG SystemRed Dark Mode - WCAG AA compliant contrast ratio */
+  --hp-color-primary: 239 68 68;
+  --hp-color-primary-hover: 220 38 38;
+  --hp-color-accent-orange: 249 115 22;
+  --hp-color-accent-pink: 244 63 94;
   
   /* Apple System Materials - Dark (Deep Graphite & OLED Slate) */
   --hp-color-bg: 12 13 14;

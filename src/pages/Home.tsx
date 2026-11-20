@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import api from "../services/api";
@@ -93,6 +93,44 @@ export const Home: React.FC = () => {
     const IconComponent = serviceIcons[name] || HelpCircle;
     return <IconComponent className={className} />;
   };
+
+  // Dynamic CMS Page Content & Sections Hydration
+  const [pageData, setPageData] = useState<any>(null);
+  const [sections, setSections] = useState<any[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchHomeContent = async () => {
+      try {
+        const res = await api.getPublicHomepage();
+        if (isMounted && res.success) {
+          if (res.page) setPageData(res.page);
+          if (res.sections && res.sections.length > 0) {
+            setSections(res.sections);
+          }
+        }
+      } catch (err) {
+        // Graceful fallback to static data
+      }
+    };
+    fetchHomeContent();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Section content helpers
+  const getSection = (type: string) => sections.find((s) => s.type === type);
+  const heroSec = getSection('hero')?.content;
+  const tickerSec = getSection('client_logos')?.content;
+  const servicesSec = getSection('services_grid')?.content;
+  const pillarsSec = getSection('value_pillars')?.content;
+  const industriesSec = getSection('industry_tabs')?.content;
+  const portfolioSec = getSection('portfolio_highlights')?.content;
+  const statsSec = getSection('metrics_counter')?.content;
+  const testimonialsSec = getSection('testimonials_slider')?.content;
+  const faqSec = getSection('faq_accordion')?.content;
+  const ctaSec = getSection('cta_banner')?.content;
 
   const [activeTab, setActiveTab] = useState("Fintech");
   const [selectedTechCategory, setSelectedTechCategory] = useState("Frontend");
@@ -252,21 +290,21 @@ export const Home: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>HangingPanda | AI-Powered Custom Software & Mobile App Development</title>
+        <title>{pageData?.seo?.metaTitle || "HangingPanda | AI-Powered Custom Software & Mobile App Development"}</title>
         <meta
           name="description"
-          content="HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms. Get your development quote using our App Cost Calculator."
+          content={pageData?.seo?.metaDescription || "HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms. Get your development quote using our App Cost Calculator."}
         />
-        <link rel="canonical" href="https://hangingpanda.com/" />
-        <meta property="og:title" content="HangingPanda | AI-Powered Custom Software & Mobile App Development" />
-        <meta property="og:description" content="HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms. Get your development quote using our App Cost Calculator." />
+        <link rel="canonical" href={pageData?.seo?.canonicalUrl || "https://hangingpanda.com/"} />
+        <meta property="og:title" content={pageData?.seo?.metaTitle || "HangingPanda | AI-Powered Custom Software & Mobile App Development"} />
+        <meta property="og:description" content={pageData?.seo?.metaDescription || "HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms. Get your development quote using our App Cost Calculator."} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hangingpanda.com/" />
-        <meta property="og:image" content="https://hangingpanda.com/og-image.jpg" />
+        <meta property="og:url" content={pageData?.seo?.canonicalUrl || "https://hangingpanda.com/"} />
+        <meta property="og:image" content={pageData?.seo?.ogImage || "https://hangingpanda.com/og-image.jpg"} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="HangingPanda | AI-Powered Custom Software & Mobile App Development" />
-        <meta name="twitter:description" content="HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms. Get your development quote using our App Cost Calculator." />
-        <meta name="twitter:image" content="https://hangingpanda.com/og-image.jpg" />
+        <meta name="twitter:title" content={pageData?.seo?.metaTitle || "HangingPanda | AI-Powered Custom Software & Mobile App Development"} />
+        <meta name="twitter:description" content={pageData?.seo?.metaDescription || "HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms. Get your development quote using our App Cost Calculator."} />
+        <meta name="twitter:image" content={pageData?.seo?.ogImage || "https://hangingpanda.com/og-image.jpg"} />
         <meta name="robots" content="index, follow" />
       </Helmet>
 
@@ -276,28 +314,25 @@ export const Home: React.FC = () => {
         <TechBackground />
 
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center">
-          {/* Monumental Display Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl sm:text-5xl lg:text-7xl font-extrabold text-text-primary tracking-display leading-[1.08] sm:leading-[1.04] max-w-5xl"
-          >
-            Engineering Intelligent Software At{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent-orange to-accent-pink drop-shadow-sm">
-              Uncompromising Scale.
-            </span>
-          </motion.h1>
+          {/* Monumental Display Headline - Instantly visible on mount for optimal FCP/LCP */}
+          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold text-text-primary tracking-display leading-[1.08] sm:leading-[1.04] max-w-5xl">
+            {heroSec?.headline ? (
+              <span>{heroSec.headline}</span>
+            ) : (
+              <>
+                Engineering Intelligent Software At{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent-orange to-accent-pink drop-shadow-sm">
+                  Uncompromising Scale.
+                </span>
+              </>
+            )}
+          </h1>
 
           {/* High-Precision Subheading */}
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-sm sm:text-lg md:text-xl text-text-secondary mt-4 sm:mt-6 max-w-3xl leading-relaxed tracking-body font-normal"
-          >
-            We build custom web platforms, mobile applications, and smart AI automation tools tailored to your business goals. Backed by 2.5 years of free maintenance.
-          </motion.p>
+          <p className="text-sm sm:text-lg md:text-xl text-text-secondary mt-4 sm:mt-6 max-w-3xl leading-relaxed tracking-body font-normal">
+            {heroSec?.description ||
+              "We build custom web platforms, mobile applications, and smart AI automation tools tailored to your business goals. Backed by 2.5 years of free maintenance."}
+          </p>
 
           {/* Easy to Understand Value Chips */}
           <motion.div
@@ -333,24 +368,24 @@ export const Home: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mt-7 sm:mt-10 w-full sm:w-auto max-w-xs sm:max-w-none"
           >
-            <Link to="/app-cost-calculator" className="w-full sm:w-auto">
+            <Link to={heroSec?.primaryBtnUrl || "/app-cost-calculator"} className="w-full sm:w-auto">
               <Button
                 variant="primary"
                 size="lg"
                 className="w-full justify-center shadow-md shadow-primary/20 min-h-[48px]"
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
-                Consult Our Experts
+                {heroSec?.primaryBtnText || "Consult Our Experts"}
               </Button>
             </Link>
-            <Link to="/case-studies" className="w-full sm:w-auto">
+            <Link to={heroSec?.secondaryBtnUrl || "/case-studies"} className="w-full sm:w-auto">
               <Button
                 variant="glass"
                 size="lg"
                 className="w-full justify-center min-h-[48px]"
                 leftIcon={<Sparkles className="w-4 h-4 text-accent-orange" />}
               >
-                View Our Portfolio
+                {heroSec?.secondaryBtnText || "View Our Portfolio"}
               </Button>
             </Link>
           </motion.div>
@@ -367,7 +402,7 @@ export const Home: React.FC = () => {
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
                 <span className="text-xs sm:text-sm font-bold text-text-primary tracking-tight">
-                  HangingPanda Service Commitments
+                  {heroSec?.badgeText || "HangingPanda Service Commitments"}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -515,13 +550,13 @@ export const Home: React.FC = () => {
             className="lg:col-span-5 flex flex-col items-start text-left"
           >
             <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
-              Who We Are
+              {pillarsSec?.badge || "Who We Are"}
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-text-primary tracking-tight leading-tight">
-              Your Specialized Digital Innovation Partner
+              {pillarsSec?.heading || "Your Specialized Digital Innovation Partner"}
             </h2>
             <p className="text-text-secondary mt-3 sm:mt-6 text-xs sm:text-base leading-relaxed">
-              At HangingPanda, we reject generic one-size-fits-all coding templates. We audit your workflows and formulate exact web, mobile, and automation tools that scale operations.
+              {pillarsSec?.subheading || "At HangingPanda, we reject generic one-size-fits-all coding templates. We audit your workflows and formulate exact web, mobile, and automation tools that scale operations."}
             </p>
             <div className="flex flex-col gap-2.5 sm:gap-4 mt-5 sm:mt-8 w-full">
               {[
@@ -588,13 +623,13 @@ export const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <motion.div {...fadeInUp}>
             <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
-              Core Service Offerings
+              {servicesSec?.badge || "Core Service Offerings"}
             </span>
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight max-w-3xl mx-auto">
-              Dynamic Solutions Engineered for Scale
+              {servicesSec?.heading || "Dynamic Solutions Engineered for Scale"}
             </h2>
             <p className="text-text-secondary text-xs sm:text-base mt-2 sm:mt-4 max-w-xl mx-auto">
-              Discover how HangingPanda develops, secures, and markets customized software frameworks.
+              {servicesSec?.subheading || "Discover how HangingPanda develops, secures, and markets customized software frameworks."}
             </p>
           </motion.div>
 
@@ -620,7 +655,11 @@ export const Home: React.FC = () => {
                     </p>
                   </div>
                   <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-border/40 flex items-center justify-between text-xs font-bold">
-                    <Link to={`/services/${service.slug}`} className="text-primary hover:underline flex items-center gap-1">
+                    <Link
+                      to={`/services/${service.slug}`}
+                      className="text-primary hover:underline flex items-center gap-1"
+                      aria-label={`Explore ${service.title} service`}
+                    >
                       Explore Service &rarr;
                     </Link>
                   </div>
@@ -700,10 +739,10 @@ export const Home: React.FC = () => {
         <div className="text-center mb-12">
           <motion.div {...fadeInUp}>
             <span className="block text-xs font-black text-primary tracking-widest uppercase mb-3">
-              Industries We Serve
+              {industriesSec?.badge || "Industries We Serve"}
             </span>
             <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight">
-              Tailored Domain Expertise
+              {industriesSec?.heading || "Tailored Domain Expertise"}
             </h2>
           </motion.div>
         </div>
@@ -799,10 +838,10 @@ export const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <motion.div {...fadeInUp}>
             <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
-              Client Testimonials
+              {testimonialsSec?.badge || "Client Testimonials"}
             </span>
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight mb-8 sm:mb-12">
-              Trusted by Modern Startups
+              {testimonialsSec?.heading || "Trusted by Modern Startups"}
             </h2>
           </motion.div>
 
@@ -954,10 +993,10 @@ export const Home: React.FC = () => {
         <div className="text-center mb-8 sm:mb-12">
           <motion.div {...fadeInUp}>
             <span className="block text-xs font-black text-primary tracking-widest uppercase mb-2 sm:mb-3">
-              Common Questions
+              {faqSec?.badge || "Common Questions"}
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-text-primary tracking-tight">
-              Frequently Asked Queries
+              {faqSec?.heading || "Frequently Asked Queries"}
             </h2>
           </motion.div>
         </div>
@@ -1137,20 +1176,20 @@ export const Home: React.FC = () => {
             className="flex flex-col items-center gap-6"
           >
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-              Ready to Build Your App?
+              {ctaSec?.heading || "Ready to Build Your App?"}
             </h2>
             <p className="text-sm sm:text-base text-text-secondary max-w-xl">
-              Get an instant cost assessment or contact our engineering team to draft custom software blueprints.
+              {ctaSec?.subheading || "Get an instant cost assessment or contact our engineering team to draft custom software blueprints."}
             </p>
             <div className="flex flex-col sm:flex-row gap-3.5 w-full sm:w-auto mt-4">
-              <Link to="/app-cost-calculator" className="w-full sm:w-auto">
+              <Link to={ctaSec?.buttonUrl || ctaSec?.primaryBtnUrl || "/app-cost-calculator"} className="w-full sm:w-auto">
                 <Button variant="primary" size="lg" className="w-full justify-center shadow-sm">
-                  Calculate App Cost
+                  {ctaSec?.buttonText || ctaSec?.primaryBtnText || "Calculate App Cost"}
                 </Button>
               </Link>
-              <Link to="/contact" className="w-full sm:w-auto">
+              <Link to={ctaSec?.secondaryButtonUrl || "/contact"} className="w-full sm:w-auto">
                 <Button variant="secondary" size="lg" className="w-full justify-center">
-                  Contact Experts
+                  {ctaSec?.secondaryButtonText || "Contact Experts"}
                 </Button>
               </Link>
             </div>

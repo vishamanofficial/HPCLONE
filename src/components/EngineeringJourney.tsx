@@ -61,9 +61,9 @@ const CardWrapper: React.FC<{ card: StepData }> = ({
           <Icon className="w-5.5 h-5.5" />
         </div>
         <div className="flex flex-col text-left">
-          <h4 className="font-extrabold text-sm sm:text-base text-text-primary tracking-tight">
+          <h3 className="font-extrabold text-sm sm:text-base text-text-primary tracking-tight">
             {card.title}
-          </h4>
+          </h3>
           {card.badgeText && (
             <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border self-start mt-1 ${card.badgeClass}`}>
               {card.badgeText}

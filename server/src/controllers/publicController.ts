@@ -13,6 +13,7 @@ import { Job } from '../models/Job.js';
 import { Lead } from '../models/Lead.js';
 import { SeoSettings } from '../models/SeoSettings.js';
 import { Redirect } from '../models/Redirect.js';
+import { publicCache } from '../utils/cache.js';
 
 export const getSiteSettings = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -41,13 +42,19 @@ export const getNavigation = async (req: Request, res: Response): Promise<void> 
 
 export const getHomepage = async (req: Request, res: Response): Promise<void> => {
   try {
+    const cached = publicCache.get<any>('homepage');
+    if (cached) {
+      res.json(cached);
+      return;
+    }
+
     const page = await Page.findOne({ slug: 'home', status: 'published' });
     const services = await Service.find({ status: 'published' }).sort({ displayOrder: 1 });
     const portfolio = await Portfolio.find({ status: 'published' }).sort({ displayOrder: 1 });
     const testimonials = await Testimonial.find({ status: 'published', isFeatured: true }).sort({ displayOrder: 1 });
     const faqs = await FAQ.find({ isActive: true, category: 'general' }).sort({ displayOrder: 1 });
 
-    res.json({
+    const payload = {
       success: true,
       page,
       sections: page?.sections || [],
@@ -57,7 +64,10 @@ export const getHomepage = async (req: Request, res: Response): Promise<void> =>
         testimonials,
         faqs
       }
-    });
+    };
+
+    publicCache.set('homepage', payload, 60);
+    res.json(payload);
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -66,6 +76,13 @@ export const getHomepage = async (req: Request, res: Response): Promise<void> =>
 export const getPageBySlug = async (req: Request, res: Response): Promise<void> => {
   try {
     const slug = String(req.params.slug).toLowerCase();
+    const cacheKey = `page_${slug}`;
+    const cached = publicCache.get<any>(cacheKey);
+    if (cached) {
+      res.json(cached);
+      return;
+    }
+
     const page = await Page.findOne({ slug, status: 'published' });
 
     if (!page) {
@@ -87,7 +104,9 @@ export const getPageBySlug = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    res.json({ success: true, page });
+    const payload = { success: true, page };
+    publicCache.set(cacheKey, payload, 60);
+    res.json(payload);
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -296,10 +315,33 @@ export const createInquiry = async (req: Request, res: Response): Promise<void> 
       ]
     });
 
+    // Instant WhatsApp Notification Alert (Zero infrastructure cost)
+    const adminWhatsApp = process.env.ADMIN_WHATSAPP_NUMBER || '918887024887';
+    const alertMessage = `🚨 *New Lead Alert on HangingPanda!*
+👤 *Name:* ${fullName}
+📧 *Email:* ${email}
+📱 *Phone:* ${countryCode} ${phone}
+💼 *Budget:* ${budget || 'N/A'}
+🎯 *Source:* ${source}
+💬 *Message:* ${message || 'App blueprint submission'}`;
+    const whatsappAlertUrl = `https://api.whatsapp.com/send?phone=${adminWhatsApp}&text=${encodeURIComponent(alertMessage)}`;
+
+    // Optional Webhook dispatch if webhook URL is configured in environment
+    if (process.env.LEAD_WEBHOOK_URL) {
+      fetch(process.env.LEAD_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: `🚨 *New Lead on HangingPanda:*\n*Name:* ${fullName}\n*Phone:* ${countryCode} ${phone}\n*Budget:* ${budget || 'N/A'}\n*Source:* ${source}`
+        })
+      }).catch((webhookErr) => console.warn('[Lead Webhook] Dispatch note:', webhookErr.message));
+    }
+
     res.status(201).json({
       success: true,
       message: 'Inquiry received successfully. Our team will contact you shortly.',
-      leadId: newLead._id
+      leadId: newLead._id,
+      whatsappAlertUrl
     });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
