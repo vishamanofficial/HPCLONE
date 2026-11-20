@@ -1,18 +1,37 @@
 {
-  "name": "hangingpanda-workspace",
+  "name": "hangingpanda",
   "version": "1.0.0",
   "private": true,
-  "description": "HangingPanda Enterprise Software & CMS - Unified Full-Stack Architecture",
+  "description": "HangingPanda Enterprise Web & CMS Platform - Pure Full-Stack Next.js Architecture",
   "scripts": {
-    "dev": "npm run dev:all",
-    "dev:all": "node -e \"const { spawn } = require('child_process'); const opts = { stdio: 'inherit', shell: true }; spawn('npm', ['--prefix', 'server', 'run', 'dev'], opts); spawn('npm', ['--prefix', 'web', 'run', 'dev'], opts);\"",
-    "dev:web": "npm --prefix web run dev",
-    "dev:server": "npm --prefix server run dev",
-    "build": "npm --prefix server run build && npm --prefix web run build",
-    "build:web": "npm --prefix web run build",
-    "build:server": "npm --prefix server run build",
-    "start:web": "npm --prefix web run start",
-    "start:server": "npm --prefix server run start",
-    "seed": "npm --prefix server run seed"
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint",
+    "seed": "tsx src/scripts/seed.ts"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "framer-motion": "^12.4.0",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^1.21.0",
+    "mongodb-memory-server": "^10.1.2",
+    "mongoose": "^8.9.5",
+    "next": "^15.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.9",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.8",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.9",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.0"
   }
 }

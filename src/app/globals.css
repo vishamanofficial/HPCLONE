@@ -1,0 +1,208 @@
+@import "tailwindcss";
+@import "../styles/theme.css";
+
+@theme {
+  --color-primary: rgb(var(--hp-color-primary));
+  --color-primary-hover: rgb(var(--hp-color-primary-hover));
+  --color-accent-orange: rgb(var(--hp-color-accent-orange));
+  --color-accent-pink: rgb(var(--hp-color-accent-pink));
+  
+  --color-bg: rgb(var(--hp-color-bg));
+  --color-surface: rgb(var(--hp-color-surface));
+  --color-card: rgb(var(--hp-color-card));
+  --color-border: rgb(var(--hp-color-border));
+  --color-border-subtle: rgb(var(--hp-color-border-subtle));
+  
+  --color-text-primary: rgb(var(--hp-color-text-primary));
+  --color-text-secondary: rgb(var(--hp-color-text-secondary));
+  --color-text-muted: rgb(var(--hp-color-text-muted));
+  
+  --radius-card: var(--radius-card);
+  --radius-button: var(--radius-button);
+  --radius-control: var(--radius-control);
+  
+  --font-sans: var(--font-sans);
+  
+  --animate-scroll-strip: scroll-strip 35s linear infinite;
+
+  @keyframes scroll-strip {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  background-color: rgb(var(--hp-color-bg));
+  color: rgb(var(--hp-color-text-primary));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   KINETIC CHROMATIC AURORA & CONDUIT KEYFRAMES
+   ============================================================ */
+@keyframes auroraShift1 {
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50% { transform: translate3d(8%, 12%, 0) scale(1.15) rotate(6deg); }
+  100% { transform: translate3d(-10%, -6%, 0) scale(0.92) rotate(-4deg); }
+}
+
+@keyframes auroraShift2 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-12%, 10%, 0) scale(1.12); }
+  100% { transform: translate3d(6%, -12%, 0) scale(0.9); }
+}
+
+@keyframes auroraShift3 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(14%, -10%, 0) scale(1.2); }
+  100% { transform: translate3d(-8%, 8%, 0) scale(0.95); }
+}
+
+.hp-conduit-stream-1 {
+  animation: conduitFlow 14s linear infinite;
+}
+
+.hp-conduit-stream-2 {
+  animation: conduitFlow 18s linear infinite reverse;
+}
+
+.hp-conduit-stream-3 {
+  animation: conduitFlow 11s linear infinite;
+}
+
+@keyframes conduitFlow {
+  from { stroke-dashoffset: 1200; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* ============================================================
+   GLOBAL MODERN SLEEK SCROLLBARS (Matches Dark & Light Themes)
+   ============================================================ */
+
+/* Standards-compliant (Firefox / Modern Web) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.dark * {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+/* WebKit-based browsers (Chrome, Edge, Safari, Brave, Opera) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.32);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* Specific class for ultra-sleek scrollable panes and sidebars */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.dark .custom-scrollbar {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.16);
+  border-radius: 9999px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Apple Liquid Glass Material Specification */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+}
+
+.dark .apple-glass {
+  background: rgba(22, 23, 26, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+.apple-glass-clear {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .apple-glass-clear {
+  background: rgba(22, 23, 26, 0.45);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
