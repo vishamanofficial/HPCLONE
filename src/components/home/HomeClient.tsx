@@ -144,6 +144,7 @@ export const HomeClient: React.FC<HomeClientProps> = ({
     message: ""
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submittedWhatsAppUrl, setSubmittedWhatsAppUrl] = useState("");
   const [formLoading, setFormLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -178,7 +179,7 @@ export const HomeClient: React.FC<HomeClientProps> = ({
     setSubmitError("");
 
     try {
-      await nextApi.submitInquiry({
+      const res = await nextApi.submitInquiry({
         fullName: formData.name,
         email: formData.email,
         phone: formData.phone,
@@ -188,6 +189,11 @@ export const HomeClient: React.FC<HomeClientProps> = ({
         message: formData.message,
         source: 'homepage_blueprint'
       });
+
+      const targetPhone = siteConfig.phone.replace(/[^0-9]/g, '') || "918887024887";
+      const waFallback = `https://wa.me/${targetPhone}?text=${encodeURIComponent(`Hi ${siteConfig.name}, I submitted a scoping blueprint inquiry:\nName: ${formData.name}\nBudget: ${formData.budget}\nConcept: ${formData.message}`)}`;
+      const waUrl = res?.whatsappUrl || waFallback;
+      setSubmittedWhatsAppUrl(waUrl);
 
       setFormLoading(false);
       setFormSubmitted(true);
@@ -986,15 +992,37 @@ export const HomeClient: React.FC<HomeClientProps> = ({
               <p className="text-xs text-text-secondary mb-4 sm:mb-6 tracking-body">Let our senior software architects analyze your app requirements and supply draft system diagrams.</p>
               
               {formSubmitted ? (
-                <div className="flex flex-col items-center justify-center text-center py-10 gap-4">
+                <div className="flex flex-col items-center justify-center text-center py-8 gap-4">
                   <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center text-green-500">
                     <CheckCircle className="w-8 h-8 animate-bounce" />
                   </div>
-                  <h4 className="text-lg font-bold text-text-primary tracking-headline">Blueprint Scheduled!</h4>
-                  <p className="text-xs text-text-secondary max-w-xs leading-relaxed">
-                    Thank you! Our engineering team has received your application. We will reach out to you within 24 hours at your email.
+                  <h4 className="text-xl font-bold text-text-primary tracking-headline">Blueprint Inquiry Received!</h4>
+                  <p className="text-xs text-text-secondary max-w-sm leading-relaxed">
+                    Thank you! We have dispatched your application to our senior architecture team at <strong className="text-text-primary">{siteConfig.emails.contact}</strong>.
                   </p>
-                  <Button variant="secondary" size="sm" onClick={() => setFormSubmitted(false)}>
+
+                  {submittedWhatsAppUrl && (
+                    <a
+                      href={submittedWhatsAppUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full mt-2"
+                    >
+                      <Button
+                        variant="gradient"
+                        size="md"
+                        className="w-full justify-center bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-md shadow-emerald-500/20 py-3"
+                      >
+                        💬 Chat with Lead Architect on WhatsApp (+91-8887024887)
+                      </Button>
+                    </a>
+                  )}
+
+                  <p className="text-[11px] text-text-muted">
+                    Tap above for priority 15-minute response directly from our Lead Engineer.
+                  </p>
+
+                  <Button variant="secondary" size="sm" onClick={() => setFormSubmitted(false)} className="mt-1">
                     Submit Another Request
                   </Button>
                 </div>

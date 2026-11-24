@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, ShieldCheck, Cpu, Layers, Globe, Building2, Sparkles } from "lucide-react";
+import { Mail, Phone, MapPin, Send, ShieldCheck, Cpu, Layers, Globe, Building2, Sparkles, MessageSquare } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
@@ -12,6 +12,7 @@ import { Card } from "@/components/ui/Card";
 import { PhoneInput } from "@/components/ui/PhoneInput";
 import { nextApi } from "@/lib/api";
 import { useToast } from "@/components/admin/Toast";
+import { siteConfig } from "@/config/site";
 
 export const ContactClient: React.FC = () => {
   const router = useRouter();
@@ -49,7 +50,7 @@ export const ContactClient: React.FC = () => {
     countryCode: "+91",
     phone: "",
     subject: "",
-    service: "",
+    service: "web-design",
     message: "",
     subscribe: false,
     isWhatsApp: true
@@ -88,14 +89,8 @@ export const ContactClient: React.FC = () => {
       formErrors.phone = "Please enter a valid phone number (6 to 15 digits)";
     }
 
-    if (!formData.service) {
-      formErrors.service = "Please select a service category";
-    }
-
-    if (!formData.message.trim()) {
-      formErrors.message = "Message is required";
-    } else if (formData.message.trim().length < 10) {
-      formErrors.message = "Message must be at least 10 characters long";
+    if (formData.message.trim() && formData.message.trim().length < 3) {
+      formErrors.message = "Message must be at least 3 characters long";
     }
 
     setErrors(formErrors);
@@ -110,19 +105,25 @@ export const ContactClient: React.FC = () => {
     setSubmitError("");
 
     try {
-      await nextApi.submitInquiry({
+      const res = await nextApi.submitInquiry({
         name: formData.name,
         email: formData.email,
-        phone: `${formData.countryCode} ${formData.phone}`,
-        serviceInterested: formData.service,
-        message: formData.message,
+        phone: formData.phone,
+        countryCode: formData.countryCode,
+        isWhatsApp: formData.isWhatsApp,
+        serviceInterested: formData.service || "Website design",
+        message: formData.message || formData.subject || "General Consultation Request",
         source: 'contact_page',
         status: 'new'
       });
 
       setIsSubmitting(false);
       toastSuccess("Inquiry sent successfully! Redirecting...");
-      router.push("/thank-you");
+      const targetPhone = siteConfig.phone.replace(/[^0-9]/g, '') || "918887024887";
+      const fallbackWa = `https://wa.me/${targetPhone}?text=${encodeURIComponent(`Hi ${siteConfig.name}, I submitted an inquiry:\nName: ${formData.name}\nService: ${formData.service}\nMessage: ${formData.message || 'No additional notes'}`)}`;
+      const waUrl = res?.whatsappUrl || fallbackWa;
+      
+      router.push(`/thank-you?name=${encodeURIComponent(formData.name)}&whatsapp=${encodeURIComponent(waUrl)}`);
     } catch (error: any) {
       console.error("Submission error:", error);
       setIsSubmitting(false);
@@ -190,9 +191,27 @@ export const ContactClient: React.FC = () => {
               </span>
               <div className="flex flex-col gap-1">
                 <span className="text-xs font-bold text-text-secondary uppercase tracking-wider">Call Coordinates</span>
-                <a href="tel:+918887024887" className="text-sm font-semibold text-text-primary hover:text-primary transition-colors">
-                  +91-8887024887
+                <a href={`tel:${siteConfig.phone.replace(/[^0-9+]/g, '')}`} className="text-sm font-semibold text-text-primary hover:text-primary transition-colors">
+                  {siteConfig.phone}
                 </a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4 p-5 bg-card border border-emerald-500/30 rounded-2xl shadow-sm bg-gradient-to-br from-emerald-500/5 to-transparent">
+              <span className="p-3 bg-emerald-500/10 rounded-xl text-emerald-500 mt-0.5">
+                <MessageSquare className="w-6 h-6" />
+              </span>
+              <div className="flex flex-col gap-1">
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">WhatsApp Direct</span>
+                <a
+                  href={`https://wa.me/${siteConfig.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi ${siteConfig.name}, I would like to consult on a software project.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:underline transition-colors flex items-center gap-1.5"
+                >
+                  Chat with Lead Architect &rarr;
+                </a>
+                <span className="text-[11px] text-text-muted">Direct engineering response in ~15 mins</span>
               </div>
             </div>
           </div>
@@ -261,6 +280,7 @@ export const ContactClient: React.FC = () => {
               placeholder="Choose a category"
               value={formData.service}
               onChange={handleInputChange}
+              error={errors.service}
               options={[
                 { value: "web-design", label: "Website design" },
                 { value: "app-dev", label: "App development" },
@@ -277,6 +297,7 @@ export const ContactClient: React.FC = () => {
               placeholder="Describe your project, tech stack requirements, or questions..."
               value={formData.message}
               onChange={handleInputChange}
+              error={errors.message}
               rows={4}
             />
 

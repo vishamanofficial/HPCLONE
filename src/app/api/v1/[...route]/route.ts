@@ -27,6 +27,7 @@ import { CalculatorSettings } from '@/models/CalculatorSettings';
 import { calculatorQuestions } from '@/data/calculatorQuestions';
 import { siteConfig } from '@/config/site';
 import { AuditLog } from '@/models/AuditLog';
+import { sendLeadNotification } from '@/lib/mailer';
 
 interface RouteContext {
   params: Promise<{ route: string[] }>;
@@ -39,7 +40,11 @@ const JWT_SECRET = process.env.JWT_SECRET || 'hp_jwt_super_secret_key_2026_chang
 // ==========================================
 export async function GET(req: NextRequest, context: RouteContext) {
   try {
-    await connectDB();
+    try {
+      await connectDB();
+    } catch (dbErr: any) {
+      console.warn('[API GET] DB connection notice:', dbErr.message);
+    }
     const { route } = await context.params;
     const path = route.join('/');
     const searchParams = req.nextUrl.searchParams;
@@ -462,7 +467,11 @@ export async function GET(req: NextRequest, context: RouteContext) {
 // ==========================================
 export async function POST(req: NextRequest, context: RouteContext) {
   try {
-    await connectDB();
+    try {
+      await connectDB();
+    } catch (dbErr: any) {
+      console.warn('[API POST] DB connection notice:', dbErr.message);
+    }
     const { route } = await context.params;
     const path = route.join('/');
     const body = await req.json().catch(() => ({}));
@@ -578,19 +587,88 @@ export async function POST(req: NextRequest, context: RouteContext) {
 
     // ---------------- PUBLIC: SUBMIT INQUIRY ----------------
     if (path === 'public/inquiries') {
-      const lead = await Lead.create({
-        fullName: body.fullName || body.name || 'Anonymous',
-        email: body.email,
-        phone: body.phone,
-        company: body.company,
-        interestedService: body.interestedService || body.service,
-        budget: body.budget,
-        message: body.message,
-        source: body.source || 'Website Form',
-        status: 'new'
+      const fullName = (body.fullName || body.name || 'Anonymous Client').trim();
+      const email = (body.email || 'no-reply@hangingpanda.com').trim();
+      const rawPhone = (body.phone || '').trim();
+      const countryCode = body.countryCode || '+91';
+      const isWhatsApp = body.isWhatsApp !== false;
+      const company = (body.companyName || body.company || '').trim();
+      const interestedService = (body.interestedService || body.service || body.serviceInterested || 'Custom Software').trim();
+      const budget = body.budget || 'Flexible';
+      const message = (body.message || '').trim();
+      const allowedSources = ['homepage_blueprint', 'contact_page', 'cost_calculator', 'landing_page', 'custom_form'];
+      const source = (allowedSources.includes(body.source) ? body.source : 'contact_page') as any;
+      const calculatorDetails = body.calculatorDetails || undefined;
+
+      // Construct clean phone string
+      const fullPhone = rawPhone.startsWith('+') ? rawPhone : `${countryCode} ${rawPhone}`.trim();
+
+      // 1. Build instant WhatsApp Direct Click-to-Chat URL to +91-8887024887
+      const targetPhone = siteConfig.phone.replace(/[^0-9]/g, '') || '918887024887';
+      const whatsappLines = [
+        `*🚀 New Project Inquiry on ${siteConfig.name}*`,
+        `👤 *Name:* ${fullName}`,
+        `📧 *Email:* ${email}`,
+        `📱 *Phone:* ${fullPhone}`,
+        `💬 *WhatsApp User:* ${isWhatsApp ? 'Yes' : 'No'}`,
+        `💼 *Service:* ${interestedService}`,
+        `💰 *Budget / Est:* ${budget}`,
+        company ? `🏢 *Company:* ${company}` : '',
+        calculatorDetails
+          ? `📊 *Calculator:* Platform: ${calculatorDetails.platform || 'N/A'}, Est: $${calculatorDetails.estimatedCost?.toLocaleString() || 'N/A'} (${calculatorDetails.estimatedTimelineWeeks || 'N/A'})`
+          : '',
+        message ? `📝 *Requirements:* ${message}` : '',
+        `📍 *Form Source:* ${source}`
+      ].filter(Boolean);
+
+      const whatsappText = whatsappLines.join('\n');
+      const whatsappUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(whatsappText)}`;
+
+      // 2. Dispatch Email to Gmail (vishamanofficial.business@gmail.com) via multi-channel mailer
+      const mailStatus = await sendLeadNotification({
+        fullName,
+        email,
+        phone: fullPhone,
+        isWhatsApp,
+        company,
+        interestedService,
+        budget,
+        message,
+        source,
+        calculatorDetails,
       });
-      await logActivity(null, 'INQUIRY_CREATED', 'lead', lead._id, `New inquiry from ${lead.email}`, req);
-      return NextResponse.json({ success: true, message: 'Inquiry received successfully', leadId: lead._id });
+
+      // 3. Save Lead in MongoDB CRM (with resilient fallback so DB blips never block the client)
+      let leadId: any = null;
+      try {
+        const lead = await Lead.create({
+          fullName,
+          email,
+          phone: fullPhone || 'Not specified',
+          countryCode,
+          isWhatsApp,
+          companyName: company,
+          interestedService,
+          budget,
+          message,
+          source,
+          calculatorDetails,
+          status: 'new',
+          priority: budget.includes('50k') ? 'urgent' : 'medium'
+        });
+        leadId = lead._id;
+        await logActivity(null, 'INQUIRY_CREATED', 'lead', lead._id, `New inquiry from ${lead.email} (${fullName})`, req);
+      } catch (dbErr: any) {
+        console.warn('[Inquiry DB Write] Notice:', dbErr.message);
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: 'Inquiry received successfully! Our engineering team has been notified.',
+        leadId,
+        whatsappUrl,
+        emailDispatched: mailStatus.success
+      });
     }
 
     // ---------------- ADMIN (Requires Auth) ----------------

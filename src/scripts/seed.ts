@@ -72,7 +72,7 @@ export const seedData = async () => {
   const passwordHash = await bcrypt.hash(defaultPassword, 10);
 
   const superAdmin = await User.create({
-    name: 'Vishal Aman (Admin)',
+    name: 'Aman (Admin)',
     email: (process.env.ADMIN_DEFAULT_EMAIL || siteConfig.emails.admin).toLowerCase(),
     passwordHash,
     role: superAdminRole._id,

@@ -82,7 +82,9 @@ export const ServiceDetailClient: React.FC<ServiceDetailClientProps> = ({ servic
             Home
           </Link>
           <span className="text-text-muted">/</span>
-          <span className="text-text-muted">Services</span>
+          <Link href="/services" className="hover:text-primary transition-colors">
+            Services
+          </Link>
           <span className="text-text-muted">/</span>
           <span className="text-text-primary">{service.title}</span>
         </div>

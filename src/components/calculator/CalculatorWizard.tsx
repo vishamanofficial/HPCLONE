@@ -244,11 +244,14 @@ export const CalculatorWizard: React.FC<CalculatorWizardProps> = ({ initialConfi
 
     try {
       // 1. Submit lead to internal MongoDB CRM pipeline
+      let apiRes: any = null;
       try {
-        await nextApi.submitInquiry({
+        apiRes = await nextApi.submitInquiry({
           name: clientInfo.name,
           email: clientInfo.email,
-          phone: `${clientInfo.countryCode} ${clientInfo.phone}`,
+          phone: clientInfo.phone,
+          countryCode: clientInfo.countryCode,
+          isWhatsApp: clientInfo.isWhatsApp,
           serviceInterested: `App Cost Calculator: ${selections.category || selections.platform}`,
           message: clientInfo.query || `Estimated budget: $${results.estimatedCost.toLocaleString()} (${results.timelineWeeks.min}-${results.timelineWeeks.max} weeks)`,
           source: 'cost_calculator',
@@ -263,38 +266,16 @@ export const CalculatorWizard: React.FC<CalculatorWizardProps> = ({ initialConfi
           status: 'new'
         });
       } catch (crmErr) {
-        console.warn("Backend CRM sync fallback:", crmErr);
-      }
-
-      // 2. Submit to Web3Forms if access key is available
-      const web3Key = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
-      if (web3Key) {
-        await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-          },
-          body: JSON.stringify({
-            access_key: web3Key,
-            from_name: clientInfo.name,
-            subject: `New App Cost Calculation Request from ${clientInfo.name}`,
-            email: clientInfo.email,
-            phone: `${clientInfo.countryCode} ${clientInfo.phone}`,
-            "Is WhatsApp Number": clientInfo.isWhatsApp ? "Yes" : "No",
-            message: clientInfo.query,
-            "Estimated Cost": `$${results.estimatedCost.toLocaleString()}`,
-            "Selected Platform": selections.platform,
-            "Selected Category": selections.category,
-            "Selected Design Theme": selections.design,
-            "Selected Features": Array.isArray(selections.management) ? selections.management.join(", ") : selections.management
-          })
-        });
+        console.warn("Backend CRM sync notice:", crmErr);
       }
 
       setIsSubmitting(false);
       toastSuccess("Calculation submitted successfully! Redirecting...");
-      router.push("/thank-you");
+      const targetPhone = siteConfig.phone.replace(/[^0-9]/g, '') || "918887024887";
+      const waFallback = `https://wa.me/${targetPhone}?text=${encodeURIComponent(`Hi ${siteConfig.name}, I calculated my app estimate:\nPlatform: ${selections.platform}\nEst. Cost: $${results.estimatedCost.toLocaleString()} (${results.timelineWeeks.min}-${results.timelineWeeks.max} weeks)\nName: ${clientInfo.name}\nEmail: ${clientInfo.email}`)}`;
+      const waUrl = apiRes?.whatsappUrl || waFallback;
+
+      router.push(`/thank-you?name=${encodeURIComponent(clientInfo.name)}&whatsapp=${encodeURIComponent(waUrl)}&cost=${results.estimatedCost}`);
     } catch (error: any) {
       console.error("Submission error:", error);
       setIsSubmitting(false);
