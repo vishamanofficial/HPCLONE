@@ -89,24 +89,36 @@ export interface CalculationResult {
   suggestedTech: string[];
 }
 
-export const runCalculation = (selections: Record<string, string | string[]>): CalculationResult => {
+export const formatPrice = (amount: number, currency: string = "$"): string => {
+  return `${currency}${amount.toLocaleString()}`;
+};
+
+export const runCalculation = (
+  selections: Record<string, string | string[]>,
+  questions: CalculatorQuestion[] = calculatorQuestions,
+  customBaseWeeks: number = 6
+): CalculationResult => {
   const platformSelection = selections["platform"] as string;
   const categorySelection = selections["category"] as string;
   const designSelection = selections["design"] as string;
   const managementSelection = (selections["management"] as string[]) || [];
 
-  const platformOpt = calculatorQuestions[0].options.find(o => o.id === platformSelection);
-  const baseCost = platformOpt?.baseCost || 4000;
+  const platformQ = questions.find(q => q.id === "platform") || questions[0];
+  const platformOpt = platformQ?.options.find(o => o.id === platformSelection);
+  const baseCost = platformOpt?.baseCost ?? 4000;
 
-  const categoryOpt = calculatorQuestions[1].options.find(o => o.id === categorySelection);
-  const categoryMult = categoryOpt?.multiplier || 1.0;
+  const categoryQ = questions.find(q => q.id === "category") || questions[1];
+  const categoryOpt = categoryQ?.options.find(o => o.id === categorySelection);
+  const categoryMult = categoryOpt?.multiplier ?? 1.0;
 
-  const designOpt = calculatorQuestions[2].options.find(o => o.id === designSelection);
-  const designMult = designOpt?.multiplier || 1.0;
+  const designQ = questions.find(q => q.id === "design") || questions[2];
+  const designOpt = designQ?.options.find(o => o.id === designSelection);
+  const designMult = designOpt?.multiplier ?? 1.0;
 
   let flatCostSum = 0;
+  const managementQ = questions.find(q => q.id === "management") || questions[3];
   managementSelection.forEach(id => {
-    const opt = calculatorQuestions[3].options.find(o => o.id === id);
+    const opt = managementQ?.options.find(o => o.id === id);
     if (opt?.flatCost) {
       flatCostSum += opt.flatCost;
     }
@@ -115,7 +127,7 @@ export const runCalculation = (selections: Record<string, string | string[]>): C
   const rawCost = (baseCost * categoryMult * designMult) + flatCostSum;
   const estimatedCost = Math.round(rawCost);
 
-  let baseWeeks = 6;
+  let baseWeeks = customBaseWeeks || 6;
   if (platformSelection === "hybrid") baseWeeks += 4;
   if (platformSelection === "ios" || platformSelection === "android") baseWeeks += 3;
   if (designSelection === "animated") baseWeeks += 2;

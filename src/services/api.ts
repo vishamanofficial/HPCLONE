@@ -642,6 +642,28 @@ class ApiService {
     });
   }
 
+  // Calculator Settings
+  async getPublicCalculator() {
+    return this.request<{ success: boolean; settings: any }>('/public/calculator');
+  }
+
+  async getAdminCalculator() {
+    return this.request<{ success: boolean; settings: any }>('/admin/calculator');
+  }
+
+  async updateAdminCalculator(data: any) {
+    return this.request<{ success: boolean; settings: any; message: string }>('/admin/calculator', {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async resetAdminCalculator() {
+    return this.request<{ success: boolean; settings: any; message: string }>('/admin/calculator/reset', {
+      method: 'POST'
+    });
+  }
+
   // Users & Audit Logs
   async getAdminUsers() {
     return this.request<{ success: boolean; users: any[] }>('/admin/users');

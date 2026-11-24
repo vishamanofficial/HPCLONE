@@ -30,7 +30,8 @@ import {
   HelpCircle,
   FolderGit2,
   Bell,
-  Sparkles
+  Sparkles,
+  Calculator
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -85,6 +86,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     { label: 'FAQs Manager', path: '/admin/faqs', icon: HelpCircle },
     { label: 'Navigation Menus', path: '/admin/navigation', icon: Globe },
     { label: 'Career Openings', path: '/admin/jobs', icon: UserCheck },
+    { label: 'Cost Calculator', path: '/admin/calculator', icon: Calculator, badge: 'Pricing' },
     { label: 'Global Settings', path: '/admin/settings', icon: Settings },
     ...(hasRole(['Super Admin'])
       ? [

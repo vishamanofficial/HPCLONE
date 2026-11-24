@@ -23,6 +23,8 @@ import { Lead } from '@/models/Lead';
 import { SeoSettings } from '@/models/SeoSettings';
 import { Redirect } from '@/models/Redirect';
 import { Media } from '@/models/Media';
+import { CalculatorSettings } from '@/models/CalculatorSettings';
+import { calculatorQuestions } from '@/data/calculatorQuestions';
 import { siteConfig } from '@/config/site';
 import { AuditLog } from '@/models/AuditLog';
 
@@ -64,6 +66,18 @@ export async function GET(req: NextRequest, context: RouteContext) {
     }
 
     // ---------------- PUBLIC ----------------
+    if (path === 'public/calculator') {
+      let calc = await CalculatorSettings.findOne();
+      if (!calc) {
+        calc = await CalculatorSettings.create({
+          currency: '$',
+          baseWeeks: 6,
+          questions: calculatorQuestions,
+        });
+      }
+      return NextResponse.json({ success: true, settings: calc });
+    }
+
     if (path === 'public/settings') {
       let settings = await SiteSettings.findOne();
       if (!settings) settings = await SiteSettings.create({});
@@ -249,6 +263,18 @@ export async function GET(req: NextRequest, context: RouteContext) {
       let settings = await SiteSettings.findOne();
       if (!settings) settings = await SiteSettings.create({});
       return NextResponse.json({ success: true, settings });
+    }
+
+    if (path === 'admin/calculator') {
+      let calc = await CalculatorSettings.findOne();
+      if (!calc) {
+        calc = await CalculatorSettings.create({
+          currency: '$',
+          baseWeeks: 6,
+          questions: calculatorQuestions,
+        });
+      }
+      return NextResponse.json({ success: true, settings: calc });
     }
 
     if (path === 'admin/pages') {
@@ -442,6 +468,26 @@ export async function POST(req: NextRequest, context: RouteContext) {
     const body = await req.json().catch(() => ({}));
 
     // ---------------- AUTH: LOGIN ----------------
+    if (path === 'admin/calculator/reset') {
+      const user = await verifyAuth(req);
+      if (!user) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      let calc = await CalculatorSettings.findOne();
+      if (!calc) {
+        calc = await CalculatorSettings.create({
+          currency: '$',
+          baseWeeks: 6,
+          questions: calculatorQuestions,
+        });
+      } else {
+        calc.currency = '$';
+        calc.baseWeeks = 6;
+        calc.questions = calculatorQuestions;
+        await calc.save();
+      }
+      await logActivity(user, 'UPDATE', 'calculator', calc._id, 'Reset calculator pricing to factory defaults', req);
+      return NextResponse.json({ success: true, settings: calc, message: 'Calculator pricing reset to default rules' });
+    }
+
     if (path === 'auth/login') {
       const { email, password } = body;
       if (!email || !password) {
@@ -704,6 +750,20 @@ export async function PUT(req: NextRequest, context: RouteContext) {
       else { Object.assign(settings, body); await settings.save(); }
       await logActivity(user, 'UPDATE', 'settings', settings._id, 'Updated global settings', req);
       return NextResponse.json({ success: true, settings, message: 'Settings saved' });
+    }
+
+    if (path === 'admin/calculator') {
+      let calc = await CalculatorSettings.findOne();
+      if (!calc) {
+        calc = await CalculatorSettings.create(body);
+      } else {
+        if (body.currency !== undefined) calc.currency = body.currency;
+        if (body.baseWeeks !== undefined) calc.baseWeeks = body.baseWeeks;
+        if (body.questions !== undefined) calc.questions = body.questions;
+        await calc.save();
+      }
+      await logActivity(user, 'UPDATE', 'calculator', calc._id, 'Updated cost calculator pricing rules', req);
+      return NextResponse.json({ success: true, settings: calc, message: 'Calculator pricing rules saved successfully' });
     }
 
     if (route[0] === 'admin' && route[1] === 'pages' && route[2]) {

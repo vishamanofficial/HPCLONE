@@ -13,6 +13,8 @@ import { FAQ } from '@/models/FAQ';
 import { TeamMember } from '@/models/TeamMember';
 import { Job } from '@/models/Job';
 import { NavigationMenu } from '@/models/NavigationMenu';
+import { CalculatorSettings } from '@/models/CalculatorSettings';
+import { calculatorQuestions } from '@/data/calculatorQuestions';
 import { siteConfig } from '@/config/site';
 
 // Fast DB readiness check: if already connected, queries run immediately.
@@ -304,5 +306,21 @@ export const nextApi = {
       }
     } catch (err: any) {}
     return null;
+  }),
+
+  // 12. Calculator Settings
+  getCalculatorSettings: cache(async () => {
+    try {
+      const ready = await ensureDbQuick();
+      if (ready) {
+        let calc = await CalculatorSettings.findOne().lean();
+        if (calc) return JSON.parse(JSON.stringify(calc));
+      }
+    } catch (err: any) {}
+    return {
+      currency: '$',
+      baseWeeks: 6,
+      questions: calculatorQuestions,
+    };
   })
 };

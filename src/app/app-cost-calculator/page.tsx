@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import CalculatorWizard from "@/components/calculator/CalculatorWizard";
 import { siteConfig } from "@/config/site";
+import { nextApi } from "@/lib/server-api";
 
 export const metadata: Metadata = {
   title: `App Cost Calculator | Get Instant Ballpark Estimate | ${siteConfig.name}`,
@@ -18,7 +19,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CalculatorPage() {
+export default async function CalculatorPage() {
+  const calculatorSettings = await nextApi.getCalculatorSettings();
+
   return (
     <>
       <section className="bg-gradient-to-b from-surface to-bg py-16 sm:py-20 border-b border-border">
@@ -36,7 +39,7 @@ export default function CalculatorPage() {
       </section>
 
       <section className="py-12 bg-bg">
-        <CalculatorWizard />
+        <CalculatorWizard initialConfig={calculatorSettings} />
       </section>
     </>
   );

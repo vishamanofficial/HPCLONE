@@ -34,6 +34,7 @@ import {
 import { Apple } from "../ui/BrandIcons";
 import {
   calculatorQuestions,
+  CalculatorQuestion,
   runCalculation
 } from "@/data/calculatorQuestions";
 import { Button } from "../ui/Button";
@@ -73,9 +74,44 @@ const calculatorIcons: Record<string, React.ComponentType<any>> = {
   BellRing
 };
 
-export const CalculatorWizard: React.FC = () => {
+export interface CalculatorWizardProps {
+  initialConfig?: {
+    currency?: string;
+    baseWeeks?: number;
+    questions?: CalculatorQuestion[];
+  };
+}
+
+export const CalculatorWizard: React.FC<CalculatorWizardProps> = ({ initialConfig }) => {
   const router = useRouter();
   const { error: toastError, success: toastSuccess } = useToast();
+
+  const [questions, setQuestions] = useState<CalculatorQuestion[]>(
+    initialConfig?.questions && initialConfig.questions.length > 0
+      ? initialConfig.questions
+      : calculatorQuestions
+  );
+  const [currency, setCurrency] = useState<string>(initialConfig?.currency || "$");
+  const [baseWeeks, setBaseWeeks] = useState<number>(initialConfig?.baseWeeks || 6);
+
+  useEffect(() => {
+    // Dynamic revalidation to ensure always up-to-date with admin adjustments
+    const loadDynamicPricing = async () => {
+      try {
+        const data = await nextApi.getCalculator();
+        if (data) {
+          if (data.currency) setCurrency(data.currency);
+          if (data.baseWeeks) setBaseWeeks(data.baseWeeks);
+          if (data.questions && Array.isArray(data.questions) && data.questions.length > 0) {
+            setQuestions(data.questions);
+          }
+        }
+      } catch (err) {
+        console.warn("Using baseline calculator pricing rules:", err);
+      }
+    };
+    loadDynamicPricing();
+  }, []);
 
   const [currentStep, setCurrentStep] = useState(1);
   const [selections, setSelections] = useState<Record<string, string | string[]>>({
@@ -301,22 +337,22 @@ export const CalculatorWizard: React.FC = () => {
               >
                 <div>
                   <h2 className="text-xl sm:text-2xl font-black text-text-primary tracking-tight mb-2">
-                    {calculatorQuestions[currentStep - 1].question}
+                    {(questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).question}
                   </h2>
                   <p className="text-sm text-text-secondary">
-                    {calculatorQuestions[currentStep - 1].description}
+                    {(questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).description}
                   </p>
                 </div>
 
                 <div
-                  role={calculatorQuestions[currentStep - 1].type === "single" ? "radiogroup" : "group"}
-                  aria-label={calculatorQuestions[currentStep - 1].question}
+                  role={(questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).type === "single" ? "radiogroup" : "group"}
+                  aria-label={(questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).question}
                   className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2"
                 >
-                  {calculatorQuestions[currentStep - 1].options.map((opt) => {
-                    const qId = calculatorQuestions[currentStep - 1].id;
+                  {(questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).options.map((opt) => {
+                    const qId = (questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).id;
                     const isSelected =
-                      calculatorQuestions[currentStep - 1].type === "single"
+                      (questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).type === "single"
                         ? selections[qId] === opt.id
                         : (selections[qId] as string[]).includes(opt.id);
 
@@ -324,10 +360,10 @@ export const CalculatorWizard: React.FC = () => {
                       <button
                         type="button"
                         key={opt.id}
-                        role={calculatorQuestions[currentStep - 1].type === "single" ? "radio" : "checkbox"}
+                        role={(questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).type === "single" ? "radio" : "checkbox"}
                         aria-checked={isSelected}
                         onClick={() =>
-                          calculatorQuestions[currentStep - 1].type === "single"
+                          (questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).type === "single"
                             ? handleSingleSelect(qId, opt.id)
                             : handleMultiSelect(qId, opt.id)
                         }
@@ -349,11 +385,13 @@ export const CalculatorWizard: React.FC = () => {
                             {opt.label}
                           </span>
                           <span className="text-xs text-text-secondary mt-1">
-                            {opt.baseCost
-                              ? `Starting from $${opt.baseCost.toLocaleString()}`
-                              : opt.flatCost
-                              ? `Adds $${opt.flatCost.toLocaleString()}`
-                              : "Tailored metrics apply"}
+                            {opt.baseCost !== undefined
+                              ? `Starting from ${currency}${opt.baseCost.toLocaleString()}`
+                              : opt.flatCost !== undefined
+                              ? `Adds ${currency}${opt.flatCost.toLocaleString()}`
+                              : opt.multiplier && opt.multiplier !== 1
+                              ? `×${opt.multiplier} factor (${opt.multiplier > 1 ? `+${Math.round((opt.multiplier - 1) * 100)}%` : `-${Math.round((1 - opt.multiplier) * 100)}%`})`
+                              : "Standard baseline"}
                           </span>
                         </div>
                       </button>
@@ -361,9 +399,9 @@ export const CalculatorWizard: React.FC = () => {
                   })}
                 </div>
 
-                {errors[calculatorQuestions[currentStep - 1].id] && (
+                {errors[(questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).id] && (
                   <span className="text-sm text-red-500 font-semibold mt-2 block">
-                    {errors[calculatorQuestions[currentStep - 1].id]}
+                    {errors[(questions[currentStep - 1] || calculatorQuestions[currentStep - 1]).id]}
                   </span>
                 )}
               </motion.div>

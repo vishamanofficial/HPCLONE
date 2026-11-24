@@ -2,6 +2,20 @@
 // For use in React Client Components ('use client')
 
 export const nextApi = {
+  // Public Calculator Settings fetch
+  async getCalculator() {
+    try {
+      const res = await fetch('/api/v1/public/calculator', {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (res.ok) {
+        const json = await res.json();
+        return json?.settings || null;
+      }
+    } catch {}
+    return null;
+  },
+
   // Client-Side Inquiries submission with user-friendly error normalization
   async submitInquiry(data: any) {
     try {
