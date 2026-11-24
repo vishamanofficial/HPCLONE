@@ -5,6 +5,7 @@ import { useToast } from '@/components/admin/Toast';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
+import { siteConfig } from '@/config/site';
 import {
   Save,
   Globe,
@@ -21,21 +22,21 @@ import {
 export default function SettingsManagerPage() {
   const { success, error } = useToast();
   const [settings, setSettings] = useState<any>({
-    siteName: 'HangingPanda',
-    tagline: 'AI-Powered Software & Mobile App Development',
-    logoUrl: '/favicon.svg',
-    faviconUrl: '/favicon.svg',
+    siteName: siteConfig.name,
+    tagline: siteConfig.tagline,
+    logoUrl: siteConfig.assets.logo,
+    faviconUrl: siteConfig.assets.favicon,
     primaryColor: '#ef4444',
     secondaryColor: '#dc2626',
-    contactEmail: 'vishamanofficial.business@gmail.com',
-    contactPhone: '+91-8887024887',
-    whatsappNumber: '918887024887',
-    officeAddress: 'B-64, B Block, Sector 63, Noida, Uttar Pradesh, India, 201301',
+    contactEmail: siteConfig.emails.contact,
+    contactPhone: siteConfig.phone,
+    whatsappNumber: siteConfig.phone.replace(/[^0-9]/g, ''),
+    officeAddress: siteConfig.address.full,
     socialLinks: {
-      facebook: 'https://facebook.com',
-      twitter: 'https://twitter.com',
-      linkedin: 'https://linkedin.com',
-      instagram: 'https://instagram.com'
+      facebook: siteConfig.socialLinks.facebook,
+      twitter: siteConfig.socialLinks.twitter,
+      linkedin: siteConfig.socialLinks.linkedin,
+      instagram: siteConfig.socialLinks.instagram
     },
     announcementBar: {
       enabled: false,
@@ -44,7 +45,7 @@ export default function SettingsManagerPage() {
       badge: ''
     },
     footerText: '',
-    copyrightText: '© {year} HangingPanda Pvt Ltd. All rights reserved.',
+    copyrightText: siteConfig.getCopyright('{year}'),
     defaultCta: {
       headline: 'Ready to bring your software vision to life?',
       subheadline: 'Connect with our engineering leads today for a confidential architecture consultation.',
@@ -158,7 +159,7 @@ export default function SettingsManagerPage() {
             <Input
               value={settings.siteName || ''}
               onChange={(e) => handleChange('siteName', e.target.value)}
-              placeholder="HangingPanda"
+              placeholder={siteConfig.name}
               required
             />
           </div>
@@ -306,7 +307,7 @@ export default function SettingsManagerPage() {
             <Input
               value={settings.socialLinks?.linkedin || ''}
               onChange={(e) => handleSocialChange('linkedin', e.target.value)}
-              placeholder="https://linkedin.com/company/hangingpanda"
+              placeholder={siteConfig.socialLinks.linkedin}
             />
           </div>
 
@@ -317,7 +318,7 @@ export default function SettingsManagerPage() {
             <Input
               value={settings.socialLinks?.twitter || ''}
               onChange={(e) => handleSocialChange('twitter', e.target.value)}
-              placeholder="https://twitter.com/hangingpanda"
+              placeholder={siteConfig.socialLinks.twitter}
             />
           </div>
 
@@ -328,7 +329,7 @@ export default function SettingsManagerPage() {
             <Input
               value={settings.socialLinks?.facebook || ''}
               onChange={(e) => handleSocialChange('facebook', e.target.value)}
-              placeholder="https://facebook.com/hangingpanda"
+              placeholder={siteConfig.socialLinks.facebook}
             />
           </div>
 
@@ -339,7 +340,7 @@ export default function SettingsManagerPage() {
             <Input
               value={settings.socialLinks?.instagram || ''}
               onChange={(e) => handleSocialChange('instagram', e.target.value)}
-              placeholder="https://instagram.com/hangingpanda"
+              placeholder={siteConfig.socialLinks.instagram}
             />
           </div>
         </div>
@@ -426,7 +427,7 @@ export default function SettingsManagerPage() {
           <Input
             value={settings.copyrightText || ''}
             onChange={(e) => handleChange('copyrightText', e.target.value)}
-            placeholder="© {year} HangingPanda Pvt Ltd. All rights reserved."
+            placeholder={siteConfig.getCopyright('{year}')}
           />
         </div>
       </div>

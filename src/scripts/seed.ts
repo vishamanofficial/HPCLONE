@@ -17,6 +17,7 @@ import { Job } from '@/models/Job';
 import { NavigationMenu } from '@/models/NavigationMenu';
 import { SeoSettings } from '@/models/SeoSettings';
 import { Lead } from '@/models/Lead';
+import { siteConfig } from '@/config/site';
 
 
 export const seedData = async () => {
@@ -67,12 +68,12 @@ export const seedData = async () => {
   // 2. Default Super Admin User
   console.log('[Seed] Seeding Super Admin User...');
   await User.deleteMany({});
-  const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || 'Admin@HangingPanda2026!';
+  const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || `Admin@${siteConfig.name}2026!`;
   const passwordHash = await bcrypt.hash(defaultPassword, 10);
 
   const superAdmin = await User.create({
     name: 'Vishal Aman (Admin)',
-    email: (process.env.ADMIN_DEFAULT_EMAIL || 'admin@hangingpanda.com').toLowerCase(),
+    email: (process.env.ADMIN_DEFAULT_EMAIL || siteConfig.emails.admin).toLowerCase(),
     passwordHash,
     role: superAdminRole._id,
     isActive: true,
@@ -83,17 +84,17 @@ export const seedData = async () => {
   console.log('[Seed] Seeding Global Site Settings...');
   await SiteSettings.deleteMany({});
   await SiteSettings.create({
-    siteName: 'HangingPanda',
-    tagline: 'AI-Powered Software & Mobile App Development',
-    logoUrl: '/favicon.svg',
-    faviconUrl: '/favicon.svg',
+    siteName: siteConfig.name,
+    tagline: siteConfig.tagline,
+    logoUrl: siteConfig.assets.logo,
+    faviconUrl: siteConfig.assets.favicon,
     primaryColor: '#ef4444',
     secondaryColor: '#dc2626',
     accentOrange: '#dc2626',
-    contactEmail: 'vishamanofficial.business@gmail.com',
-    contactPhone: '+91-8887024887',
-    whatsappNumber: '918887024887',
-    officeAddress: 'B-64, B Block, Sector 63, Noida, Uttar Pradesh, India, 201301',
+    contactEmail: siteConfig.emails.contact,
+    contactPhone: siteConfig.phone,
+    whatsappNumber: siteConfig.phone.replace(/[^0-9]/g, ''),
+    officeAddress: siteConfig.address.full,
     officeLocations: [
       {
         city: 'Noida, UP',
@@ -114,7 +115,7 @@ export const seedData = async () => {
     },
     footerText:
       'AI-powered Software Development Company for Startups & Enterprises. Re-imagining software architectures with security, accessibility, and high performance.',
-    copyrightText: '© {year} HangingPanda Pvt Ltd. All rights reserved.',
+    copyrightText: siteConfig.getCopyright('{year}'),
     defaultCta: {
       headline: 'Ready to bring your software vision to life?',
       subheadline:
@@ -135,7 +136,7 @@ export const seedData = async () => {
       title: 'Custom App Development',
       shortDesc: 'End-to-end native and hybrid mobile apps tailored to your business operations.',
       longDesc:
-        'HangingPanda designs and engineers enterprise-ready mobile app products. From initial requirement blueprinting to UX design and backend API creation, we deliver powerful Android, iOS, and hybrid applications.',
+        `${siteConfig.name} designs and engineers enterprise-ready mobile app products. From initial requirement blueprinting to UX design and backend API creation, we deliver powerful Android, iOS, and hybrid applications.`,
       iconName: 'Smartphone',
       benefits: [
         'Target multiple app stores from a single code repository',
@@ -198,7 +199,7 @@ export const seedData = async () => {
       title: 'Branding & Design',
       shortDesc: 'Cohesive logo assets, UI design tokens, and branding design systems.',
       longDesc:
-        'Design system assets that build credibility. HangingPanda establishes color frameworks, design component libraries, logo graphics, and brand guides to ensure your online identity remains unified across platforms.',
+        `Design system assets that build credibility. ${siteConfig.name} establishes color frameworks, design component libraries, logo graphics, and brand guides to ensure your online identity remains unified across platforms.`,
       iconName: 'Palette',
       benefits: [
         'Unified design system files (Figma tokens)',
@@ -261,7 +262,7 @@ export const seedData = async () => {
       title: 'IoT Development',
       shortDesc: 'Edge telemetry pipelines, hardware integrations, and smart monitoring portals.',
       longDesc:
-        'Integrate physical devices with cloud software. HangingPanda sets up lightweight telemetry pathways, IoT device hubs, and data visualizations to help businesses monitor industrial processes in real time.',
+        `Integrate physical devices with cloud software. ${siteConfig.name} sets up lightweight telemetry pathways, IoT device hubs, and data visualizations to help businesses monitor industrial processes in real time.`,
       iconName: 'Cpu',
       benefits: [
         'Real-time asset telemetry checks',
@@ -345,7 +346,7 @@ export const seedData = async () => {
       title: 'Artificial Intelligence',
       shortDesc: 'Custom LLM integrations, autonomous agents, and predictive data systems.',
       longDesc:
-        'Embed machine learning into company products. HangingPanda sets up vector search indexes, integrates LLMs with internal company files, and builds prediction models to automate business processes.',
+        `Embed machine learning into company products. ${siteConfig.name} sets up vector search indexes, integrates LLMs with internal company files, and builds prediction models to automate business processes.`,
       iconName: 'BrainCircuit',
       benefits: [
         'Automated initial customer query responses',
@@ -399,9 +400,9 @@ export const seedData = async () => {
         { title: 'What support options are included after release?', content: 'Every build comes with 2.5 years of free maintenance covering software regressions, server health diagnostics, and security updates.' }
       ],
       seo: {
-        metaTitle: `${s.title} Services | HangingPanda`,
+        metaTitle: `${s.title} Services | ${siteConfig.name}`,
         metaDescription: s.shortDesc,
-        canonicalUrl: `https://hangingpanda.com/services/${s.slug}`,
+        canonicalUrl: `${siteConfig.url}/services/${s.slug}`,
         focusKeyword: s.title
       }
     });
@@ -502,9 +503,9 @@ export const seedData = async () => {
     await Portfolio.create({
       ...item,
       seo: {
-        metaTitle: `${item.title} Case Study | HangingPanda`,
+        metaTitle: `${item.title} Case Study | ${siteConfig.name}`,
         metaDescription: item.description,
-        canonicalUrl: `https://hangingpanda.com/case-studies#${item.slug}`
+        canonicalUrl: `${siteConfig.url}/case-studies#${item.slug}`
       }
     });
   }
@@ -521,7 +522,7 @@ export const seedData = async () => {
 
 An autonomous AI agent does not just explain a code bug—it creates a bug report, schedules a patch branch in Git, runs the test suite, and requests deployment review when successful.
 
-At HangingPanda, our PandaNext AI team builds internal workflow integrations that hook enterprise telemetry straight into multi-step agent grids, saving thousands of operational hours.
+At ${siteConfig.name}, our PandaNext AI team builds internal workflow integrations that hook enterprise telemetry straight into multi-step agent grids, saving thousands of operational hours.
 
 ### Key Pillars of Agentic Enterprise Architecture
 1. **Deterministic Guardrails:** Ensuring LLM outputs map to strictly validated JSON schemas.
@@ -587,7 +588,7 @@ We detail how to select between them depending on your system's hardware require
       excerpt: 'Five core mistakes startups make when building their first software iteration, and how to scale infrastructure on low budgets.',
       content: `The goal of a Minimum Viable Product is to validate business assumptions as quickly as possible. Yet, many teams waste months building complex server clusters and caching networks before finding their first customer.
 
-At HangingPanda, we advise clients to start with a modular monolith backend, leverage managed database systems, and focus heavy resources on polishing user interface flows. Keeping the initial system design decoupled allows you to migrate to serverless or microservices later, only when traffic demand justifies the complexity.`,
+At ${siteConfig.name}, we advise clients to start with a modular monolith backend, leverage managed database systems, and focus heavy resources on polishing user interface flows. Keeping the initial system design decoupled allows you to migrate to serverless or microservices later, only when traffic demand justifies the complexity.`,
       category: 'Tech Strategy',
       author: {
         name: 'Vikas Verma',
@@ -605,9 +606,9 @@ At HangingPanda, we advise clients to start with a modular monolith backend, lev
     await Blog.create({
       ...b,
       seo: {
-        metaTitle: `${b.title} | HangingPanda Tech Hub`,
+        metaTitle: `${b.title} | ${siteConfig.name} Tech Hub`,
         metaDescription: b.excerpt,
-        canonicalUrl: `https://hangingpanda.com/blog/${b.slug}`
+        canonicalUrl: `${siteConfig.url}/blog/${b.slug}`
       }
     });
   }
@@ -621,7 +622,7 @@ At HangingPanda, we advise clients to start with a modular monolith backend, lev
       designation: 'CTO & Co-Founder',
       company: 'Marhba Islamic Banking',
       avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-      content: 'HangingPanda built our entire core banking mobile application with bulletproof security, multi-factor biometric auth, and complete Sharia compliance. Shipped 2 weeks ahead of our product launch date!',
+      content: `${siteConfig.name} built our entire core banking mobile application with bulletproof security, multi-factor biometric auth, and complete Sharia compliance. Shipped 2 weeks ahead of our product launch date!`,
       rating: 5,
       isFeatured: true,
       displayOrder: 1,
@@ -632,7 +633,7 @@ At HangingPanda, we advise clients to start with a modular monolith backend, lev
       designation: 'Chief Operating Officer',
       company: 'Train Effective Academy',
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-      content: 'The architectural rigor HangingPanda brought to our video streaming and coaching app allowed us to scale from 10,000 to over 75,000 active students without a single minute of server downtime.',
+      content: `The architectural rigor ${siteConfig.name} brought to our video streaming and coaching app allowed us to scale from 10,000 to over 75,000 active students without a single minute of server downtime.`,
       rating: 5,
       isFeatured: true,
       displayOrder: 2,
@@ -828,17 +829,16 @@ At HangingPanda, we advise clients to start with a modular monolith backend, lev
   console.log('[Seed] Seeding SEO Settings...');
   await SeoSettings.deleteMany({});
   await SeoSettings.create({
-    defaultMetaTitle: 'HangingPanda | AI-Powered Custom Software & Mobile App Development',
-    defaultMetaDescription:
-      'HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms. Get your development quote using our App Cost Calculator.',
-    defaultOgImage: 'https://hangingpanda.com/og-image.jpg',
-    siteUrl: 'https://hangingpanda.com',
+    defaultMetaTitle: `${siteConfig.name} | ${siteConfig.tagline}`,
+    defaultMetaDescription: siteConfig.description,
+    defaultOgImage: `${siteConfig.url}/og-image.jpg`,
+    siteUrl: siteConfig.url,
     googleAnalyticsId: 'G-HP78201',
     organizationSchema: {
-      name: 'HangingPanda Software Labs',
-      legalName: 'HangingPanda Pvt Ltd',
-      url: 'https://hangingpanda.com',
-      logo: 'https://hangingpanda.com/favicon.svg',
+      name: `${siteConfig.name} ${siteConfig.subName}`,
+      legalName: siteConfig.legalName,
+      url: siteConfig.url,
+      logo: `${siteConfig.url}${siteConfig.assets.logo}`,
       contactPoint: {
         telephone: '+91-8887024887',
         contactType: 'Customer Support',
@@ -957,12 +957,11 @@ At HangingPanda, we advise clients to start with a modular monolith backend, lev
     currentRevision: 1,
     author: superAdmin._id,
     seo: {
-      metaTitle: 'HangingPanda | AI-Powered Custom Software & Mobile App Development',
-      metaDescription:
-        'HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms. Get your development quote using our App Cost Calculator.',
-      canonicalUrl: 'https://hangingpanda.com/',
+      metaTitle: `${siteConfig.name} | ${siteConfig.tagline}`,
+      metaDescription: siteConfig.description,
+      canonicalUrl: `${siteConfig.url}/`,
       focusKeyword: 'AI-Powered Software Development',
-      ogImage: 'https://hangingpanda.com/og-image.jpg'
+      ogImage: `${siteConfig.url}/og-image.jpg`
     },
     sections: [
       {
@@ -976,7 +975,7 @@ At HangingPanda, we advise clients to start with a modular monolith backend, lev
           badgeText: 'Contractual SLA & 2.5 Years Free Maintenance',
           headline: 'Engineering Scalable Software & AI Products That Power Modern Business',
           description:
-            'From day one, HangingPanda engineers production-grade mobile applications, robust web platforms, and custom machine learning pipelines backed by enforceable delivery guarantees.',
+            `From day one, ${siteConfig.name} engineers production-grade mobile applications, robust web platforms, and custom machine learning pipelines backed by enforceable delivery guarantees.`,
           primaryBtnText: 'Book a Free Architecture Call',
           primaryBtnUrl: '/contact',
           secondaryBtnText: 'Explore Services',
@@ -1090,7 +1089,7 @@ At HangingPanda, we advise clients to start with a modular monolith backend, lev
         content: {
           badge: 'CLIENT TESTIMONIALS',
           heading: 'Trusted by Founders, CTOs, and Product Leaders',
-          subheading: 'Hear directly from executives who scale their businesses on HangingPanda software systems.'
+          subheading: `Hear directly from executives who scale their businesses on ${siteConfig.name} software systems.`
         }
       },
       {

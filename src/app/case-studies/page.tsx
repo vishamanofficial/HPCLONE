@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import { nextApi } from "@/lib/server-api";
 import { CaseStudiesClient } from "./CaseStudiesClient";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Portfolio & Case Studies | HangingPanda Success Metrics",
+  title: `Portfolio & Case Studies | ${siteConfig.name} Success Metrics`,
   description:
-    "Explore our case studies. HangingPanda builds custom app developments and software databases that increase conversion rates and support user scaling.",
+    `Explore our case studies. ${siteConfig.name} builds custom app developments and software databases that increase conversion rates and support user scaling.`,
   alternates: {
-    canonical: "https://hangingpanda.com/case-studies",
+    canonical: `${siteConfig.url}/case-studies`,
   },
   openGraph: {
-    title: "Portfolio & Case Studies | HangingPanda Success Metrics",
+    title: `Portfolio & Case Studies | ${siteConfig.name} Success Metrics`,
     description:
-      "Explore our case studies. HangingPanda builds custom app developments and software databases that increase conversion rates and support user scaling.",
-    url: "https://hangingpanda.com/case-studies",
+      `Explore our case studies. ${siteConfig.name} builds custom app developments and software databases that increase conversion rates and support user scaling.`,
+    url: `${siteConfig.url}/case-studies`,
     type: "website",
   },
 };

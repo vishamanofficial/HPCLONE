@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/context/AdminAuthContext';
 import { useToast } from '@/components/admin/Toast';
+import { siteConfig } from '@/config/site';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { ShieldCheck, Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
@@ -13,8 +14,8 @@ export default function AdminLoginPage() {
   const { error: toastError, success: toastSuccess } = useToast();
   const router = useRouter();
 
-  const [email, setEmail] = useState('admin@hangingpanda.com');
-  const [password, setPassword] = useState('Admin@HangingPanda2026!');
+  const [email, setEmail] = useState(siteConfig.emails.admin);
+  const [password, setPassword] = useState(process.env.NEXT_PUBLIC_ADMIN_DEFAULT_PASSWORD || `Admin@${siteConfig.name}2026!`);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -57,11 +58,11 @@ export default function AdminLoginPage() {
       <div className="max-w-md w-full bg-card border border-border p-8 sm:p-10 rounded-3xl shadow-2xl relative z-10 flex flex-col gap-6 text-left">
         <div className="flex items-center gap-3">
           <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary to-accent-orange flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-primary/25">
-            HP
+            {siteConfig.shortName}
           </span>
           <div>
             <h1 className="text-xl font-black text-text-primary tracking-tight leading-tight">
-              HangingPanda CMS
+              {siteConfig.name} CMS
             </h1>
             <span className="text-xs font-semibold text-text-muted">
               Secure Administration Portal
@@ -92,7 +93,7 @@ export default function AdminLoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@hangingpanda.com"
+              placeholder={siteConfig.emails.admin}
               leftIcon={<Mail className="w-4 h-4 text-text-muted" />}
               required
             />

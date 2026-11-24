@@ -6,6 +6,7 @@ import { useToast } from '@/components/admin/Toast';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
+import { siteConfig } from '@/config/site';
 import {
   ArrowLeft,
   Eye,
@@ -126,7 +127,7 @@ const SECTION_TEMPLATES = [
     defaultContent: {
       badge: 'CLIENT TESTIMONIALS',
       heading: 'Trusted by Founders, CTOs, and Product Leaders',
-      subheading: 'Hear directly from executives who scale their businesses on HangingPanda software systems.'
+      subheading: `Hear directly from executives who scale their businesses on ${siteConfig.name} software systems.`
     }
   },
   {
@@ -168,7 +169,7 @@ const SECTION_TEMPLATES = [
     description: 'Formatted markdown or HTML paragraphs, headings, and bullet points.',
     defaultContent: {
       heading: 'Custom In-Depth Overview',
-      bodyText: 'HangingPanda designs enterprise software systems built for high availability and low latency.'
+      bodyText: `${siteConfig.name} designs enterprise software systems built for high availability and low latency.`
     }
   }
 ];
@@ -602,7 +603,7 @@ export default function VisualPageBuilderPage() {
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
                 <span className="ml-2 font-mono text-[11px] text-text-primary font-bold">
-                  https://hangingpanda.com/{page?.slug}
+                  {siteConfig.url}/{page?.slug}
                 </span>
               </div>
               <span className="text-[10px] font-bold uppercase tracking-wider">
@@ -1013,7 +1014,7 @@ export default function VisualPageBuilderPage() {
                     Google Search Preview
                   </span>
                   <div className="flex items-center gap-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 mt-1">
-                    <span>https://hangingpanda.com</span>
+                    <span>{siteConfig.url}</span>
                     <span>&rsaquo;</span>
                     <span>{page?.slug}</span>
                   </div>
@@ -1041,7 +1042,7 @@ export default function VisualPageBuilderPage() {
                   <Input
                     value={seo.metaTitle || ''}
                     onChange={(e) => setSeo({ ...seo, metaTitle: e.target.value })}
-                    placeholder="e.g. AI-Powered Enterprise Software | HangingPanda"
+                    placeholder={`e.g. AI-Powered Enterprise Software | ${siteConfig.name}`}
                   />
                 </div>
 
@@ -1084,7 +1085,7 @@ export default function VisualPageBuilderPage() {
                   <Input
                     value={seo.canonicalUrl || ''}
                     onChange={(e) => setSeo({ ...seo, canonicalUrl: e.target.value })}
-                    placeholder={`https://hangingpanda.com/${page?.slug}`}
+                    placeholder={`${siteConfig.url}/${page?.slug}`}
                   />
                 </div>
 
@@ -1095,7 +1096,7 @@ export default function VisualPageBuilderPage() {
                   <Input
                     value={seo.ogImage || ''}
                     onChange={(e) => setSeo({ ...seo, ogImage: e.target.value })}
-                    placeholder="https://hangingpanda.com/og-image.jpg"
+                    placeholder={`${siteConfig.url}/og-image.jpg`}
                   />
                 </div>
               </div>

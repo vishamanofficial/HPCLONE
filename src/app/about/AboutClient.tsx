@@ -19,9 +19,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { siteConfig } from "@/config/site";
 
 const milestones = [
-  { year: "2019", title: "Founding & MVP Focus", desc: "HangingPanda was founded with a mission to deliver clean code architectures for early-stage startups.", icon: GitBranch },
+  { year: "2019", title: "Founding & MVP Focus", desc: `${siteConfig.name} was founded with a mission to deliver clean code architectures for early-stage startups.`, icon: GitBranch },
   { year: "2021", title: "Enterprise Scaling", desc: "Expanded engineering services to scale legacy databases and deploy microservice structures.", icon: Target },
   { year: "2023", title: "Offshore Dedicated Teams", desc: "Successfully launched our Offshore Development model, providing dedicated tech teams to global clients.", icon: Sparkles },
   { year: "2026", title: "Next-Gen AI Integration Labs", desc: "Deployed customized AI autonomous agents, vector indexing (pgvector), and predictive model pipelines.", icon: ShieldCheck }
@@ -67,7 +68,7 @@ export const AboutClient: React.FC = () => {
             We Build Software with Unmatched <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-orange">Engineering Guarantees</span>.
           </h1>
           <p className="text-sm sm:text-base text-text-secondary mt-6 leading-relaxed max-w-2xl mx-auto">
-            HangingPanda was founded to bridge the gap between abstract startup goals and concrete, high-performance software builds. We protect our clients using contractual guarantees.
+            {siteConfig.name} was founded to bridge the gap between abstract startup goals and concrete, high-performance software builds. We protect our clients using contractual guarantees.
           </p>
         </div>
       </section>
@@ -150,7 +151,7 @@ export const AboutClient: React.FC = () => {
               Growth & Milestone Roadmap
             </h2>
             <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
-              A historical overview of HangingPanda's evolution and core technical focus milestones.
+              A historical overview of {siteConfig.name}&apos;s evolution and core technical focus milestones.
             </p>
           </motion.div>
         </div>
@@ -194,7 +195,7 @@ export const AboutClient: React.FC = () => {
             Developing Software that Outperforms Competitors
           </h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-2">
-            HangingPanda's team comprises software developers, cloud architects, and UI analysts with multi-industry expertise. We focus heavily on reducing technical debt by writing modular TypeScript architectures, utilizing unit testing workflows, and selecting hosting configurations that minimize monthly cloud costs.
+            {siteConfig.name}&apos;s team comprises software developers, cloud architects, and UI analysts with multi-industry expertise. We focus heavily on reducing technical debt by writing modular TypeScript architectures, utilizing unit testing workflows, and selecting hosting configurations that minimize monthly cloud costs.
           </p>
           <p className="text-sm text-text-secondary leading-relaxed">
             Whether you need a mobile application built in React Native or React elements integrated with an IoT telemetry broker, we formulate paths to deliver fast runtime execution and accessible designs.
@@ -203,7 +204,7 @@ export const AboutClient: React.FC = () => {
         <div className="lg:col-span-6 bg-surface border border-border p-8 rounded-3xl flex flex-col gap-6 relative overflow-hidden">
           <div className="absolute right-0 top-0 w-24 h-24 bg-primary/5 rounded-full filter blur-xl" />
           <h3 className="font-bold text-lg text-text-primary border-b border-border pb-3">
-            Why start with HangingPanda?
+            Why start with {siteConfig.name}?
           </h3>
           <div className="flex flex-col gap-4">
             {[

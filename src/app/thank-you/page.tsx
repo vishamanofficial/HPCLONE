@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2, ArrowLeft, Heart } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Thank You | HangingPanda Software Labs",
+  title: `Thank You | ${siteConfig.name} ${siteConfig.subName}`,
   robots: {
     index: false,
     follow: false,

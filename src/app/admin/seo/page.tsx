@@ -5,6 +5,7 @@ import { useToast } from '@/components/admin/Toast';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
+import { siteConfig } from '@/config/site';
 import {
   Search,
   AlertTriangle,
@@ -33,15 +34,15 @@ export default function SeoSuitePage() {
     defaultMetaTitle: '',
     defaultMetaDescription: '',
     defaultOgImage: '',
-    siteUrl: 'https://hangingpanda.com',
+    siteUrl: siteConfig.url,
     googleAnalyticsId: '',
     googleSearchConsoleVerification: '',
     defaultRobots: 'index, follow',
     organizationSchema: {
-      name: 'HangingPanda Software Labs',
-      legalName: 'HangingPanda Pvt Ltd',
-      url: 'https://hangingpanda.com',
-      logo: 'https://hangingpanda.com/favicon.svg'
+      name: `${siteConfig.name} ${siteConfig.subName}`,
+      legalName: siteConfig.legalName,
+      url: siteConfig.url,
+      logo: `${siteConfig.url}${siteConfig.assets.logo}`
     }
   });
 
@@ -315,7 +316,7 @@ export default function SeoSuitePage() {
               <Input
                 value={seoSettings.defaultMetaTitle || ''}
                 onChange={(e) => setSeoSettings({ ...seoSettings, defaultMetaTitle: e.target.value })}
-                placeholder="HangingPanda | AI-Powered Custom Software & Mobile App Development"
+                placeholder={`${siteConfig.name} | ${siteConfig.tagline}`}
                 required
               />
             </div>
@@ -341,7 +342,7 @@ export default function SeoSuitePage() {
                 <Input
                   value={seoSettings.defaultOgImage || ''}
                   onChange={(e) => setSeoSettings({ ...seoSettings, defaultOgImage: e.target.value })}
-                  placeholder="https://hangingpanda.com/og-image.jpg"
+                  placeholder={`${siteConfig.url}/og-image.jpg`}
                 />
               </div>
 
@@ -375,7 +376,7 @@ export default function SeoSuitePage() {
                       organizationSchema: { ...seoSettings.organizationSchema, name: e.target.value }
                     })
                   }
-                  placeholder="HangingPanda Software Labs"
+                  placeholder={`${siteConfig.name} ${siteConfig.subName}`}
                 />
               </div>
               <div>
@@ -388,7 +389,7 @@ export default function SeoSuitePage() {
                       organizationSchema: { ...seoSettings.organizationSchema, url: e.target.value }
                     })
                   }
-                  placeholder="https://hangingpanda.com"
+                  placeholder={siteConfig.url}
                 />
               </div>
             </div>
@@ -499,7 +500,7 @@ export default function SeoSuitePage() {
               Your XML sitemap is dynamically generated from MongoDB. Whenever you publish new pages, blogs, or services, they are automatically indexed.
             </p>
             <div className="p-3.5 rounded-2xl bg-surface border border-border font-mono text-xs text-text-primary break-all">
-              https://hangingpanda.com/sitemap.xml
+              {seoSettings.siteUrl || siteConfig.url}/sitemap.xml
             </div>
           </div>
 
@@ -519,7 +520,7 @@ export default function SeoSuitePage() {
               Directives instruct search engine crawlers (Googlebot, Bingbot) which paths to index and protect admin routes.
             </p>
             <div className="p-3.5 rounded-2xl bg-surface border border-border font-mono text-xs text-text-secondary whitespace-pre leading-relaxed">
-              {`User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: https://hangingpanda.com/sitemap.xml`}
+              {`User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: ${(seoSettings.siteUrl || siteConfig.url).replace(/\/$/, '')}/sitemap.xml`}
             </div>
           </div>
         </div>

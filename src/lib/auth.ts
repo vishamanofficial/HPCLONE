@@ -4,6 +4,7 @@ import { User, IUser } from '@/models/User';
 import '@/models/Role';
 import { AuditLog } from '@/models/AuditLog';
 import { connectDB } from './db';
+import { siteConfig } from '@/config/site';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'hp_jwt_super_secret_key_2026_change_in_production_9988776655';
 
@@ -29,7 +30,7 @@ export async function verifyAuth(req: NextRequest | Request): Promise<Authentica
     } catch {}
 
     if (!user) {
-      const defaultEmail = (process.env.ADMIN_DEFAULT_EMAIL || 'admin@hangingpanda.com').toLowerCase();
+      const defaultEmail = (process.env.ADMIN_DEFAULT_EMAIL || siteConfig.emails.admin).toLowerCase();
       if (decoded.email?.toLowerCase() === defaultEmail) {
         return {
           _id: decoded.id || '673e1c9e89b2c3d4e5f60001',

@@ -1,3 +1,5 @@
+import { siteConfig } from "@/config/site";
+
 export interface ServiceItem {
   slug: string;
   title: string;
@@ -14,7 +16,7 @@ export const servicesData: ServiceItem[] = [
     slug: "app-development",
     title: "Custom App Development",
     shortDesc: "End-to-end native and hybrid mobile apps tailored to your business operations.",
-    longDesc: "HangingPanda designs and engineers enterprise-ready mobile app products. From initial requirement blueprinting to UX design and backend API creation, we deliver powerful Android, iOS, and hybrid applications.",
+    longDesc: `${siteConfig.name} designs and engineers enterprise-ready mobile app products. From initial requirement blueprinting to UX design and backend API creation, we deliver powerful Android, iOS, and hybrid applications.`,
     iconName: "Smartphone",
     benefits: [
       "Target multiple app stores from a single code repository",
@@ -68,7 +70,7 @@ export const servicesData: ServiceItem[] = [
     slug: "brand-design",
     title: "Branding & Design",
     shortDesc: "Cohesive logo assets, UI design tokens, and branding design systems.",
-    longDesc: "Design system assets that build credibility. HangingPanda establishes color frameworks, design component libraries, logo graphics, and brand guides to ensure your online identity remains unified across platforms.",
+    longDesc: `Design system assets that build credibility. ${siteConfig.name} establishes color frameworks, design component libraries, logo graphics, and brand guides to ensure your online identity remains unified across platforms.`,
     iconName: "Palette",
     benefits: [
       "Unified design system files (Figma tokens)",
@@ -122,7 +124,7 @@ export const servicesData: ServiceItem[] = [
     slug: "iot-development",
     title: "IoT Development",
     shortDesc: "Edge telemetry pipelines, hardware integrations, and smart monitoring portals.",
-    longDesc: "Integrate physical devices with cloud software. HangingPanda sets up lightweight telemetry pathways, IoT device hubs, and data visualizations to help businesses monitor industrial processes in real time.",
+    longDesc: `Integrate physical devices with cloud software. ${siteConfig.name} sets up lightweight telemetry pathways, IoT device hubs, and data visualizations to help businesses monitor industrial processes in real time.`,
     iconName: "Cpu",
     benefits: [
       "Real-time asset telemetry checks",
@@ -194,7 +196,7 @@ export const servicesData: ServiceItem[] = [
     slug: "artificial-intelligence",
     title: "Artificial Intelligence",
     shortDesc: "Custom LLM integrations, autonomous agents, and predictive data systems.",
-    longDesc: "Embed machine learning into company products. HangingPanda sets up vector search indexes, integrates LLMs with internal company files, and builds prediction models to automate business processes.",
+    longDesc: `Embed machine learning into company products. ${siteConfig.name} sets up vector search indexes, integrates LLMs with internal company files, and builds prediction models to automate business processes.`,
     iconName: "BrainCircuit",
     benefits: [
       "Automated initial customer query responses",

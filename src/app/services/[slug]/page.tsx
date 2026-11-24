@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { nextApi } from "@/lib/server-api";
 import { ServiceDetailClient } from "./ServiceDetailClient";
+import { siteConfig } from "@/config/site";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -20,23 +21,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!service) {
     return {
-      title: "Service Not Found | HangingPanda",
+      title: `Service Not Found | ${siteConfig.name}`,
     };
   }
 
-  const title = service.seoTitle || `${service.title} Services | HangingPanda`;
+  const title = service.seoTitle || `${service.title} Services | ${siteConfig.name}`;
   const description = service.metaDescription || service.shortDesc;
 
   return {
     title,
     description,
     alternates: {
-      canonical: `https://hangingpanda.com/services/${slug}`,
+      canonical: `${siteConfig.url}/services/${slug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://hangingpanda.com/services/${slug}`,
+      url: `${siteConfig.url}/services/${slug}`,
       type: "website",
     },
   };
@@ -56,8 +57,8 @@ export default async function ServiceDetailPage({ params }: Props) {
     serviceType: service.title,
     provider: {
       "@type": "Organization",
-      name: "HangingPanda",
-      url: "https://hangingpanda.com"
+      name: siteConfig.name,
+      url: siteConfig.url
     },
     description: service.shortDesc,
     areaServed: "Worldwide"

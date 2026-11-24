@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { ToastProvider } from "@/components/admin/Toast";
 import { PublicLayoutWrapper } from "@/components/PublicLayoutWrapper";
 import { nextApi } from "@/lib/server-api";
+import { siteConfig } from "@/config/site";
 
 export const viewport: Viewport = {
   themeColor: "#05070A",
@@ -13,17 +14,16 @@ export const viewport: Viewport = {
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await nextApi.getSettings();
-  const siteName = settings?.siteName || "HangingPanda";
-  const siteTagline = settings?.siteTagline || "Engineering Scalable Software & AI Products";
+  const siteName = settings?.siteName || siteConfig.name;
+  const siteTagline = settings?.siteTagline || siteConfig.tagline;
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://hangingpanda.com"),
+    metadataBase: new URL(siteConfig.url),
     title: {
       default: `${siteName} - ${siteTagline}`,
       template: `%s | ${siteName}`,
     },
-    description:
-      "From day one, HangingPanda engineers production-grade mobile applications, robust web platforms, and custom machine learning pipelines backed by enforceable delivery guarantees.",
+    description: siteConfig.description,
     keywords: [
       "Software Development",
       "AI Engineering",
@@ -33,22 +33,22 @@ export async function generateMetadata(): Promise<Metadata> {
       "Enterprise Web Apps",
       "Bangalore Software Agency"
     ],
-    authors: [{ name: "HangingPanda Software Labs" }],
-    creator: "HangingPanda",
+    authors: [{ name: `${siteConfig.name} ${siteConfig.subName}` }],
+    creator: siteConfig.name,
     icons: {
-      icon: "/favicon.svg",
-      apple: "/favicon.svg",
+      icon: siteConfig.assets.favicon,
+      apple: siteConfig.assets.favicon,
     },
     openGraph: {
       type: "website",
       locale: "en_US",
-      url: "https://hangingpanda.com",
+      url: siteConfig.url,
       siteName: siteName,
       title: `${siteName} - ${siteTagline}`,
-      description: "Engineering scalable software, enterprise web apps, and AI products.",
+      description: siteConfig.description,
       images: [
         {
-          url: "/favicon.svg",
+          url: siteConfig.assets.ogImage,
           width: 800,
           height: 600,
           alt: `${siteName} Logo`,
@@ -58,7 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: `${siteName} - ${siteTagline}`,
-      description: "Engineering scalable software, enterprise web apps, and AI products.",
+      description: siteConfig.description,
     },
     robots: {
       index: true,

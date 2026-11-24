@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import { ContactClient } from "./ContactClient";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Contact Us | Custom Software Consultation | HangingPanda",
+  title: `Contact Us | Custom Software Consultation | ${siteConfig.name}`,
   description:
-    "Get in touch with HangingPanda. Write your project requirements for mobile apps, custom SaaS databases, or request audits. B-64 Noida Sector 63.",
+    `Get in touch with ${siteConfig.name}. Write your project requirements for mobile apps, custom SaaS databases, or request audits. ${siteConfig.address.street} ${siteConfig.address.locality}.`,
   alternates: {
-    canonical: "https://hangingpanda.com/contact",
+    canonical: `${siteConfig.url}/contact`,
   },
   openGraph: {
-    title: "Contact Us | Custom Software Consultation | HangingPanda",
+    title: `Contact Us | Custom Software Consultation | ${siteConfig.name}`,
     description:
-      "Get in touch with HangingPanda. Write your project requirements for mobile apps, custom SaaS databases, or request audits. B-64 Noida Sector 63.",
-    url: "https://hangingpanda.com/contact",
+      `Get in touch with ${siteConfig.name}. Write your project requirements for mobile apps, custom SaaS databases, or request audits. ${siteConfig.address.street} ${siteConfig.address.locality}.`,
+    url: `${siteConfig.url}/contact`,
     type: "website",
   },
 };

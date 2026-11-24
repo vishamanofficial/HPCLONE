@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import CalculatorWizard from "@/components/calculator/CalculatorWizard";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "App Cost Calculator | Get Instant Ballpark Estimate | HangingPanda",
+  title: `App Cost Calculator | Get Instant Ballpark Estimate | ${siteConfig.name}`,
   description:
     "Calculate your mobile app or custom software development cost. Our instant wizard evaluates platform selections, UI options, and admin features.",
   alternates: {
-    canonical: "https://hangingpanda.com/app-cost-calculator",
+    canonical: `${siteConfig.url}/app-cost-calculator`,
   },
   openGraph: {
-    title: "App Cost Calculator | Get Instant Ballpark Estimate | HangingPanda",
+    title: `App Cost Calculator | Get Instant Ballpark Estimate | ${siteConfig.name}`,
     description:
       "Calculate your mobile app or custom software development cost. Our instant wizard evaluates platform selections, UI options, and admin features.",
-    url: "https://hangingpanda.com/app-cost-calculator",
+    url: `${siteConfig.url}/app-cost-calculator`,
     type: "website",
   },
 };

@@ -7,6 +7,7 @@ import { Zap, GitBranch, Activity, ShieldCheck } from "lucide-react";
 import { portfolioData } from "@/data/portfolioData";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { siteConfig } from "@/config/site";
 
 interface CaseStudiesClientProps {
   portfolio?: any[];
@@ -54,7 +55,7 @@ export const CaseStudiesClient: React.FC<CaseStudiesClientProps> = ({ portfolio 
             Software Products that Deliver <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-orange">Real Business Value</span>.
           </h1>
           <p className="text-sm sm:text-base text-text-secondary mt-6 leading-relaxed max-w-2xl mx-auto">
-            Review detailed case study profiles of custom software, cross-platform apps, and enterprise tools engineered by HangingPanda.
+            Review detailed case study profiles of custom software, cross-platform apps, and enterprise tools engineered by {siteConfig.name}.
           </p>
         </div>
       </section>
@@ -142,7 +143,7 @@ export const CaseStudiesClient: React.FC<CaseStudiesClientProps> = ({ portfolio 
                 Technical Efficiency Metrics
               </h2>
               <p className="text-text-secondary text-sm max-w-xl mx-auto mt-4">
-                Average performance enhancements measured across all custom HangingPanda software builds.
+                Average performance enhancements measured across all custom {siteConfig.name} software builds.
               </p>
             </motion.div>
           </div>

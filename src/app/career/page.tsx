@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import { CareerClient } from "./CareerClient";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Careers | Join HangingPanda Tech Labs",
+  title: `Careers | Join ${siteConfig.name} Tech Labs`,
   description:
-    "Explore job openings at HangingPanda. We hire certified React developers, mobile engineers, and database architects. Flexible work culture.",
+    `Explore job openings at ${siteConfig.name}. We hire certified React developers, mobile engineers, and database architects. Flexible work culture.`,
   alternates: {
-    canonical: "https://hangingpanda.com/career",
+    canonical: `${siteConfig.url}/career`,
   },
   openGraph: {
-    title: "Careers | Join HangingPanda Tech Labs",
+    title: `Careers | Join ${siteConfig.name} Tech Labs`,
     description:
-      "Explore job openings at HangingPanda. We hire certified React developers, mobile engineers, and database architects. Flexible work culture.",
-    url: "https://hangingpanda.com/career",
+      `Explore job openings at ${siteConfig.name}. We hire certified React developers, mobile engineers, and database architects. Flexible work culture.`,
+    url: `${siteConfig.url}/career`,
     type: "website",
   },
 };

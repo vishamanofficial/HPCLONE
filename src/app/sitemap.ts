@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
 import { servicesData } from '@/data/servicesData';
 import { blogsData } from '@/data/blogsData';
+import { siteConfig } from '@/config/site';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hangingpanda.com';
+  const baseUrl = siteConfig.url;
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },

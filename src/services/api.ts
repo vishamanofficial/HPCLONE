@@ -1,8 +1,9 @@
-// HangingPanda Unified API Client Service
+// Unified API Client Service
 // Works across Next.js Client and Server components
 import { servicesData } from '@/data/servicesData';
 import { portfolioData } from '@/data/portfolioData';
 import { blogsData } from '@/data/blogsData';
+import { siteConfig } from '@/config/site';
 
 const API_BASE_URL = typeof window === 'undefined'
   ? (process.env.INTERNAL_API_URL || 'http://127.0.0.1:3000/api/v1')
@@ -119,12 +120,12 @@ class ApiService {
       return {
         success: true,
         settings: {
-          siteName: 'HangingPanda',
-          siteTagline: 'Engineering Scalable Software & AI Products',
-          contactEmail: 'contact@hangingpanda.com',
-          contactPhone: '+91 98765 43210',
-          whatsappNumber: '+919876543210',
-          address: 'Tech Park, Bangalore, Karnataka, India'
+          siteName: siteConfig.name,
+          siteTagline: siteConfig.tagline,
+          contactEmail: siteConfig.emails.contact,
+          contactPhone: siteConfig.phone,
+          whatsappNumber: siteConfig.phone.replace(/[^0-9]/g, ''),
+          address: siteConfig.address.full
         }
       };
     }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { nextApi } from "@/lib/server-api";
+import { siteConfig } from "@/config/site";
 import { blogsData } from "@/data/blogsData";
 import { BlogDetailClient } from "./BlogDetailClient";
 
@@ -23,24 +24,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!blog) {
     return {
-      title: "Article Not Found | HangingPanda Tech Hub",
+      title: `Article Not Found | ${siteConfig.name} Tech Hub`,
     };
   }
 
   return {
-    title: `${blog.title} | HangingPanda Tech Hub`,
+    title: `${blog.title} | ${siteConfig.name} Tech Hub`,
     description: blog.excerpt,
     alternates: {
-      canonical: `https://hangingpanda.com/blog/${slug}`,
+      canonical: `${siteConfig.url}/blog/${slug}`,
     },
     openGraph: {
       title: blog.title,
       description: blog.excerpt,
-      url: `https://hangingpanda.com/blog/${slug}`,
+      url: `${siteConfig.url}/blog/${slug}`,
       type: "article",
       images: [
         {
-          url: blog.featuredImage || "/favicon.svg",
+          url: blog.featuredImage || siteConfig.assets.ogImage,
           width: 1200,
           height: 630,
           alt: blog.title,
@@ -71,15 +72,15 @@ export default async function BlogDetailPage({ params }: Props) {
     description: blog.excerpt,
     author: {
       "@type": "Person",
-      name: blog.author?.name || "HangingPanda Engineer",
+      name: blog.author?.name || `${siteConfig.name} Engineer`,
     },
     datePublished: blog.publishedAt || "2026-06-15",
     publisher: {
       "@type": "Organization",
-      name: "HangingPanda",
+      name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
-        url: "https://hangingpanda.com/favicon.svg",
+        url: `${siteConfig.url}${siteConfig.assets.logo}`,
       },
     },
   };

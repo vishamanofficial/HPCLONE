@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { siteConfig } from '@/config/site';
 
 export interface ISeoSettings extends Document {
   defaultMetaTitle: string;
@@ -39,26 +40,25 @@ const SeoSettingsSchema = new Schema<ISeoSettings>(
   {
     defaultMetaTitle: {
       type: String,
-      default: 'HangingPanda | AI-Powered Custom Software & Mobile App Development'
+      default: `${siteConfig.name} | ${siteConfig.tagline}`
     },
     defaultMetaDescription: {
       type: String,
-      default:
-        'HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms. Get your development quote using our App Cost Calculator.'
+      default: siteConfig.description
     },
-    defaultOgImage: { type: String, default: '/favicon.svg' },
+    defaultOgImage: { type: String, default: siteConfig.assets.ogImage },
     defaultOgTitle: { type: String, default: '' },
     defaultOgDescription: { type: String, default: '' },
-    siteUrl: { type: String, default: 'https://hangingpanda.com' },
+    siteUrl: { type: String, default: siteConfig.url },
     googleAnalyticsId: { type: String, default: '' },
     googleSearchConsoleVerification: { type: String, default: '' },
     bingVerification: { type: String, default: '' },
     defaultRobots: { type: String, default: 'index, follow' },
     organizationSchema: {
-      name: { type: String, default: 'HangingPanda Software Labs' },
-      legalName: { type: String, default: 'HangingPanda Pvt Ltd' },
-      url: { type: String, default: 'https://hangingpanda.com' },
-      logo: { type: String, default: 'https://hangingpanda.com/favicon.svg' },
+      name: { type: String, default: `${siteConfig.name} ${siteConfig.subName}` },
+      legalName: { type: String, default: siteConfig.legalName },
+      url: { type: String, default: siteConfig.url },
+      logo: { type: String, default: `${siteConfig.url}${siteConfig.assets.logo}` },
       contactPoint: {
         telephone: { type: String, default: '+91-8887024887' },
         contactType: { type: String, default: 'Customer Support' },

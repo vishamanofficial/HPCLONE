@@ -1,4 +1,4 @@
-// HangingPanda Client-Safe API Client
+// Client-Safe API Client
 // For use in React Client Components ('use client')
 
 export const nextApi = {

@@ -42,6 +42,7 @@ import { Textarea } from "../ui/Textarea";
 import { PhoneInput } from "../ui/PhoneInput";
 import { nextApi } from "@/lib/api";
 import { useToast } from "@/components/admin/Toast";
+import { siteConfig } from "@/config/site";
 
 const calculatorIcons: Record<string, React.ComponentType<any>> = {
   HelpCircle,
@@ -450,7 +451,7 @@ export const CalculatorWizard: React.FC = () => {
                       className="w-4.5 h-4.5 text-primary border-border focus:ring-primary rounded mt-0.5 cursor-pointer"
                     />
                     <label htmlFor="calc-subscribe" className="text-xs text-text-secondary leading-snug cursor-pointer select-none">
-                      Subscribe to HangingPanda monthly technology audits & product strategy digests.
+                      Subscribe to {siteConfig.name} monthly technology audits & product strategy digests.
                     </label>
                   </div>
                 </div>

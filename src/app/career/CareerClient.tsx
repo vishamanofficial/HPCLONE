@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { siteConfig } from "@/config/site";
 
 export const CareerClient: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -78,7 +79,7 @@ export const CareerClient: React.FC = () => {
             Build Software that <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-orange">Empowers Users</span>.
           </h1>
           <p className="text-sm sm:text-base text-text-secondary mt-6 leading-relaxed max-w-2xl mx-auto">
-            HangingPanda is scaling. We seek engineers who value clean architectures, type safety, and direct client coordination grids.
+            {siteConfig.name} is scaling. We seek engineers who value clean architectures, type safety, and direct client coordination grids.
           </p>
         </div>
       </section>
@@ -89,7 +90,7 @@ export const CareerClient: React.FC = () => {
             Company Culture
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
-            Why Code with HangingPanda?
+            Why Code with {siteConfig.name}?
           </h2>
         </div>
 

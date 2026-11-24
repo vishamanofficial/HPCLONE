@@ -1,31 +1,32 @@
 import type { Metadata } from "next";
 import { nextApi } from "@/lib/server-api";
 import { HomeClient } from "@/components/home/HomeClient";
+import { siteConfig } from "@/config/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const homeData = await nextApi.getHomepage();
   const page = homeData?.page;
 
-  const title = page?.seo?.metaTitle || "HangingPanda | AI-Powered Custom Software & Mobile App Development";
-  const description = page?.seo?.metaDescription || "HangingPanda designs and engineers enterprise software, Android & iOS mobile apps, and custom web platforms with enforceable delivery guarantees and 2.5 years free maintenance.";
+  const title = page?.seo?.metaTitle || `${siteConfig.name} | ${siteConfig.tagline}`;
+  const description = page?.seo?.metaDescription || siteConfig.description;
 
   return {
     title,
     description,
     alternates: {
-      canonical: page?.seo?.canonicalUrl || "https://hangingpanda.com/",
+      canonical: page?.seo?.canonicalUrl || `${siteConfig.url}/`,
     },
     openGraph: {
       title,
       description,
-      url: "https://hangingpanda.com/",
+      url: `${siteConfig.url}/`,
       type: "website",
       images: [
         {
-          url: page?.seo?.ogImage || "/favicon.svg",
+          url: page?.seo?.ogImage || siteConfig.assets.ogImage,
           width: 1200,
           height: 630,
-          alt: "HangingPanda Software Labs",
+          alt: `${siteConfig.name} ${siteConfig.subName}`,
         },
       ],
     },
@@ -33,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: [page?.seo?.ogImage || "/favicon.svg"],
+      images: [page?.seo?.ogImage || siteConfig.assets.ogImage],
     },
   };
 }
@@ -44,24 +45,25 @@ export default async function HomePage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "HangingPanda",
-    url: "https://hangingpanda.com",
-    logo: "https://hangingpanda.com/favicon.svg",
-    description: "AI-Powered Custom Software, Web Platforms, and Mobile App Development Agency.",
+    name: siteConfig.name,
+    url: siteConfig.url,
+    logo: `${siteConfig.url}${siteConfig.assets.logo}`,
+    description: siteConfig.description,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "B-64, B Block, Sector 63",
-      addressLocality: "Noida",
-      addressRegion: "Uttar Pradesh",
-      postalCode: "201301",
-      addressCountry: "IN"
+      streetAddress: siteConfig.address.street,
+      addressLocality: siteConfig.address.locality,
+      addressRegion: siteConfig.address.region,
+      postalCode: siteConfig.address.postalCode,
+      addressCountry: siteConfig.address.country
     },
     sameAs: [
-      "https://facebook.com",
-      "https://twitter.com",
-      "https://linkedin.com",
-      "https://instagram.com"
-    ]
+      siteConfig.socialLinks.facebook,
+      siteConfig.socialLinks.twitter,
+      siteConfig.socialLinks.linkedin,
+      siteConfig.socialLinks.instagram,
+      siteConfig.socialLinks.github
+    ].filter(Boolean)
   };
 
   return (

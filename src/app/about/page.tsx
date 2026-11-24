@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import { AboutClient } from "./AboutClient";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "About Us | HangingPanda Software Engineering Guarantees",
+  title: `About Us | ${siteConfig.name} Software Engineering Guarantees`,
   description:
-    "Learn about HangingPanda, an IT solutions partner offering 2.5 years of free app maintenance, real-time live code tracking, and strict SLA timelines.",
+    `Learn about ${siteConfig.name}, an IT solutions partner offering 2.5 years of free app maintenance, real-time live code tracking, and strict SLA timelines.`,
   alternates: {
-    canonical: "https://hangingpanda.com/about",
+    canonical: `${siteConfig.url}/about`,
   },
   openGraph: {
-    title: "About Us | HangingPanda Software Engineering Guarantees",
+    title: `About Us | ${siteConfig.name} Software Engineering Guarantees`,
     description:
-      "Learn about HangingPanda, an IT solutions partner offering 2.5 years of free app maintenance, real-time live code tracking, and strict SLA timelines.",
-    url: "https://hangingpanda.com/about",
+      `Learn about ${siteConfig.name}, an IT solutions partner offering 2.5 years of free app maintenance, real-time live code tracking, and strict SLA timelines.`,
+    url: `${siteConfig.url}/about`,
     type: "website",
   },
 };

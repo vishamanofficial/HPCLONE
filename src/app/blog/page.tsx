@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import { nextApi } from "@/lib/server-api";
 import { BlogClient } from "./BlogClient";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "HangingPanda Technical Blog | Custom Software Insights",
+  title: `${siteConfig.name} Technical Blog | Custom Software Insights`,
   description:
-    "Audit the latest tech guides. HangingPanda writes articles detailing AI workflows, mobile app frameworks, custom server architectures, and product strategies.",
+    `Audit the latest tech guides. ${siteConfig.name} writes articles detailing AI workflows, mobile app frameworks, custom server architectures, and product strategies.`,
   alternates: {
-    canonical: "https://hangingpanda.com/blog",
+    canonical: `${siteConfig.url}/blog`,
   },
   openGraph: {
-    title: "HangingPanda Technical Blog | Custom Software Insights",
+    title: `${siteConfig.name} Technical Blog | Custom Software Insights`,
     description:
-      "Audit the latest tech guides. HangingPanda writes articles detailing AI workflows, mobile app frameworks, custom server architectures, and product strategies.",
-    url: "https://hangingpanda.com/blog",
+      `Audit the latest tech guides. ${siteConfig.name} writes articles detailing AI workflows, mobile app frameworks, custom server architectures, and product strategies.`,
+    url: `${siteConfig.url}/blog`,
     type: "website",
   },
 };

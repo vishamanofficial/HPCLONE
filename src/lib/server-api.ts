@@ -1,4 +1,4 @@
-// HangingPanda High-Performance Server-Side Data Layer
+// High-Performance Server-Side Data Layer
 // Runs strictly on the server in Server Components (Zero HTTP network latency, direct Mongoose queries with instant fallback)
 import mongoose from 'mongoose';
 import { cache } from 'react';
@@ -13,6 +13,7 @@ import { FAQ } from '@/models/FAQ';
 import { TeamMember } from '@/models/TeamMember';
 import { Job } from '@/models/Job';
 import { NavigationMenu } from '@/models/NavigationMenu';
+import { siteConfig } from '@/config/site';
 
 // Fast DB readiness check: if already connected, queries run immediately.
 // Concurrent calls share one promise and resolve in <= 400ms so SSR never blocks browser loading.
@@ -48,12 +49,12 @@ import { portfolioData } from '@/data/portfolioData';
 import { blogsData } from '@/data/blogsData';
 
 const defaultSettings = {
-  siteName: 'HangingPanda',
-  siteTagline: 'Engineering Scalable Software & AI Products',
-  contactEmail: 'contact@hangingpanda.com',
-  contactPhone: '+91 98765 43210',
-  whatsappNumber: '+919876543210',
-  address: 'Tech Park, Bangalore, Karnataka, India'
+  siteName: siteConfig.name,
+  siteTagline: siteConfig.tagline,
+  contactEmail: siteConfig.emails.contact,
+  contactPhone: siteConfig.phone,
+  whatsappNumber: siteConfig.phone.replace(/[^0-9]/g, ''),
+  address: siteConfig.address.full
 };
 
 export const nextApi = {

@@ -1,3 +1,5 @@
+import { siteConfig } from "@/config/site";
+
 export interface BlogArticle {
   id: string;
   title: string;
@@ -15,7 +17,7 @@ export const blogsData: BlogArticle[] = [
     id: "ai-agents-enterprise",
     title: "How Autonomous AI Agents are Transforming Enterprise Workflows in 2026",
     excerpt: "Explore how AI agents shift from passive text generation to orchestrating active tasks like scheduling, database analysis, and code review.",
-    content: "Enterprise software is undergoing a generational shift. While the initial wave of Large Language Models focused heavily on answering questions, the current wave centers on agentic behavior. An autonomous AI agent does not just explain a code bug—it creates a bug report, schedules a patch branch in Git, runs the test suite, and requests deployment review when successful. At HangingPanda, our PandaNext AI team builds internal workflow integrations that hook enterprise telemetry straight into multi-step agent grids, saving thousands of operational hours.",
+    content: `Enterprise software is undergoing a generational shift. While the initial wave of Large Language Models focused heavily on answering questions, the current wave centers on agentic behavior. An autonomous AI agent does not just explain a code bug—it creates a bug report, schedules a patch branch in Git, runs the test suite, and requests deployment review when successful. At ${siteConfig.name}, our PandaNext AI team builds internal workflow integrations that hook enterprise telemetry straight into multi-step agent grids, saving thousands of operational hours.`,
     category: "AI & ML",
     author: { name: "Aarav Sharma", avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80", role: "AI Solutions Architect" },
     publishedAt: "June 15, 2026",
@@ -48,7 +50,7 @@ export const blogsData: BlogArticle[] = [
     id: "scaling-startups-mvp",
     title: "The MVP Blueprint: How to Deliver High Uptime Products on a Startup Budget",
     excerpt: "Five core mistakes startups make when building their first software iteration, and how to scale infrastructure on low budgets.",
-    content: "The goal of a Minimum Viable Product is to validate business assumptions as quickly as possible. Yet, many teams waste months building complex server clusters and caching networks before finding their first customer. At HangingPanda, we advise clients to start with a modular monolith backend, leverage managed database systems, and focus heavy resources on polishing user interface flows. Keeping the initial system design decoupled allows you to migrate to serverless or microservices later, only when traffic demand justifies the complexity.",
+    content: `The goal of a Minimum Viable Product is to validate business assumptions as quickly as possible. Yet, many teams waste months building complex server clusters and caching networks before finding their first customer. At ${siteConfig.name}, we advise clients to start with a modular monolith backend, leverage managed database systems, and focus heavy resources on polishing user interface flows. Keeping the initial system design decoupled allows you to migrate to serverless or microservices later, only when traffic demand justifies the complexity.`,
     category: "Tech Strategy",
     author: { name: "Vikas Verma", avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80", role: "VP of Product Development" },
     publishedAt: "April 20, 2026",

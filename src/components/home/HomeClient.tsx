@@ -33,6 +33,7 @@ import { portfolioData } from "@/data/portfolioData";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Accordion } from "@/components/ui/Accordion";
+import { siteConfig } from "@/config/site";
 const EngineeringJourney = dynamic(
   () => import("@/components/EngineeringJourney").then((m) => m.EngineeringJourney),
   {
@@ -345,7 +346,7 @@ export const HomeClient: React.FC<HomeClientProps> = ({
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
                 <span className="text-xs sm:text-sm font-bold text-text-primary tracking-tight">
-                  {heroSec?.badgeText || "HangingPanda Service Commitments"}
+                  {heroSec?.badgeText || `${siteConfig.name} Service Commitments`}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -492,7 +493,7 @@ export const HomeClient: React.FC<HomeClientProps> = ({
               {pillarsSec?.heading || "Your Specialized Digital Innovation Partner"}
             </h2>
             <p className="text-text-secondary mt-3 sm:mt-6 text-xs sm:text-base leading-relaxed">
-              {pillarsSec?.subheading || "At HangingPanda, we reject generic one-size-fits-all coding templates. We audit your workflows and formulate exact web, mobile, and automation tools that scale operations."}
+              {pillarsSec?.subheading || `At ${siteConfig.name}, we reject generic one-size-fits-all coding templates. We audit your workflows and formulate exact web, mobile, and automation tools that scale operations.`}
             </p>
             <div className="flex flex-col gap-2.5 sm:gap-4 mt-5 sm:mt-8 w-full">
               {[
@@ -566,7 +567,7 @@ export const HomeClient: React.FC<HomeClientProps> = ({
               {servicesSec?.heading || "Dynamic Solutions Engineered for Scale"}
             </h2>
             <p className="text-text-secondary text-xs sm:text-base mt-2 sm:mt-4 max-w-xl mx-auto">
-              {servicesSec?.subheading || "Discover how HangingPanda develops, secures, and markets customized software frameworks."}
+              {servicesSec?.subheading || `Discover how ${siteConfig.name} develops, secures, and markets customized software frameworks.`}
             </p>
           </motion.div>
 
@@ -796,7 +797,7 @@ export const HomeClient: React.FC<HomeClientProps> = ({
                     ))}
                   </div>
                   <p className="text-xs sm:text-sm text-text-secondary italic leading-relaxed">
-                    &ldquo;HangingPanda helped rebuild our legacy inventory dashboard. Code execution rates jumped, latency dropped, and their developers handled our MQTT telemetry with ease.&rdquo;
+                    &ldquo;{siteConfig.name} helped rebuild our legacy inventory dashboard. Code execution rates jumped, latency dropped, and their developers handled our MQTT telemetry with ease.&rdquo;
                   </p>
                 </div>
                 <div className="flex items-center gap-2.5 sm:gap-3.5 mt-4 sm:mt-6 border-t border-border/40 pt-3 sm:pt-4">

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/context/AdminAuthContext';
+import { siteConfig } from '@/config/site';
 import { useTheme } from '@/context/ThemeContext';
 import {
   LayoutDashboard,
@@ -121,11 +122,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <div className="h-20 flex items-center justify-between px-6 border-b border-border flex-shrink-0">
             <Link href="/admin/dashboard" className="flex items-center gap-3 group">
               <span className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-accent-orange flex items-center justify-center text-white font-black text-lg shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
-                HP
+                {siteConfig.shortName}
               </span>
               <div>
                 <span className="font-black text-base tracking-tight text-text-primary block leading-none">
-                  HangingPanda
+                  {siteConfig.name}
                 </span>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-primary mt-1 block">
                   Enterprise CMS

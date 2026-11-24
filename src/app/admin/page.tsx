@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/context/AdminAuthContext';
+import { siteConfig } from '@/config/site';
 
 export default function AdminIndexPage() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function AdminIndexPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh]">
       <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      <span className="text-xs font-bold text-text-muted mt-3">Loading HangingPanda CMS...</span>
+      <span className="text-xs font-bold text-text-muted mt-3">Loading {siteConfig.name} CMS...</span>
     </div>
   );
 }

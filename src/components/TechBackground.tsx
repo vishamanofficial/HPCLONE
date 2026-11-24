@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { siteConfig } from "@/config/site";
 import { useReducedMotion } from "framer-motion";
 
 /**
@@ -305,7 +306,7 @@ export const TechBackground: React.FC = () => {
       <div className="hidden lg:flex items-center justify-between absolute top-6 left-8 right-8 text-[10px] font-mono tracking-widest text-text-muted/40 uppercase pointer-events-none">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-primary/60 animate-ping" />
-          <span>HP.CORE // NEURAL_MESH_V4</span>
+          <span>{siteConfig.shortName}.CORE // NEURAL_MESH_V4</span>
         </div>
         <div className="flex items-center gap-4">
           <span>LATENCY // ZERO_LAG</span>

@@ -23,6 +23,7 @@ import { Lead } from '@/models/Lead';
 import { SeoSettings } from '@/models/SeoSettings';
 import { Redirect } from '@/models/Redirect';
 import { Media } from '@/models/Media';
+import { siteConfig } from '@/config/site';
 import { AuditLog } from '@/models/AuditLog';
 
 interface RouteContext {
@@ -447,8 +448,8 @@ export async function POST(req: NextRequest, context: RouteContext) {
         return NextResponse.json({ success: false, message: 'Email and password required' }, { status: 400 });
       }
 
-      const defaultEmail = (process.env.ADMIN_DEFAULT_EMAIL || 'admin@hangingpanda.com').toLowerCase();
-      const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || 'Admin@HangingPanda2026!';
+      const defaultEmail = (process.env.ADMIN_DEFAULT_EMAIL || siteConfig.emails.admin).toLowerCase();
+      const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || `Admin@${siteConfig.name}2026!`;
 
       // 1. Fast-path authentication for master Super Admin
       if (email.toLowerCase() === defaultEmail && password === defaultPassword) {

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { servicesData } from "@/data/servicesData";
 import { Button } from "./ui/Button";
+import { siteConfig } from "@/config/site";
 
 export const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -70,14 +71,14 @@ export const Navbar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
             <span className="w-10 h-10 rounded-[12px] bg-gradient-to-tr from-primary to-accent-orange flex items-center justify-center text-white font-black text-lg shadow-sm shadow-primary/20 transition-transform duration-200 group-hover:scale-[1.03]">
-              HP
+              {siteConfig.shortName}
             </span>
             <div className="flex flex-col">
               <span className="text-[17px] font-bold tracking-headline text-text-primary group-hover:text-primary transition-colors leading-tight">
-                HangingPanda
+                {siteConfig.name}
               </span>
               <span className="text-[10px] tracking-caption uppercase font-semibold text-text-muted">
-                Software Labs
+                {siteConfig.subName}
               </span>
             </div>
           </Link>

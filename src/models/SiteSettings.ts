@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { siteConfig } from '@/config/site';
 
 export interface ISiteSettings extends Document {
   siteName: string;
@@ -47,17 +48,17 @@ export interface ISiteSettings extends Document {
 
 const SiteSettingsSchema = new Schema<ISiteSettings>(
   {
-    siteName: { type: String, default: 'HangingPanda' },
-    tagline: { type: String, default: 'AI-Powered Software & Mobile App Development' },
-    logoUrl: { type: String, default: '/favicon.svg' },
-    faviconUrl: { type: String, default: '/favicon.svg' },
+    siteName: { type: String, default: siteConfig.name },
+    tagline: { type: String, default: siteConfig.tagline },
+    logoUrl: { type: String, default: siteConfig.assets.logo },
+    faviconUrl: { type: String, default: siteConfig.assets.favicon },
     primaryColor: { type: String, default: '#ef4444' },
     secondaryColor: { type: String, default: '#dc2626' },
     accentOrange: { type: String, default: '#dc2626' },
-    contactEmail: { type: String, default: 'vishamanofficial.business@gmail.com' },
-    contactPhone: { type: String, default: '+91-8887024887' },
-    whatsappNumber: { type: String, default: '918887024887' },
-    officeAddress: { type: String, default: 'B-64, B Block, Sector 63, Noida, Uttar Pradesh, India, 201301' },
+    contactEmail: { type: String, default: siteConfig.emails.contact },
+    contactPhone: { type: String, default: siteConfig.phone },
+    whatsappNumber: { type: String, default: siteConfig.phone.replace(/[^0-9]/g, '') },
+    officeAddress: { type: String, default: siteConfig.address.full },
     officeLocations: [
       {
         city: { type: String },
@@ -85,7 +86,7 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
     },
     copyrightText: {
       type: String,
-      default: '© {year} HangingPanda Pvt Ltd. All rights reserved.'
+      default: `© {year} ${siteConfig.legalName}. All rights reserved.`
     },
     defaultCta: {
       headline: { type: String, default: 'Ready to bring your software vision to life?' },

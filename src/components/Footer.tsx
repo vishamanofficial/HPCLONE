@@ -3,9 +3,11 @@ import Link from "next/link";
 import { Smartphone, Mail, MapPin } from "lucide-react";
 import { Facebook, Twitter, Linkedin, Instagram } from "./ui/BrandIcons";
 import { servicesData } from "@/data/servicesData";
+import { siteConfig } from "@/config/site";
 
 interface FooterProps {
   settings?: {
+    siteName?: string;
     officeAddress?: string;
     contactEmail?: string;
     contactPhone?: string;
@@ -23,15 +25,15 @@ export const Footer: React.FC<FooterProps> = ({
   const quickServices = (customServices && customServices.length > 0 ? customServices : servicesData).slice(0, 5);
 
   const settings = {
-    officeAddress: customSettings?.officeAddress || "B-64, B Block, Sector 63, Noida, Uttar Pradesh, India, 201301",
-    contactEmail: customSettings?.contactEmail || "vishamanofficial.business@gmail.com",
-    contactPhone: customSettings?.contactPhone || "+91-8887024887",
-    copyrightText: customSettings?.copyrightText || `© ${currentYear} HangingPanda Pvt Ltd. All rights reserved.`,
+    officeAddress: customSettings?.officeAddress || siteConfig.address.full,
+    contactEmail: customSettings?.contactEmail || siteConfig.emails.contact,
+    contactPhone: customSettings?.contactPhone || siteConfig.phone,
+    copyrightText: customSettings?.copyrightText || siteConfig.getCopyright(currentYear),
     socialLinks: {
-      facebook: customSettings?.socialLinks?.facebook || "https://facebook.com",
-      twitter: customSettings?.socialLinks?.twitter || "https://twitter.com",
-      linkedin: customSettings?.socialLinks?.linkedin || "https://linkedin.com",
-      instagram: customSettings?.socialLinks?.instagram || "https://instagram.com"
+      facebook: customSettings?.socialLinks?.facebook || siteConfig.socialLinks.facebook,
+      twitter: customSettings?.socialLinks?.twitter || siteConfig.socialLinks.twitter,
+      linkedin: customSettings?.socialLinks?.linkedin || siteConfig.socialLinks.linkedin,
+      instagram: customSettings?.socialLinks?.instagram || siteConfig.socialLinks.instagram
     }
   };
 
@@ -41,10 +43,10 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="flex flex-col gap-6">
           <div className="flex items-center gap-2">
             <span className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-accent-orange flex items-center justify-center text-white font-black text-xl shadow-md">
-              HP
+              {siteConfig.shortName}
             </span>
             <span className="text-lg font-black tracking-tight text-text-primary leading-none">
-              HangingPanda
+              {customSettings?.siteName || siteConfig.name}
             </span>
           </div>
           <p className="text-sm text-text-secondary leading-relaxed">

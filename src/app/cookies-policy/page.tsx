@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Cookies Policy | HangingPanda Software Labs",
+  title: `Cookies Policy | ${siteConfig.name} ${siteConfig.subName}`,
   description:
-    "Review the Cookies Policy of HangingPanda. Learn about essential browser cookies, analytics settings, and user tracking.",
+    `Review the Cookies Policy of ${siteConfig.name}. Learn about essential browser cookies, analytics settings, and user tracking.`,
   alternates: {
-    canonical: "https://hangingpanda.com/cookies-policy",
+    canonical: `${siteConfig.url}/cookies-policy`,
   },
   openGraph: {
-    title: "Cookies Policy | HangingPanda Software Labs",
+    title: `Cookies Policy | ${siteConfig.name} ${siteConfig.subName}`,
     description:
-      "Review the Cookies Policy of HangingPanda. Learn about essential browser cookies, analytics settings, and user tracking.",
-    url: "https://hangingpanda.com/cookies-policy",
+      `Review the Cookies Policy of ${siteConfig.name}. Learn about essential browser cookies, analytics settings, and user tracking.`,
+    url: `${siteConfig.url}/cookies-policy`,
     type: "website",
   },
 };
@@ -30,9 +31,9 @@ export default function CookiesPolicyPage() {
 
       <div className="prose dark:prose-invert text-sm sm:text-base text-text-secondary leading-relaxed flex flex-col gap-6">
         <p>
-          This is the Cookies Policy for HangingPanda, accessible from{" "}
-          <a href="https://hangingpanda.com" className="text-primary hover:underline font-semibold">
-            https://hangingpanda.com
+          This is the Cookies Policy for {siteConfig.name}, accessible from{" "}
+          <a href={siteConfig.url} className="text-primary hover:underline font-semibold">
+            {siteConfig.url}
           </a>.
         </p>
 
