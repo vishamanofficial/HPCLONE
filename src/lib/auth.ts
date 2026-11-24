@@ -34,7 +34,7 @@ export async function verifyAuth(req: NextRequest | Request): Promise<Authentica
       if (decoded.email?.toLowerCase() === defaultEmail) {
         return {
           _id: decoded.id || '673e1c9e89b2c3d4e5f60001',
-          name: 'Vishal Aman (Super Admin)',
+          name: 'Aman (Super Admin)',
           email: defaultEmail,
           role: 'Super Admin',
           roleDetails: { name: 'Super Admin', permissions: ['*'] },

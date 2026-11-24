@@ -62,7 +62,7 @@ export async function GET(req: NextRequest, context: RouteContext) {
         success: true,
         user: {
           id: fullUser?._id || user._id,
-          name: fullUser?.name || user.name || 'Vishal Aman (Super Admin)',
+          name: fullUser?.name || user.name || 'Aman (Super Admin)',
           email: fullUser?.email || user.email,
           role: (fullUser?.role as any)?.name || (user as any)?.role?.name || (user as any)?.role || 'Super Admin',
           permissions: (fullUser?.role as any)?.permissions || (user as any)?.roleDetails?.permissions || (user as any)?.permissions || ['*'],
@@ -534,7 +534,7 @@ export async function POST(req: NextRequest, context: RouteContext) {
       if (email.toLowerCase() === defaultEmail && password === defaultPassword) {
         const superAdminData = {
           id: '673e1c9e89b2c3d4e5f60001',
-          name: 'Vishal Aman (Super Admin)',
+          name: 'Aman (Super Admin)',
           email: defaultEmail,
           role: 'Super Admin',
           permissions: ['*'],

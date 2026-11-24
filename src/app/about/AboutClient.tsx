@@ -29,9 +29,10 @@ const milestones = [
 ];
 
 const leadership = [
-  { name: "Vishal Aman", role: "Founding Partner & Technical Director", bio: "Ex-Systems Architect with a focus on high-concurrency databases, server caching pipelines, and React Native builds." },
-  { name: "Devendra Singh", role: "Lead DevOps & Server Infrastructure", bio: "Specialist in AWS clustering, Docker environments, self-healing Kubernetes workloads, and secure network routing." },
-  { name: "Anjali Gupta", role: "Head of Interface & UI/UX Design", bio: "Focuses on scalable Figma tokens, design systems, interactive prototyping, and human-computer design." }
+  { name: "Aman", role: "Founding Partner & Technical Director", bio: "Ex-Systems Architect with a focus on high-concurrency databases, server caching pipelines, and React Native builds." },
+  { name: "Monika", role: "Lead DevOps & Server Infrastructure", bio: "Specialist in AWS clustering, Docker environments, self-healing Kubernetes workloads, and secure network routing." },
+  { name: "Nandan", role: "Head of Interface & UI/UX Design", bio: "Focuses on scalable Figma tokens, design systems, interactive prototyping, and human-computer design." },
+  { name: "Navaneet", role: "Lead SEO" , bio: "Specialist in AWS clustering, Docker environments, self-healing Kubernetes workloads, and secure network routing." },
 ];
 
 export const AboutClient: React.FC = () => {

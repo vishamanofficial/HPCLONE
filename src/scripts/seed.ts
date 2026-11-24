@@ -671,7 +671,7 @@ At ${siteConfig.name}, we advise clients to start with a modular monolith backen
   await TeamMember.deleteMany({});
   await TeamMember.create([
     {
-      name: 'Vishal Aman',
+      name: 'Aman',
       role: 'Founding Partner & Technical Director',
       bio: 'Ex-Systems Architect with a focus on high-concurrency databases, server caching pipelines, and React Native builds.',
       photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
@@ -897,7 +897,7 @@ At ${siteConfig.name}, we advise clients to start with a modular monolith backen
         {
           id: 'n1',
           text: 'Client requested NDA prior to sharing their warehouse floor plan blueprints.',
-          addedBy: 'Vishal Aman',
+          addedBy: 'Aman',
           createdAt: new Date()
         }
       ],
@@ -937,7 +937,7 @@ At ${siteConfig.name}, we advise clients to start with a modular monolith backen
         {
           id: 'n2',
           text: 'Initial scoping email sent. Waiting for schedule confirmation for Zoom demo.',
-          addedBy: 'Vishal Aman',
+          addedBy: 'Aman',
           createdAt: new Date()
         }
       ],
@@ -950,7 +950,7 @@ At ${siteConfig.name}, we advise clients to start with a modular monolith backen
         },
         {
           action: 'STATUS_CHANGED',
-          performedBy: 'Vishal Aman',
+          performedBy: 'Aman',
           timestamp: new Date(),
           details: "Moved stage from 'new' to 'contacted'"
         }
