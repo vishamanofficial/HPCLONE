@@ -288,6 +288,12 @@ class ApiService {
   // ==========================================
   // ADMIN CMS APIS
   // ==========================================
+  async syncSeedDatabase() {
+    return this.request<{ success: boolean; message: string }>('/admin/sync-seed', {
+      method: 'POST'
+    });
+  }
+
   async getDashboardStats() {
     return this.request<{ success: boolean; stats: any }>('/admin/dashboard/stats');
   }

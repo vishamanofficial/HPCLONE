@@ -16,7 +16,7 @@ interface BlogClientProps {
 export const BlogClient: React.FC<BlogClientProps> = ({ initialBlogs }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("All");
-  const articles = initialBlogs && initialBlogs.length > 0 ? initialBlogs : blogsData;
+  const articles = Array.isArray(initialBlogs) ? initialBlogs : blogsData;
 
   const categories: CategoryFilter[] = ["All", "AI & ML", "Web Development", "Mobile Apps", "Tech Strategy"];
 

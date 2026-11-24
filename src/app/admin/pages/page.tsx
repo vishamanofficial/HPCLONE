@@ -42,6 +42,7 @@ export default function PagesManagerPage() {
   // Delete modal state
   const [deleteTarget, setDeleteTarget] = useState<any>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
 
   const fetchPages = async () => {
     setIsLoading(true);
@@ -54,6 +55,21 @@ export default function PagesManagerPage() {
       error(err.message || 'Failed to fetch pages');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSeedContent = async () => {
+    setIsSeeding(true);
+    try {
+      const res = await api.syncSeedDatabase();
+      if (res && res.success) {
+        success('Initial database content seeded successfully!');
+        await fetchPages();
+      }
+    } catch (err: any) {
+      error(err.message || 'Failed to seed initial content');
+    } finally {
+      setIsSeeding(false);
     }
   };
 
@@ -326,8 +342,19 @@ export default function PagesManagerPage() {
         ) : (
           <div className="py-16 text-center flex flex-col items-center gap-3">
             <Layers className="w-10 h-10 text-text-muted" />
-            <h3 className="text-sm font-bold text-text-primary">No pages found</h3>
-            <p className="text-xs text-text-secondary">Try adjusting your search terms or create a new page.</p>
+            <h3 className="text-sm font-bold text-text-primary">No pages found in database</h3>
+            <p className="text-xs text-text-secondary max-w-md">
+              Your database has not been seeded yet. Click below to load the Home Page and all 12 modular builder sections into MongoDB.
+            </p>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleSeedContent}
+              isLoading={isSeeding}
+              leftIcon={<Sparkles className="w-4 h-4" />}
+            >
+              Populate Initial Pages & Builder
+            </Button>
           </div>
         )}
       </div>

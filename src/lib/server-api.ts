@@ -18,31 +18,15 @@ import { calculatorQuestions } from '@/data/calculatorQuestions';
 import { siteConfig } from '@/config/site';
 
 // Fast DB readiness check: if already connected, queries run immediately.
-// Concurrent calls share one promise and resolve in <= 400ms so SSR never blocks browser loading.
-let dbCheckPromise: Promise<boolean> | null = null;
-
 async function ensureDbQuick(): Promise<boolean> {
-  if (mongoose.connection.readyState === 1) return true;
-  if (dbCheckPromise) return dbCheckPromise;
-
-  dbCheckPromise = (async () => {
-    try {
-      const connPromise = connectDB();
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('db-timeout')), 400)
-      );
-      await Promise.race([connPromise, timeoutPromise]);
-      return mongoose.connection.readyState === 1;
-    } catch {
-      return false;
-    } finally {
-      setTimeout(() => {
-        dbCheckPromise = null;
-      }, 1500);
-    }
-  })();
-
-  return dbCheckPromise;
+  if ((mongoose.connection.readyState as number) === 1) return true;
+  try {
+    await connectDB();
+    return (mongoose.connection.readyState as number) === 1;
+  } catch (err: any) {
+    console.warn('[DB] Connection check notice:', err.message);
+    return false;
+  }
 }
 
 // Static Data Fallbacks
@@ -61,7 +45,7 @@ const defaultSettings = {
 
 export const nextApi = {
   // 1. Site Settings
-  getSettings: cache(async () => {
+  getSettings: async () => {
     try {
       const ready = await ensureDbQuick();
       if (ready) {
@@ -74,17 +58,17 @@ export const nextApi = {
       console.warn('[nextApi.getSettings] DB notice:', err.message);
     }
     return defaultSettings;
-  }),
+  },
 
   // 2. Homepage Dynamic Content & Modular Sections
-  getHomepage: cache(async () => {
+  getHomepage: async () => {
     try {
       const ready = await ensureDbQuick();
       if (ready) {
         const page = await Page.findOne({ slug: 'home', status: 'published' }).lean();
         if (page) {
           const [services, portfolio, testimonials, faqs] = await Promise.all([
-            Service.find({ isActive: true }).sort({ displayOrder: 1 }).limit(6).lean(),
+            Service.find({ status: 'published' }).sort({ displayOrder: 1 }).limit(6).lean(),
             Portfolio.find({ status: 'published', isFeatured: true }).sort({ displayOrder: 1 }).limit(6).lean(),
             Testimonial.find({ status: 'published' }).sort({ displayOrder: 1 }).limit(6).lean(),
             FAQ.find({ status: 'published' }).sort({ displayOrder: 1 }).limit(10).lean()
@@ -107,10 +91,10 @@ export const nextApi = {
       console.warn('[nextApi.getHomepage] DB notice:', err.message);
     }
     return null;
-  }),
+  },
 
   // 3. Custom Page by Slug
-  getPageBySlug: cache(async (slug: string) => {
+  getPageBySlug: async (slug: string) => {
     try {
       const ready = await ensureDbQuick();
       if (ready) {
@@ -121,15 +105,15 @@ export const nextApi = {
       console.warn(`[nextApi.getPageBySlug] DB notice for ${slug}:`, err.message);
     }
     return null;
-  }),
+  },
 
   // 4. Services
-  getServices: cache(async () => {
+  getServices: async () => {
     try {
       const ready = await ensureDbQuick();
       if (ready) {
-        const services = await Service.find({ isActive: true }).sort({ displayOrder: 1 }).lean();
-        if (services && services.length > 0) {
+        const services = await Service.find({ status: 'published' }).sort({ displayOrder: 1 }).lean();
+        if (services) {
           return JSON.parse(JSON.stringify(services));
         }
       }
@@ -137,20 +121,20 @@ export const nextApi = {
       console.warn('[nextApi.getServices] DB notice:', err.message);
     }
     return servicesData;
-  }),
+  },
 
-  getServiceBySlug: cache(async (slug: string) => {
+  getServiceBySlug: async (slug: string) => {
     try {
       const ready = await ensureDbQuick();
       if (ready) {
-        const service = await Service.findOne({ slug, isActive: true }).lean();
+        const service = await Service.findOne({ slug, status: 'published' }).lean();
         if (service) return JSON.parse(JSON.stringify(service));
       }
     } catch (err: any) {
       console.warn(`[nextApi.getServiceBySlug] DB notice for ${slug}:`, err.message);
     }
     return servicesData.find(s => s.slug === slug) || null;
-  }),
+  },
 
   // 5. Blog Posts & Articles
   async getBlogs(params?: { category?: string; tag?: string; search?: string; page?: number }) {
@@ -168,15 +152,13 @@ export const nextApi = {
         }
 
         const blogs = await Blog.find(filter).sort({ publishedAt: -1 }).lean();
-        if (blogs && blogs.length > 0) {
-          const page = params?.page || 1;
-          const limit = 10;
-          return JSON.parse(JSON.stringify({
-            success: true,
-            blogs,
-            pagination: { total: blogs.length, page, limit, totalPages: Math.ceil(blogs.length / limit) }
-          }));
-        }
+        const page = params?.page || 1;
+        const limit = 10;
+        return JSON.parse(JSON.stringify({
+          success: true,
+          blogs: blogs || [],
+          pagination: { total: blogs?.length || 0, page, limit, totalPages: Math.max(1, Math.ceil((blogs?.length || 0) / limit)) }
+        }));
       }
     } catch (err: any) {
       console.warn('[nextApi.getBlogs] DB notice:', err.message);
@@ -202,6 +184,7 @@ export const nextApi = {
             related
           }));
         }
+        return { success: false, blog: null, related: [] };
       }
     } catch (err: any) {
       console.warn(`[nextApi.getBlogBySlug] DB notice for ${slug}:`, err.message);
@@ -216,20 +199,20 @@ export const nextApi = {
   },
 
   // 6. Portfolio
-  getPortfolio: cache(async () => {
+  getPortfolio: async () => {
     try {
       const ready = await ensureDbQuick();
       if (ready) {
         const portfolio = await Portfolio.find({ status: 'published' }).sort({ displayOrder: 1 }).lean();
-        if (portfolio && portfolio.length > 0) return JSON.parse(JSON.stringify(portfolio));
+        if (portfolio) return JSON.parse(JSON.stringify(portfolio));
       }
     } catch (err: any) {
       console.warn('[nextApi.getPortfolio] DB notice:', err.message);
     }
     return portfolioData;
-  }),
+  },
 
-  getPortfolioBySlug: cache(async (slug: string) => {
+  getPortfolioBySlug: async (slug: string) => {
     try {
       const ready = await ensureDbQuick();
       if (ready) {
@@ -240,7 +223,7 @@ export const nextApi = {
       console.warn(`[nextApi.getPortfolioBySlug] DB notice for ${slug}:`, err.message);
     }
     return portfolioData.find(p => p.id === slug) || null;
-  }),
+  },
 
   // 7. Testimonials
   getTestimonials: cache(async () => {

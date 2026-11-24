@@ -19,7 +19,8 @@ import {
   Save,
   X,
   Eye,
-  Tag
+  Tag,
+  Sparkles
 } from 'lucide-react';
 
 export default function BlogsManagerPage() {
@@ -36,6 +37,7 @@ export default function BlogsManagerPage() {
   // Delete modal state
   const [deleteTarget, setDeleteTarget] = useState<any>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
 
   const fetchBlogs = async () => {
     setIsLoading(true);
@@ -46,6 +48,21 @@ export default function BlogsManagerPage() {
       error(err.message || 'Failed to fetch blogs');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSeedContent = async () => {
+    setIsSeeding(true);
+    try {
+      const res = await api.syncSeedDatabase();
+      if (res && res.success) {
+        success('Initial database content seeded successfully!');
+        await fetchBlogs();
+      }
+    } catch (err: any) {
+      error(err.message || 'Failed to seed initial content');
+    } finally {
+      setIsSeeding(false);
     }
   };
 
@@ -257,6 +274,22 @@ export default function BlogsManagerPage() {
               ))}
             </tbody>
           </table>
+
+          {filteredBlogs.length === 0 && (
+            <div className="py-16 text-center flex flex-col items-center gap-3">
+              <BookOpen className="w-10 h-10 text-text-muted" />
+              <h3 className="text-sm font-bold text-text-primary">No blog articles found in database</h3>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleSeedContent}
+                isLoading={isSeeding}
+                leftIcon={<Sparkles className="w-4 h-4" />}
+              >
+                Populate Initial Blogs
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 

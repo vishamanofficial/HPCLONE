@@ -4,6 +4,9 @@ import { nextApi } from "@/lib/server-api";
 import { ServiceDetailClient } from "./ServiceDetailClient";
 import { siteConfig } from "@/config/site";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }

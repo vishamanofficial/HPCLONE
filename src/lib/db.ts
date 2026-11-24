@@ -38,7 +38,13 @@ export async function connectDB(): Promise<typeof mongoose> {
             serverSelectionTimeoutMS: 5000,
             bufferCommands: false,
           });
-          console.log('[DB] Connected to MongoDB');
+          console.log('[DB] Connected to MongoDB Atlas');
+
+          // Auto-seed initial content if real database is brand-new/empty
+          import('@/scripts/seed')
+            .then(({ seedInitialData }) => seedInitialData())
+            .catch((e: any) => console.warn('[DB] Auto-seed background notice:', e.message));
+
           return m;
         } catch (err: any) {
           console.warn(`[DB] MongoDB Atlas connection notice (${err.message}). Activating resilient fallback to maintain 100% uptime...`);

@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function BlogPage() {
   const blogsRes = await nextApi.getBlogs();
   return <BlogClient initialBlogs={blogsRes?.blogs || []} />;

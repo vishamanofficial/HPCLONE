@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -218,6 +219,29 @@ export async function GET(req: NextRequest, context: RouteContext) {
     const user = await verifyAuth(req);
     if (!user) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Automatically ensure initial pages, blogs, and services exist in database if fresh
+    if (path.startsWith('admin/')) {
+      try {
+        const [pageCount, blogCount] = await Promise.all([
+          Page.countDocuments(),
+          Blog.countDocuments()
+        ]);
+        if (pageCount === 0 || blogCount === 0) {
+          const { seedInitialData } = await import('@/scripts/seed');
+          await seedInitialData();
+        }
+      } catch (seedErr: any) {
+        console.warn('[Admin API] Auto-seed check notice:', seedErr.message);
+      }
+    }
+
+    if (path === 'admin/sync-seed') {
+      const { seedData } = await import('@/scripts/seed');
+      await seedData();
+      await logActivity(user, 'CREATE', 'system', 'seed', 'Manually populated initial content to MongoDB', req);
+      return NextResponse.json({ success: true, message: 'All initial pages, blogs, services, and builder sections seeded successfully!' });
     }
 
     if (path === 'admin/dashboard/stats') {
@@ -677,6 +701,29 @@ export async function POST(req: NextRequest, context: RouteContext) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
 
+    // Automatically ensure initial pages, blogs, and services exist in database if fresh
+    if (path.startsWith('admin/')) {
+      try {
+        const [pageCount, blogCount] = await Promise.all([
+          Page.countDocuments(),
+          Blog.countDocuments()
+        ]);
+        if (pageCount === 0 || blogCount === 0) {
+          const { seedInitialData } = await import('@/scripts/seed');
+          await seedInitialData();
+        }
+      } catch (seedErr: any) {
+        console.warn('[Admin API] Auto-seed check notice:', seedErr.message);
+      }
+    }
+
+    if (path === 'admin/sync-seed') {
+      const { seedData } = await import('@/scripts/seed');
+      await seedData();
+      await logActivity(user, 'CREATE', 'system', 'seed', 'Manually populated initial content to MongoDB', req);
+      return NextResponse.json({ success: true, message: 'All initial pages, blogs, services, and builder sections seeded successfully!' });
+    }
+
     if (path === 'admin/pages') {
       const slug = body.slug || body.title.toLowerCase().replace(/[^a-z0-9]/g, '-');
       const page = await Page.create({ ...body, slug, author: user._id });
@@ -726,18 +773,21 @@ export async function POST(req: NextRequest, context: RouteContext) {
     if (path === 'admin/services') {
       const service = await Service.create(body);
       await logActivity(user, 'CREATE', 'service', service._id, `Created service ${service.title}`, req);
+      try { revalidatePath('/services'); revalidatePath('/'); } catch {}
       return NextResponse.json({ success: true, service, message: 'Service created successfully' });
     }
 
     if (path === 'admin/blogs') {
       const blog = await Blog.create({ ...body, author: user._id });
       await logActivity(user, 'CREATE', 'blog', blog._id, `Created blog ${blog.title}`, req);
+      try { revalidatePath('/blog'); } catch {}
       return NextResponse.json({ success: true, blog, message: 'Blog created successfully' });
     }
 
     if (path === 'admin/portfolio') {
       const portfolio = await Portfolio.create(body);
       await logActivity(user, 'CREATE', 'portfolio', portfolio._id, `Created case study ${portfolio.title}`, req);
+      try { revalidatePath('/case-studies'); revalidatePath('/'); } catch {}
       return NextResponse.json({ success: true, portfolio, message: 'Case study created' });
     }
 
@@ -860,23 +910,28 @@ export async function PUT(req: NextRequest, context: RouteContext) {
       Object.assign(page, body, { currentRevision: nextRev });
       await page.save();
       await logActivity(user, 'UPDATE', 'page', page._id, `Saved revision #${nextRev} for ${page.title}`, req);
+      try { revalidatePath('/'); if (page?.slug) revalidatePath(`/${page.slug}`); } catch {}
       return NextResponse.json({ success: true, page, message: 'Page updated successfully' });
     }
 
     if (route[0] === 'admin' && route[1] === 'services' && route[2]) {
       const service = await Service.findByIdAndUpdate(route[2], body, { new: true });
       await logActivity(user, 'UPDATE', 'service', route[2], `Updated service ${service?.title}`, req);
+      try { revalidatePath('/services'); if (service?.slug) revalidatePath(`/services/${service.slug}`); revalidatePath('/'); } catch {}
       return NextResponse.json({ success: true, service, message: 'Service updated' });
     }
 
     if (route[0] === 'admin' && route[1] === 'blogs' && route[2]) {
       const blog = await Blog.findByIdAndUpdate(route[2], body, { new: true });
       await logActivity(user, 'UPDATE', 'blog', route[2], `Updated blog ${blog?.title}`, req);
+      try { revalidatePath('/blog'); if (blog?.slug) revalidatePath(`/blog/${blog.slug}`); } catch {}
       return NextResponse.json({ success: true, blog, message: 'Blog updated' });
     }
 
     if (route[0] === 'admin' && route[1] === 'portfolio' && route[2]) {
       const portfolio = await Portfolio.findByIdAndUpdate(route[2], body, { new: true });
+      await logActivity(user, 'UPDATE', 'portfolio', route[2], `Case study updated`, req);
+      try { revalidatePath('/case-studies'); if (portfolio?.slug) revalidatePath(`/case-studies/${portfolio.slug}`); revalidatePath('/'); } catch {}
       return NextResponse.json({ success: true, portfolio, message: 'Case study updated' });
     }
 
@@ -950,21 +1005,25 @@ export async function DELETE(req: NextRequest, context: RouteContext) {
       if (page?.slug === 'home') return NextResponse.json({ success: false, message: 'Cannot delete home page' }, { status: 400 });
       await Promise.all([Page.findByIdAndDelete(route[2]), PageRevision.deleteMany({ pageId: route[2] })]);
       await logActivity(user, 'DELETE', 'page', route[2], `Deleted page ${page?.title}`, req);
+      try { revalidatePath('/'); if (page?.slug) revalidatePath(`/${page.slug}`); } catch {}
       return NextResponse.json({ success: true, message: 'Page deleted' });
     }
 
     if (route[0] === 'admin' && route[1] === 'services' && route[2]) {
-      await Service.findByIdAndDelete(route[2]);
+      const service = await Service.findByIdAndDelete(route[2]);
+      try { revalidatePath('/services'); revalidatePath('/'); } catch {}
       return NextResponse.json({ success: true, message: 'Service deleted' });
     }
 
     if (route[0] === 'admin' && route[1] === 'blogs' && route[2]) {
-      await Blog.findByIdAndDelete(route[2]);
+      const blog = await Blog.findByIdAndDelete(route[2]);
+      try { revalidatePath('/blog'); if (blog?.slug) revalidatePath(`/blog/${blog.slug}`); } catch {}
       return NextResponse.json({ success: true, message: 'Blog deleted' });
     }
 
     if (route[0] === 'admin' && route[1] === 'portfolio' && route[2]) {
-      await Portfolio.findByIdAndDelete(route[2]);
+      const portfolio = await Portfolio.findByIdAndDelete(route[2]);
+      try { revalidatePath('/case-studies'); revalidatePath('/'); } catch {}
       return NextResponse.json({ success: true, message: 'Case study deleted' });
     }
 

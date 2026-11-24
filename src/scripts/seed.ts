@@ -26,59 +26,73 @@ export const seedData = async () => {
 
   // 1. Roles
   console.log('[Seed] Seeding Roles...');
-  await Role.deleteMany({});
-  const superAdminRole = await Role.create({
-    name: 'Super Admin',
-    description: 'Full administrative access across all system modules and settings',
-    permissions: ['*'],
-    isSystem: true
-  });
+  let superAdminRole = await Role.findOne({ name: 'Super Admin' });
+  if (!superAdminRole) {
+    superAdminRole = await Role.create({
+      name: 'Super Admin',
+      description: 'Full administrative access across all system modules and settings',
+      permissions: ['*'],
+      isSystem: true
+    });
+  }
 
-  const adminRole = await Role.create({
-    name: 'Admin',
-    description: 'Manage content, pages, services, blogs, portfolio, and leads',
-    permissions: [
-      'pages:read',
-      'pages:write',
-      'services:manage',
-      'blogs:manage',
-      'portfolio:manage',
-      'crm:read',
-      'crm:write',
-      'media:manage',
-      'seo:read'
-    ],
-    isSystem: true
-  });
+  let adminRole = await Role.findOne({ name: 'Admin' });
+  if (!adminRole) {
+    adminRole = await Role.create({
+      name: 'Admin',
+      description: 'Manage content, pages, services, blogs, portfolio, and leads',
+      permissions: [
+        'pages:read',
+        'pages:write',
+        'services:manage',
+        'blogs:manage',
+        'portfolio:manage',
+        'crm:read',
+        'crm:write',
+        'media:manage',
+        'seo:read'
+      ],
+      isSystem: true
+    });
+  }
 
-  await Role.create({
-    name: 'Editor',
-    description: 'Create and edit articles, services, and draft pages',
-    permissions: ['pages:read', 'pages:write', 'blogs:manage', 'services:manage', 'media:manage'],
-    isSystem: true
-  });
+  let editorRole = await Role.findOne({ name: 'Editor' });
+  if (!editorRole) {
+    await Role.create({
+      name: 'Editor',
+      description: 'Create and edit articles, services, and draft pages',
+      permissions: ['pages:read', 'pages:write', 'blogs:manage', 'services:manage', 'media:manage'],
+      isSystem: true
+    });
+  }
 
-  await Role.create({
-    name: 'SEO Manager',
-    description: 'Manage SEO metadata, sitemaps, redirects, and run SEO audits',
-    permissions: ['seo:manage', 'pages:read', 'pages:write', 'redirects:manage'],
-    isSystem: true
-  });
+  let seoRole = await Role.findOne({ name: 'SEO Manager' });
+  if (!seoRole) {
+    await Role.create({
+      name: 'SEO Manager',
+      description: 'Manage SEO metadata, sitemaps, redirects, and run SEO audits',
+      permissions: ['seo:manage', 'pages:read', 'pages:write', 'redirects:manage'],
+      isSystem: true
+    });
+  }
 
   // 2. Default Super Admin User
   console.log('[Seed] Seeding Super Admin User...');
-  await User.deleteMany({});
-  const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || `Admin@${siteConfig.name}2026!`;
-  const passwordHash = await bcrypt.hash(defaultPassword, 10);
+  const defaultEmail = (process.env.ADMIN_DEFAULT_EMAIL || siteConfig.emails.admin).toLowerCase();
+  let superAdmin = await User.findOne({ email: defaultEmail });
+  if (!superAdmin) {
+    const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || `Admin@${siteConfig.name}2026!`;
+    const passwordHash = await bcrypt.hash(defaultPassword, 10);
 
-  const superAdmin = await User.create({
-    name: 'Aman (Admin)',
-    email: (process.env.ADMIN_DEFAULT_EMAIL || siteConfig.emails.admin).toLowerCase(),
-    passwordHash,
-    role: superAdminRole._id,
-    isActive: true,
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'
-  });
+    superAdmin = await User.create({
+      name: 'Aman (Admin)',
+      email: defaultEmail,
+      passwordHash,
+      role: superAdminRole._id,
+      isActive: true,
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'
+    });
+  }
 
   // 3. Global Site Settings
   console.log('[Seed] Seeding Global Site Settings...');
@@ -1169,9 +1183,18 @@ if (process.argv[1]?.endsWith('seed.ts') || process.argv[1]?.endsWith('seed.js')
 }
 
 export const seedInitialData = async () => {
-  const { User } = await import('@/models/User');
-  const count = await User.countDocuments();
-  if (count === 0) {
+  const { Page } = await import('@/models/Page');
+  const { Blog } = await import('@/models/Blog');
+  const { Service } = await import('@/models/Service');
+  
+  const [pageCount, blogCount, serviceCount] = await Promise.all([
+    Page.countDocuments(),
+    Blog.countDocuments(),
+    Service.countDocuments(),
+  ]);
+
+  if (pageCount === 0 || blogCount === 0 || serviceCount === 0) {
+    console.log('[Seed] Database content missing (pages/blogs/services empty). Running initial seed...');
     await seedData();
   }
 };

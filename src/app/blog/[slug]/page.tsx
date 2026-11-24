@@ -5,6 +5,9 @@ import { siteConfig } from "@/config/site";
 import { blogsData } from "@/data/blogsData";
 import { BlogDetailClient } from "./BlogDetailClient";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
